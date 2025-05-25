@@ -80,7 +80,6 @@ cd fusetech
 
 2. **Install dependencies**
 ```bash
-cd apps/web
 npm install
 ```
 
@@ -141,22 +140,21 @@ http://localhost:3000
 ### Project Structure
 ```
 fusetech/
-├── apps/
-│   └── web/                 # Next.js web application
-│       ├── src/
-│       │   ├── app/         # App Router pages
-│       │   │   ├── page.tsx           # Landing page
-│       │   │   ├── dashboard/         # Dashboard section
-│       │   │   ├── profile/           # Profile management
-│       │   │   ├── activities/        # Activity tracking
-│       │   │   └── marketplace/       # Token marketplace
-│       │   ├── components/  # Reusable UI components
-│       │   └── styles/      # Global styles
-│       ├── public/          # Static assets
-│       └── package.json     # Dependencies
-├── packages/                # Shared packages (future)
-├── docs/                   # Documentation
-└── README.md              # This file
+├── src/                     # Next.js web application
+│   ├── app/                 # App Router pages
+│   │   ├── page.tsx         # Landing page
+│   │   ├── dashboard/       # Dashboard section
+│   │   ├── profile/         # Profile management
+│   │   ├── activities/      # Activity tracking
+│   │   └── marketplace/     # Token marketplace
+│   ├── components/          # Reusable UI components
+│   └── styles/              # Global styles
+├── public/                  # Static assets
+├── demos-html/              # HTML demos (legacy)
+├── packages/                # Shared packages
+├── docs/                    # Documentation
+├── package.json             # Dependencies
+└── README.md               # This file
 ```
 
 ### Design Patterns
