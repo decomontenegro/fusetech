@@ -195,7 +195,7 @@ export default function HomePage() {
               <p className="text-blue-100">Veja seu progresso e estatísticas</p>
             </a>
 
-            <a href="/activities" className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group">
+            <a href="/dashboard/activities" className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group">
               <Activity className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-lg mb-2">Atividades</h3>
               <p className="text-green-100">Registre e acompanhe suas atividades</p>
@@ -207,9 +207,9 @@ export default function HomePage() {
               <p className="text-purple-100">Gerencie seu perfil e conquistas</p>
             </a>
 
-            <a href="/marketplace" className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group">
+            <a href="/dashboard/rewards" className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group">
               <Zap className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform" />
-              <h3 className="font-bold text-lg mb-2">Marketplace</h3>
+              <h3 className="font-bold text-lg mb-2">Recompensas</h3>
               <p className="text-pink-100">Troque FUSE por recompensas</p>
             </a>
           </div>
