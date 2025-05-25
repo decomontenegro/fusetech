@@ -3,9 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@fuseapp/ui';
-import { useAuth } from '../../context/AuthContext';
-import ProtectedRoute from '../../components/auth/ProtectedRoute';
 
 const navigationItems = [
   { name: 'Visão Geral', path: '/dashboard' },
@@ -21,20 +18,19 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { signOut } = useAuth();
 
   const handleLogout = async () => {
-    await signOut();
+    // Implementar logout depois
+    console.log('Logout');
   };
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-gray-50 flex">
         {/* Sidebar para desktop */}
-        <aside className="hidden md:flex flex-col w-64 bg-card border-r p-6">
+        <aside className="hidden md:flex flex-col w-64 bg-white border-r p-6 shadow-sm">
           <div className="mb-8">
-            <Link href="/" className="text-2xl font-bold text-primary">
-              FuseLabs
+            <Link href="/" className="text-2xl font-bold text-blue-600">
+              FUSEtech
             </Link>
           </div>
 
@@ -47,8 +43,8 @@ export default function DashboardLayout({
                   href={item.path}
                   className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                      ? 'bg-blue-100 text-blue-600'
+                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
                   {item.name}
@@ -58,33 +54,31 @@ export default function DashboardLayout({
           </nav>
 
           <div className="mt-auto pt-6">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-muted-foreground hover:text-foreground"
+            <button
+              className="w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md transition-colors"
               onClick={handleLogout}
             >
               Sair
-            </Button>
+            </button>
           </div>
         </aside>
 
         {/* Layout principal */}
         <main className="flex-1 flex flex-col">
           {/* Header mobile */}
-          <header className="md:hidden flex items-center justify-between p-4 border-b bg-card">
-            <Link href="/" className="text-xl font-bold text-primary">
-              FuseLabs
+          <header className="md:hidden flex items-center justify-between p-4 border-b bg-white">
+            <Link href="/" className="text-xl font-bold text-blue-600">
+              FUSEtech
             </Link>
 
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
+              className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded"
               onClick={() => {
                 // Implementar toggle mobile menu
               }}
             >
               Menu
-            </Button>
+            </button>
           </header>
 
           {/* Conteúdo da página */}
@@ -93,6 +87,5 @@ export default function DashboardLayout({
           </div>
         </main>
       </div>
-    </ProtectedRoute>
   );
 }
