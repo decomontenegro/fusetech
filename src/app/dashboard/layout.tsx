@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Menu, X } from 'lucide-react';
 
 const navigationItems = [
   { name: 'Visão Geral', path: '/dashboard' },
@@ -18,10 +19,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     // Implementar logout depois
     console.log('Logout');
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
@@ -72,14 +78,43 @@ export default function DashboardLayout({
             </Link>
 
             <button
-              className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded"
-              onClick={() => {
-                // Implementar toggle mobile menu
-              }}
+              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              onClick={toggleMobileMenu}
             >
-              Menu
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </header>
+
+          {/* Mobile Navigation Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden bg-white border-b shadow-lg">
+              <nav className="px-4 py-2 space-y-1">
+                {navigationItems.map((item) => {
+                  const isActive = pathname === item.path;
+                  return (
+                    <Link
+                      key={item.path}
+                      href={item.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`block px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+                        isActive
+                          ? 'bg-blue-100 text-blue-600'
+                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
+                <button
+                  className="block w-full text-left px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md transition-colors"
+                  onClick={handleLogout}
+                >
+                  Sair
+                </button>
+              </nav>
+            </div>
+          )}
 
           {/* Conteúdo da página */}
           <div className="flex-1 p-6 overflow-auto">
