@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding Flow Demo - FUSEtech</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    .demo-controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      min-width: 200px;
+    }
+
+    .demo-controls h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .demo-controls button {
+      width: 100%;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid #e5e7eb;
+      background: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .demo-controls button:hover {
+      background: #f3f4f6;
+      border-color: #5046e5;
+    }
+
+    .simplified-dashboard {
+      opacity: 0.6;
+      pointer-events: none;
+      transition: all 0.3s;
+    }
+
+    .simplified-dashboard.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .feature-highlight {
+      position: relative;
+      z-index: 10;
+    }
+
+    .feature-highlight::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border: 3px solid #5046e5;
+      border-radius: 1rem;
+      animation: highlightPulse 2s infinite;
+    }
+
+    @keyframes highlightPulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+
+    .flow-explanation {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .flow-step {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #5046e5;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: #5046e5;
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-right: 0.75rem;
+    }
+  </style>
+</head>
+<body data-page="onboarding-demo">
+  <!-- Demo Controls -->
+  <div class="demo-controls">
+    <h3>🎯 Demo Controls</h3>
+    <button onclick="startOnboardingDemo()">
+      <i class="fas fa-play mr-2"></i>
+      Iniciar Onboarding
+    </button>
+    <button onclick="showStep('profile')">
+      👤 Passo 1: Perfil
+    </button>
+    <button onclick="showStep('connections')">
+      🔗 Passo 2: Conexões
+    </button>
+    <button onclick="showStep('goal')">
+      🎯 Passo 3: Meta
+    </button>
+    <button onclick="showStep('success')">
+      🎉 Sucesso
+    </button>
+    <button onclick="resetDemo()">
+      🔄 Reset Demo
+    </button>
+  </div>
+
+  <!-- Simplified Navigation (Onboarding Mode) -->
+  <nav class="nav" id="main-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <a href="index.html" class="nav-brand">
+            <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mr-3">
+              <i class="fas fa-bolt text-white"></i>
+            </div>
+            FUSEtech
+          </a>
+        </div>
+
+        <!-- Simplified Navigation for Onboarding -->
+        <div class="hidden md:flex nav-links" id="nav-links">
+          <a href="index.html" class="nav-link active">
+            <i class="fas fa-home mr-2"></i>
+            Dashboard
+          </a>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="hidden sm:flex items-center bg-gradient-primary text-white px-4 py-2 rounded-full">
+            <i class="fas fa-coins mr-2"></i>
+            <span class="font-semibold">0</span>
+            <span class="text-xs ml-1 opacity-80">FUSE</span>
+          </div>
+
+          <div class="avatar">
+            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+              <i class="fas fa-user text-gray-600"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flow Explanation -->
+  <section class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="flow-explanation">
+      <h1 class="text-3xl font-bold mb-4">🎯 Redesign de User Flow & Onboarding</h1>
+      <p class="text-xl opacity-90 mb-6">
+        Sistema de onboarding baseado em <strong>Progressive Disclosure</strong> e <strong>Cognitive Load Reduction</strong>
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white bg-opacity-10 rounded-lg p-4">
+          <h3 class="font-semibold mb-2">❌ Problema Atual</h3>
+          <ul class="text-sm opacity-90 space-y-1">
+            <li>• 7 itens na navegação</li>
+            <li>• Cognitive overload</li>
+            <li>• Sem guided tour</li>
+            <li>• Usuário perdido</li>
+          </ul>
+        </div>
+
+        <div class="bg-white bg-opacity-10 rounded-lg p-4">
+          <h3 class="font-semibold mb-2">✅ Solução Implementada</h3>
+          <ul class="text-sm opacity-90 space-y-1">
+            <li>• Onboarding em 3 passos</li>
+            <li>• Progressive disclosure</li>
+            <li>• UI adaptativa</li>
+            <li>• Feature gating</li>
+          </ul>
+        </div>
+
+        <div class="bg-white bg-opacity-10 rounded-lg p-4">
+          <h3 class="font-semibold mb-2">📊 Resultados Esperados</h3>
+          <ul class="text-sm opacity-90 space-y-1">
+            <li>• +60% completion rate</li>
+            <li>• +40% user activation</li>
+            <li>• -50% bounce rate</li>
+            <li>• +35% retention</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Flow Steps Explanation -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+    <h2 class="text-2xl font-bold mb-6">🔄 Fluxo de Onboarding Otimizado</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="flow-step">
+        <h3 class="font-semibold mb-3">
+          <span class="step-number">1</span>
+          Perfil & Objetivos
+        </h3>
+        <p class="text-gray-600 mb-3">Coleta apenas informações essenciais para personalização</p>
+        <ul class="text-sm text-gray-500 space-y-1">
+          <li>• Nome preferido</li>
+          <li>• Objetivo principal (4 opções visuais)</li>
+          <li>• Frequência de treino</li>
+        </ul>
+      </div>
+
+      <div class="flow-step">
+        <h3 class="font-semibold mb-3">
+          <span class="step-number">2</span>
+          Conexões de Apps
+        </h3>
+        <p class="text-gray-600 mb-3">Conecta apps de fitness para automação</p>
+        <ul class="text-sm text-gray-500 space-y-1">
+          <li>• Strava (principal)</li>
+          <li>• Apple Health</li>
+          <li>• Google Fit</li>
+        </ul>
+      </div>
+
+      <div class="flow-step">
+        <h3 class="font-semibold mb-3">
+          <span class="step-number">3</span>
+          Primeira Meta
+        </h3>
+        <p class="text-gray-600 mb-3">Cria meta simples baseada no perfil</p>
+        <ul class="text-sm text-gray-500 space-y-1">
+          <li>• Meta semanal personalizada</li>
+          <li>• Recompensa clara (50 FUSE)</li>
+          <li>• Bônus de sequência</li>
+        </ul>
+      </div>
+
+      <div class="flow-step">
+        <h3 class="font-semibold mb-3">
+          <span class="step-number">4</span>
+          Ativação & Tour
+        </h3>
+        <p class="text-gray-600 mb-3">Guia o usuário para primeira ação</p>
+        <ul class="text-sm text-gray-500 space-y-1">
+          <li>• Registrar primeira atividade</li>
+          <li>• Tour guiado do dashboard</li>
+          <li>• Feature discovery progressiva</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simplified Dashboard (Onboarding Mode) -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 simplified-dashboard" id="dashboard">
+    <div class="mb-8 text-center">
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">Bem-vindo ao FUSEtech!</h1>
+      <p class="text-gray-600 mb-6">Vamos configurar sua conta em 3 passos simples</p>
+
+      <!-- Main CTA Button -->
+      <button id="main-onboarding-btn" class="btn-primary-large" style="
+        background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 14px 0 rgba(80, 70, 229, 0.3);
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+      " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px 0 rgba(80, 70, 229, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px 0 rgba(80, 70, 229, 0.3)'">
+        🚀 Iniciar Onboarding Completo
+      </button>
+    </div>
+
+    <!-- Essential Features Only -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="card hover-lift cursor-pointer feature-highlight" id="profile-card" onclick="startOnboardingDemo()">
+        <div class="card-body text-center">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-user text-blue-600"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Configurar Perfil</h3>
+          <div class="text-sm text-gray-500">Personalize sua experiência</div>
+          <button class="btn btn-primary mt-3" style="background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+            Começar Onboarding
+          </button>
+        </div>
+      </div>
+
+      <div class="card hover-lift cursor-pointer opacity-50" id="connections-card" onclick="showStep2()">
+        <div class="card-body text-center">
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-link text-green-600"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Conectar Apps</h3>
+          <div class="text-sm text-gray-500">Sincronize suas atividades</div>
+          <button class="btn btn-outline mt-3" style="background: white; color: #6b7280; border: 2px solid #e5e7eb; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer;" disabled>
+            Passo 2
+          </button>
+        </div>
+      </div>
+
+      <div class="card hover-lift cursor-pointer opacity-50" id="goal-card" onclick="showStep3()">
+        <div class="card-body text-center">
+          <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-bullseye text-orange-600"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Definir Meta</h3>
+          <div class="text-sm text-gray-500">Comece a ganhar tokens</div>
+          <button class="btn btn-outline mt-3" style="background: white; color: #6b7280; border: 2px solid #e5e7eb; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer;" disabled>
+            Passo 3
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="bg-white rounded-xl p-6 mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-semibold">Progresso da Configuração</h3>
+        <span class="text-sm text-gray-500" id="progress-text">0% completo</span>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Hidden Complex Features -->
+    <div class="hidden" id="complex-features">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="text-xl font-semibold">Funcionalidades Avançadas</h3>
+          </div>
+          <div class="card-body">
+            <p class="text-gray-600">Estas funcionalidades serão desbloqueadas após o onboarding:</p>
+            <ul class="mt-4 space-y-2 text-sm text-gray-500">
+              <li>• Analytics avançado</li>
+              <li>• Marketplace completo</li>
+              <li>• Comunidade social</li>
+              <li>• Desafios complexos</li>
+              <li>• Integração com dispositivos</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="text-xl font-semibold">Progressive Disclosure</h3>
+          </div>
+          <div class="card-body">
+            <p class="text-gray-600">Funcionalidades são reveladas progressivamente:</p>
+            <div class="mt-4 space-y-3">
+              <div class="flex items-center">
+                <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                  <i class="fas fa-check text-white text-xs"></i>
+                </div>
+                <span class="text-sm">Dashboard básico</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs text-gray-600">2</span>
+                </div>
+                <span class="text-sm text-gray-500">Registro de atividades</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs text-gray-600">3</span>
+                </div>
+                <span class="text-sm text-gray-500">Marketplace básico</span>
+              </div>
+              <div class="flex items-center">
+                <div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-xs text-gray-600">4</span>
+                </div>
+                <span class="text-sm text-gray-500">Funcionalidades sociais</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/performance.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/components.js" defer></script>
+  <script src="js/desktop-enhancements.js" defer></script>
+  <script src="js/desktop-notifications.js" defer></script>
+  <script src="js/progressive-onboarding.js" defer></script>
+  <script src="js/onboarding-simple.js" defer></script>
+  <script src="js/app.js" defer></script>
+
+  <script>
+    let currentStep = 0;
+    const totalSteps = 3;
+
+    function startOnboardingDemo() {
+      // Criar modal diretamente sem dependências
+      showWelcomeModal();
+    }
+
+    function showWelcomeModal() {
+      const modalHTML = `
+        <div class="onboarding-modal-overlay large show" id="welcome-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+          <div class="onboarding-modal-content" style="background: white; border-radius: 1rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div class="onboarding-modal-header" style="padding: 2rem 2rem 1rem; border-bottom: 1px solid #e5e7eb;">
+              <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold;">🎉 Bem-vindo ao FUSEtech!</h2>
+            </div>
+            <div class="onboarding-modal-body" style="padding: 2rem;">
+              <div class="onboarding-welcome" style="text-align: center;">
+                <div class="welcome-hero" style="margin-bottom: 2rem;">
+                  <div class="welcome-icon" style="font-size: 4rem; margin-bottom: 1rem;">💪</div>
+                  <h2 style="font-size: 1.875rem; font-weight: bold; margin-bottom: 0.5rem;">Transforme exercícios em recompensas</h2>
+                  <p style="font-size: 1.125rem; color: #6b7280;">Vamos configurar sua conta em 3 passos simples</p>
+                </div>
+
+                <div class="onboarding-benefits" style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem;">
+                  <div class="benefit-item" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+                    <div class="benefit-icon" style="font-size: 1.5rem;">🏃‍♂️</div>
+                    <div class="benefit-text" style="text-align: left;">
+                      <h4 style="margin: 0 0 0.25rem 0; font-weight: 600;">Registre Atividades</h4>
+                      <p style="margin: 0; font-size: 0.875rem; color: #6b7280;">Conecte apps e dispositivos</p>
+                    </div>
+                  </div>
+                  <div class="benefit-item" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+                    <div class="benefit-icon" style="font-size: 1.5rem;">🪙</div>
+                    <div class="benefit-text" style="text-align: left;">
+                      <h4 style="margin: 0 0 0.25rem 0; font-weight: 600;">Ganhe Tokens</h4>
+                      <p style="margin: 0; font-size: 0.875rem; color: #6b7280;">Cada exercício vira FUSE</p>
+                    </div>
+                  </div>
+                  <div class="benefit-item" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+                    <div class="benefit-icon" style="font-size: 1.5rem;">🛍️</div>
+                    <div class="benefit-text" style="text-align: left;">
+                      <h4 style="margin: 0 0 0.25rem 0; font-weight: 600;">Troque Recompensas</h4>
+                      <p style="margin: 0; font-size: 0.875rem; color: #6b7280;">Use tokens no marketplace</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="onboarding-cta" style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">
+                  <button class="btn btn-primary btn-lg" onclick="showStep1()" style="background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); color: white; border: none; padding: 0.75rem 2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+                    Começar Configuração
+                  </button>
+                  <button class="btn btn-ghost" onclick="closeModal()" style="background: transparent; color: #6b7280; border: none; padding: 0.75rem 2rem; border-radius: 0.5rem; cursor: pointer;">
+                    Pular por agora
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    function showStep1() {
+      closeModal();
+      const modalHTML = `
+        <div class="onboarding-modal-overlay large show" id="step1-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+          <div class="onboarding-modal-content" style="background: white; border-radius: 1rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div class="onboarding-modal-header" style="padding: 2rem 2rem 1rem; border-bottom: 1px solid #e5e7eb;">
+              <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold;">👤 Conte-nos sobre você</h2>
+            </div>
+            <div class="onboarding-modal-body" style="padding: 2rem;">
+              <div class="onboarding-progress" style="margin-bottom: 2rem;">
+                <div class="progress-bar" style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; margin-bottom: 0.5rem;">
+                  <div class="progress-fill" style="height: 100%; background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); border-radius: 9999px; width: 33%;"></div>
+                </div>
+                <div class="progress-text" style="text-align: center; font-size: 0.875rem; color: #6b7280;">Passo 1 de 3</div>
+              </div>
+
+              <div class="step-description" style="text-align: center; margin-bottom: 2rem;">
+                <p style="font-size: 1.125rem; color: #6b7280; margin: 0;">Essas informações nos ajudam a personalizar sua experiência</p>
+              </div>
+
+              <form class="onboarding-form" style="max-width: 400px; margin: 0 auto;">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 0.75rem;">Como prefere ser chamado?</label>
+                  <input type="text" id="display-name" placeholder="Seu nome" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 1rem;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 0.75rem;">Qual seu principal objetivo?</label>
+                  <div class="goal-options" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
+                    <div class="goal-option" data-goal="weight-loss" onclick="selectGoal(this)" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; cursor: pointer; text-align: center;">
+                      <div class="goal-icon" style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚖️</div>
+                      <div class="goal-text" style="font-weight: 500;">Perder Peso</div>
+                    </div>
+                    <div class="goal-option" data-goal="muscle-gain" onclick="selectGoal(this)" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; cursor: pointer; text-align: center;">
+                      <div class="goal-icon" style="font-size: 1.5rem; margin-bottom: 0.5rem;">💪</div>
+                      <div class="goal-text" style="font-weight: 500;">Ganhar Músculo</div>
+                    </div>
+                    <div class="goal-option" data-goal="endurance" onclick="selectGoal(this)" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; cursor: pointer; text-align: center;">
+                      <div class="goal-icon" style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏃‍♂️</div>
+                      <div class="goal-text" style="font-weight: 500;">Resistência</div>
+                    </div>
+                    <div class="goal-option" data-goal="general" onclick="selectGoal(this)" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; cursor: pointer; text-align: center;">
+                      <div class="goal-icon" style="font-size: 1.5rem; margin-bottom: 0.5rem;">❤️</div>
+                      <div class="goal-text" style="font-weight: 500;">Saúde Geral</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 0.75rem;">Quantas vezes treina por semana?</label>
+                  <select id="frequency" style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 1rem;">
+                    <option value="">Selecione...</option>
+                    <option value="1-2">1-2 vezes</option>
+                    <option value="3-4">3-4 vezes</option>
+                    <option value="5-6">5-6 vezes</option>
+                    <option value="daily">Todos os dias</option>
+                  </select>
+                </div>
+              </form>
+
+              <div class="onboarding-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                <button onclick="showWelcomeModal()" style="background: transparent; color: #6b7280; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">Voltar</button>
+                <button onclick="validateStep1()" style="background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Próximo</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    function selectGoal(element) {
+      document.querySelectorAll('.goal-option').forEach(option => {
+        option.style.borderColor = '#e5e7eb';
+        option.style.background = 'white';
+      });
+      element.style.borderColor = '#5046e5';
+      element.style.background = '#eff6ff';
+    }
+
+    function validateStep1() {
+      const name = document.getElementById('display-name').value;
+      const goal = document.querySelector('.goal-option[style*="#5046e5"]')?.dataset.goal;
+      const frequency = document.getElementById('frequency').value;
+
+      if (!name || !goal || !frequency) {
+        alert('Por favor, preencha todos os campos');
+        return;
+      }
+
+      showStep2();
+    }
+
+    function showStep2() {
+      closeModal();
+      const modalHTML = `
+        <div class="onboarding-modal-overlay large show" id="step2-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+          <div class="onboarding-modal-content" style="background: white; border-radius: 1rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div class="onboarding-modal-header" style="padding: 2rem 2rem 1rem; border-bottom: 1px solid #e5e7eb;">
+              <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold;">🔗 Conecte suas atividades</h2>
+            </div>
+            <div class="onboarding-modal-body" style="padding: 2rem;">
+              <div class="onboarding-progress" style="margin-bottom: 2rem;">
+                <div class="progress-bar" style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; margin-bottom: 0.5rem;">
+                  <div class="progress-fill" style="height: 100%; background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); border-radius: 9999px; width: 66%;"></div>
+                </div>
+                <div class="progress-text" style="text-align: center; font-size: 0.875rem; color: #6b7280;">Passo 2 de 3</div>
+              </div>
+
+              <div class="step-description" style="text-align: center; margin-bottom: 2rem;">
+                <p style="font-size: 1.125rem; color: #6b7280; margin: 0;">Conecte apps e dispositivos para registrar atividades automaticamente</p>
+              </div>
+
+              <div class="connection-options" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+                <div class="connection-card" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                  <div class="connection-header" style="display: flex; align-items: center; flex: 1;">
+                    <div class="connection-logo" style="width: 40px; height: 40px; background: #fc4c02; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 0.25rem; margin-right: 0.75rem;">S</div>
+                    <div class="connection-info">
+                      <h4 style="margin: 0 0 0.25rem 0; font-weight: 600;">Strava</h4>
+                      <p style="margin: 0; font-size: 0.875rem; color: #6b7280;">Sincronize corridas e ciclismo</p>
+                    </div>
+                  </div>
+                  <button onclick="connectApp('strava', this)" style="background: white; color: #374151; border: 2px solid #e5e7eb; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; min-width: 100px;">Conectar</button>
+                </div>
+
+                <div class="connection-card" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                  <div class="connection-header" style="display: flex; align-items: center; flex: 1;">
+                    <div class="connection-logo" style="width: 40px; height: 40px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; border-radius: 0.25rem; margin-right: 0.75rem; font-size: 1.125rem;">❤️</div>
+                    <div class="connection-info">
+                      <h4 style="margin: 0 0 0.25rem 0; font-weight: 600;">Apple Health</h4>
+                      <p style="margin: 0; font-size: 0.875rem; color: #6b7280;">Dados de saúde e atividade</p>
+                    </div>
+                  </div>
+                  <button onclick="connectApp('apple-health', this)" style="background: white; color: #374151; border: 2px solid #e5e7eb; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; min-width: 100px;">Conectar</button>
+                </div>
+              </div>
+
+              <div class="connection-note" style="text-align: center; padding: 1rem; background: #eff6ff; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
+                <p style="margin: 0; font-size: 0.875rem; color: #1e40af;"><strong>💡 Dica:</strong> Você pode conectar mais apps depois nas configurações</p>
+              </div>
+
+              <div class="onboarding-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                <button onclick="showStep1()" style="background: transparent; color: #6b7280; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">Voltar</button>
+                <button onclick="showStep3()" style="background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Continuar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    function connectApp(app, button) {
+      button.textContent = 'Conectando...';
+      button.disabled = true;
+
+      setTimeout(() => {
+        button.textContent = '✓ Conectado';
+        button.style.background = '#10b981';
+        button.style.color = 'white';
+        button.style.borderColor = '#10b981';
+
+        if (window.desktopNotifications) {
+          window.desktopNotifications.success('Conectado!', app + ' conectado com sucesso');
+        }
+      }, 1500);
+    }
+
+    function showStep3() {
+      closeModal();
+      const modalHTML = `
+        <div class="onboarding-modal-overlay large show" id="step3-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+          <div class="onboarding-modal-content" style="background: white; border-radius: 1rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div class="onboarding-modal-header" style="padding: 2rem 2rem 1rem; border-bottom: 1px solid #e5e7eb;">
+              <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold;">🎯 Defina sua primeira meta</h2>
+            </div>
+            <div class="onboarding-modal-body" style="padding: 2rem;">
+              <div class="onboarding-progress" style="margin-bottom: 2rem;">
+                <div class="progress-bar" style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; margin-bottom: 0.5rem;">
+                  <div class="progress-fill" style="height: 100%; background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); border-radius: 9999px; width: 100%;"></div>
+                </div>
+                <div class="progress-text" style="text-align: center; font-size: 0.875rem; color: #6b7280;">Passo 3 de 3</div>
+              </div>
+
+              <div class="step-description" style="text-align: center; margin-bottom: 2rem;">
+                <p style="font-size: 1.125rem; color: #6b7280; margin: 0;">Vamos criar uma meta simples para você começar a ganhar tokens</p>
+              </div>
+
+              <div class="goal-setup" style="max-width: 500px; margin: 0 auto;">
+                <div class="goal-preview" style="text-align: center; margin-bottom: 2rem;">
+                  <div class="goal-icon-large" style="font-size: 4rem; margin-bottom: 0.75rem;">🏃‍♂️</div>
+                  <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">Meta Semanal de Corrida</h3>
+                  <p style="color: #6b7280; margin-bottom: 1rem;">Baseada no seu perfil, sugerimos:</p>
+                </div>
+
+                <div class="goal-config" style="margin-bottom: 2rem;">
+                  <div class="goal-metric" style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 500; margin-bottom: 0.75rem; text-align: center;">Distância por semana</label>
+                    <div class="metric-selector" style="display: flex; gap: 0.5rem; justify-content: center;">
+                      <button onclick="selectMetric(this)" data-value="5" style="padding: 0.75rem 1rem; border: 2px solid #e5e7eb; background: white; border-radius: 0.5rem; cursor: pointer; font-weight: 500;">5 km</button>
+                      <button onclick="selectMetric(this)" data-value="10" style="padding: 0.75rem 1rem; border: 2px solid #5046e5; background: #5046e5; color: white; border-radius: 0.5rem; cursor: pointer; font-weight: 500;">10 km</button>
+                      <button onclick="selectMetric(this)" data-value="15" style="padding: 0.75rem 1rem; border: 2px solid #e5e7eb; background: white; border-radius: 0.5rem; cursor: pointer; font-weight: 500;">15 km</button>
+                      <button onclick="selectMetric(this)" data-value="20" style="padding: 0.75rem 1rem; border: 2px solid #e5e7eb; background: white; border-radius: 0.5rem; cursor: pointer; font-weight: 500;">20 km</button>
+                    </div>
+                  </div>
+
+                  <div class="goal-reward" style="background: #dcfce7; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #16a34a;">
+                    <div class="reward-preview" style="display: flex; align-items: center; gap: 0.75rem;">
+                      <div class="reward-icon" style="font-size: 1.5rem;">🪙</div>
+                      <div class="reward-text">
+                        <h4 style="margin: 0 0 0.25rem 0; font-weight: 600; color: #166534;">Recompensa: 50 FUSE</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: #15803d;">Por completar a meta semanal</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="goal-motivation" style="background: #fed7aa; border-radius: 0.5rem; padding: 1rem; text-align: center; border-left: 4px solid #ea580c;">
+                  <h4 style="margin: 0 0 0.5rem 0; font-weight: 600; color: #9a3412;">🔥 Bônus de Sequência</h4>
+                  <p style="margin: 0; font-size: 0.875rem; color: #c2410c;">Complete 3 semanas seguidas e ganhe +25 FUSE extra!</p>
+                </div>
+              </div>
+
+              <div class="onboarding-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                <button onclick="showStep2()" style="background: transparent; color: #6b7280; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer;">Voltar</button>
+                <button onclick="showSuccess()" style="background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Criar Meta</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    function selectMetric(element) {
+      document.querySelectorAll('.metric-selector button').forEach(btn => {
+        btn.style.borderColor = '#e5e7eb';
+        btn.style.background = 'white';
+        btn.style.color = '#374151';
+      });
+      element.style.borderColor = '#5046e5';
+      element.style.background = '#5046e5';
+      element.style.color = 'white';
+    }
+
+    function showSuccess() {
+      closeModal();
+      const modalHTML = `
+        <div class="onboarding-modal-overlay large show" id="success-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+          <div class="onboarding-modal-content" style="background: white; border-radius: 1rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div class="onboarding-modal-header" style="padding: 2rem 2rem 1rem; border-bottom: 1px solid #e5e7eb;">
+              <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold;">🎉 Configuração Completa!</h2>
+            </div>
+            <div class="onboarding-modal-body" style="padding: 2rem;">
+              <div class="onboarding-success" style="text-align: center;">
+                <div class="success-animation" style="margin-bottom: 2rem;">
+                  <div class="success-icon" style="font-size: 4rem; margin-bottom: 1rem; animation: pulse 2s infinite;">✅</div>
+                  <h2 style="font-size: 1.875rem; font-weight: bold; margin-bottom: 0.5rem;">Tudo pronto!</h2>
+                  <p style="font-size: 1.125rem; color: #6b7280;">Sua conta está configurada e você já pode começar a ganhar tokens</p>
+                </div>
+
+                <div class="next-steps" style="margin-bottom: 2rem;">
+                  <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Próximos passos:</h3>
+                  <div class="step-list" style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 300px; margin: 0 auto;">
+                    <div class="next-step" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #f9fafb; border-radius: 0.5rem; text-align: left;">
+                      <div class="step-number" style="width: 32px; height: 32px; background: #5046e5; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">1</div>
+                      <div class="step-text" style="font-weight: 500;">Registre sua primeira atividade</div>
+                    </div>
+                    <div class="next-step" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #f9fafb; border-radius: 0.5rem; text-align: left;">
+                      <div class="step-number" style="width: 32px; height: 32px; background: #5046e5; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">2</div>
+                      <div class="step-text" style="font-weight: 500;">Explore o marketplace</div>
+                    </div>
+                    <div class="next-step" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #f9fafb; border-radius: 0.5rem; text-align: left;">
+                      <div class="step-number" style="width: 32px; height: 32px; background: #5046e5; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">3</div>
+                      <div class="step-text" style="font-weight: 500;">Conecte-se com amigos</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="completion-cta" style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">
+                  <button onclick="startFirstActivity()" style="background: linear-gradient(135deg, #5046e5 0%, #6366f1 100%); color: white; border: none; padding: 0.75rem 2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+                    Registrar Primeira Atividade
+                  </button>
+                  <button onclick="closeModal()" style="background: transparent; color: #6b7280; border: none; padding: 0.75rem 2rem; border-radius: 0.5rem; cursor: pointer;">
+                    Ir para Dashboard
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+      if (window.desktopNotifications) {
+        window.desktopNotifications.achievement('Onboarding Completo!', 'Sua conta está configurada e pronta para uso');
+      }
+    }
+
+    function startFirstActivity() {
+      closeModal();
+      if (window.desktopNotifications) {
+        window.desktopNotifications.success('Primeira Atividade!', 'Registre sua primeira atividade para ganhar tokens');
+      }
+    }
+
+    function closeModal() {
+      const modals = document.querySelectorAll('[id$="-modal"]');
+      modals.forEach(modal => {
+        if (modal.parentNode) {
+          modal.parentNode.removeChild(modal);
+        }
+      });
+    }
+
+    function showStep(step) {
+      // Reset highlights
+      document.querySelectorAll('.feature-highlight').forEach(el => {
+        el.classList.remove('feature-highlight');
+      });
+
+      // Reset opacity
+      document.querySelectorAll('#dashboard .card').forEach(el => {
+        el.classList.remove('opacity-50');
+        el.classList.add('opacity-50');
+      });
+
+      switch(step) {
+        case 'profile':
+          currentStep = 1;
+          document.getElementById('profile-card').classList.add('feature-highlight');
+          document.getElementById('profile-card').classList.remove('opacity-50');
+          break;
+        case 'connections':
+          currentStep = 2;
+          document.getElementById('connections-card').classList.add('feature-highlight');
+          document.getElementById('connections-card').classList.remove('opacity-50');
+          document.getElementById('profile-card').classList.remove('opacity-50');
+          break;
+        case 'goal':
+          currentStep = 3;
+          document.getElementById('goal-card').classList.add('feature-highlight');
+          document.getElementById('goal-card').classList.remove('opacity-50');
+          document.getElementById('profile-card').classList.remove('opacity-50');
+          document.getElementById('connections-card').classList.remove('opacity-50');
+          break;
+        case 'success':
+          currentStep = 3;
+          document.querySelectorAll('#dashboard .card').forEach(el => {
+            el.classList.remove('opacity-50');
+          });
+          document.getElementById('complex-features').classList.remove('hidden');
+          break;
+      }
+
+      updateProgress();
+    }
+
+    function resetDemo() {
+      currentStep = 0;
+      document.querySelectorAll('.feature-highlight').forEach(el => {
+        el.classList.remove('feature-highlight');
+      });
+
+      document.querySelectorAll('#dashboard .card').forEach(el => {
+        el.classList.add('opacity-50');
+      });
+
+      document.getElementById('profile-card').classList.add('feature-highlight');
+      document.getElementById('profile-card').classList.remove('opacity-50');
+      document.getElementById('complex-features').classList.add('hidden');
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const progress = (currentStep / totalSteps) * 100;
+      document.getElementById('progress-bar').style.width = progress + '%';
+      document.getElementById('progress-text').textContent = Math.round(progress) + '% completo';
+    }
+
+    // Inicializar demo
+    document.addEventListener('DOMContentLoaded', () => {
+      resetDemo();
+
+      // Adicionar event listeners diretos
+      const mainBtn = document.getElementById('main-onboarding-btn');
+      if (mainBtn) {
+        mainBtn.addEventListener('click', function() {
+          console.log('Botão clicado!');
+          startOnboardingDemo();
+        });
+      }
+
+      const profileCard = document.getElementById('profile-card');
+      if (profileCard) {
+        profileCard.addEventListener('click', function() {
+          console.log('Card perfil clicado!');
+          startOnboardingDemo();
+        });
+      }
+
+      // Simular notificação de boas-vindas
+      setTimeout(() => {
+        if (window.desktopNotifications) {
+          window.desktopNotifications.info(
+            'Demo de Onboarding',
+            'Use os controles à direita para navegar pelos passos'
+          );
+        }
+      }, 2000);
+    });
+
+    // Adicionar interatividade aos cards
+    document.getElementById('profile-card').addEventListener('click', () => {
+      if (window.simpleOnboarding) {
+        window.simpleOnboarding.showStep1();
+      }
+    });
+
+    document.getElementById('connections-card').addEventListener('click', () => {
+      if (currentStep >= 1 && window.simpleOnboarding) {
+        window.simpleOnboarding.showStep2();
+      }
+    });
+
+    document.getElementById('goal-card').addEventListener('click', () => {
+      if (currentStep >= 2 && window.simpleOnboarding) {
+        window.simpleOnboarding.showStep3();
+      }
+    });
+  </script>
+</body>
+</html>

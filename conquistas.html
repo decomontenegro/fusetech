@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FuseLabs - Conquistas</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-900" data-page="achievements">
+
+  <!-- Cabeçalho -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="font-bold text-xl text-primary">FuseLabs</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="index_modular.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-home mr-1"></i> Início
+            </a>
+            <a href="atividades.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-running mr-1"></i> Atividades
+            </a>
+            <a href="desafios.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-trophy mr-1"></i> Desafios
+            </a>
+            <a href="comunidade.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-users mr-1"></i> Comunidade
+            </a>
+            <a href="analytics.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-bar mr-1"></i> Análises
+            </a>
+            <a href="conquistas.html" class="border-primary text-primary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-medal mr-1"></i> Conquistas
+            </a>
+            <a href="perfil.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-user mr-1"></i> Perfil
+            </a>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <button id="notifications-button" class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
+            <i class="fas fa-bell text-lg"></i>
+            <span class="absolute top-3 right-3 inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+          </button>
+          <div class="ml-3 relative">
+            <div>
+              <button id="user-menu-button" class="flex text-sm rounded-full focus:outline-none" aria-expanded="false" aria-haspopup="true">
+                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              </button>
+            </div>
+            <div id="user-menu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+              <a href="perfil.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Seu Perfil</a>
+              <a href="configuracoes.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Configurações</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sair</a>
+            </div>
+          </div>
+          <div class="flex items-center sm:hidden ml-3">
+            <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Abrir menu principal</span>
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div id="mobile-menu" class="sm:hidden hidden">
+      <div class="pt-2 pb-3 space-y-1">
+        <a href="index_modular.html" class="bg-white text-gray-500 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium">Início</a>
+        <a href="atividades.html" class="bg-white text-gray-500 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium">Atividades</a>
+        <a href="desafios.html" class="bg-white text-gray-500 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium">Desafios</a>
+        <a href="comunidade.html" class="bg-white text-gray-500 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium">Comunidade</a>
+        <a href="analytics.html" class="bg-white text-gray-500 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium">Análises</a>
+        <a href="conquistas.html" class="bg-primary-light text-primary block pl-3 pr-4 py-2 border-l-4 border-primary text-base font-medium">Conquistas</a>
+        <a href="perfil.html" class="bg-white text-gray-500 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium">Perfil</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Conquistas</h1>
+        <p class="mt-1 text-sm text-gray-500">Acompanhe seu progresso e desbloqueie recompensas</p>
+      </div>
+      <div class="mt-4 md:mt-0 flex space-x-3">
+        <div class="relative">
+          <select id="achievement-filter" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+            <option value="all">Todas conquistas</option>
+            <option value="unlocked">Desbloqueadas</option>
+            <option value="locked">Bloqueadas</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nível e Progresso -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <div class="flex flex-col md:flex-row md:items-center">
+        <div class="flex-shrink-0 flex items-center justify-center w-20 h-20 rounded-full bg-primary-light text-primary mb-4 md:mb-0 md:mr-6">
+          <i id="level-icon" class="fas fa-seedling text-3xl"></i>
+        </div>
+        <div class="flex-grow">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+            <div>
+              <h2 class="text-xl font-bold text-gray-900">Nível <span id="current-level">1</span>: <span id="level-name">Iniciante</span></h2>
+              <p class="text-sm text-gray-500">Continue se exercitando para subir de nível</p>
+            </div>
+            <div class="mt-2 md:mt-0">
+              <span class="text-sm font-medium text-gray-700">XP: <span id="current-xp">0</span>/<span id="next-level-xp">100</span></span>
+            </div>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div id="xp-progress" class="bg-primary h-2.5 rounded-full" style="width: 25%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs de Conquistas -->
+    <div class="mb-6">
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <button id="tab-all" class="tab-button active border-primary text-primary whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+            Todas
+          </button>
+          <button id="tab-distance" class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+            Distância
+          </button>
+          <button id="tab-activities" class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+            Atividades
+          </button>
+          <button id="tab-challenges" class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+            Desafios
+          </button>
+          <button id="tab-social" class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+            Social
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Conteúdo das Tabs -->
+    <div>
+      <!-- Todas as Conquistas -->
+      <div id="content-all" class="tab-content active">
+        <div id="achievements-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- As conquistas serão inseridas aqui dinamicamente -->
+          <div class="achievement-card bg-white shadow rounded-lg overflow-hidden">
+            <div class="p-6">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center bg-blue-100 text-blue-500">
+                  <i class="fas fa-shoe-prints text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-medium text-gray-900">Primeiro Passo</h3>
+                  <p class="text-sm text-gray-500">Registre sua primeira atividade</p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-medium text-blue-500">+10 XP</span>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <i class="fas fa-check-circle mr-1"></i> Desbloqueada
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="achievement-card bg-white shadow rounded-lg overflow-hidden">
+            <div class="p-6">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center bg-blue-100 text-blue-500">
+                  <i class="fas fa-route text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-medium text-gray-900">Explorador Iniciante</h3>
+                  <p class="text-sm text-gray-500">Acumule 10 km de distância</p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-medium text-blue-500">+20 XP</span>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    <i class="fas fa-lock mr-1"></i> Bloqueada
+                  </span>
+                </div>
+                <div class="mt-2">
+                  <div class="w-full bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: 45%"></div>
+                  </div>
+                  <div class="mt-1 text-xs text-gray-500 text-right">4.5/10 km</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outras tabs -->
+      <div id="content-distance" class="tab-content">
+        <!-- Conteúdo será carregado dinamicamente -->
+      </div>
+
+      <div id="content-activities" class="tab-content">
+        <!-- Conteúdo será carregado dinamicamente -->
+      </div>
+
+      <div id="content-challenges" class="tab-content">
+        <!-- Conteúdo será carregado dinamicamente -->
+      </div>
+
+      <div id="content-social" class="tab-content">
+        <!-- Conteúdo será carregado dinamicamente -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/user-menu.js"></script>
+  <script src="js/mobile-menu.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/gamification.js"></script>
+  <script src="js/conquistas.js"></script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!-- Health Content -->
+<div class="space-y-6">
+  <!-- Health Metrics -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Frequência Cardíaca</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-heartbeat text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">68</p>
+          <p class="text-sm text-gray-500">bpm (repouso)</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-down mr-1"></i>
+          3%
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Status</span>
+          <span>Excelente</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-green-500 rounded-full progress-bar" style="width: 90%"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Sono</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-bed text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">7.2</p>
+          <p class="text-sm text-gray-500">horas/dia (média)</p>
+        </div>
+        <div class="text-yellow-500 text-sm font-medium flex items-center">
+          <i class="fas fa-minus mr-1"></i>
+          Estável
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Status</span>
+          <span>Bom</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-yellow-500 rounded-full progress-bar" style="width: 75%"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Recuperação</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-sync-alt text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">82</p>
+          <p class="text-sm text-gray-500">pontos (0-100)</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-up mr-1"></i>
+          5%
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Status</span>
+          <span>Muito Bom</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-green-500 rounded-full progress-bar" style="width: 82%"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Stress</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-brain text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">35</p>
+          <p class="text-sm text-gray-500">pontos (0-100)</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-down mr-1"></i>
+          8%
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Status</span>
+          <span>Baixo</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-green-500 rounded-full progress-bar" style="width: 35%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Sleep Analysis -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Análise do Sono</h2>
+      <div class="chart-container">
+        <canvas id="sleepAnalysisChart"></canvas>
+      </div>
+    </div>
+    
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Qualidade do Sono</h2>
+      <div class="chart-container">
+        <canvas id="sleepQualityChart"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Heart Rate Variability -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-medium text-gray-900">Variabilidade da Frequência Cardíaca (HRV)</h2>
+      <div class="flex space-x-2">
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          Diário
+        </button>
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+          Semanal
+        </button>
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          Mensal
+        </button>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="hrvChart"></canvas>
+    </div>
+  </div>
+  
+  <!-- Wellness Score -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Pontuação de Bem-estar</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <div class="flex items-center justify-center">
+          <div class="relative">
+            <svg class="w-40 h-40" viewBox="0 0 100 100">
+              <circle class="text-gray-200" stroke-width="10" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+              <circle class="text-primary" stroke-width="10" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" stroke-dasharray="251.2" stroke-dashoffset="50.24" />
+              <text x="50" y="50" font-size="20" text-anchor="middle" alignment-baseline="middle" fill="#4F46E5" font-weight="bold">80%</text>
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <p class="text-lg font-medium text-gray-900">Pontuação Geral</p>
+          <p class="text-sm text-gray-500">Baseado em todos os fatores de saúde</p>
+        </div>
+      </div>
+      <div>
+        <div class="space-y-4">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center">
+                <i class="fas fa-heartbeat text-red-500 mr-2"></i>
+                <span class="text-sm">Cardiovascular</span>
+              </div>
+              <span class="text-sm font-medium">85%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full progress-bar">
+              <div class="bg-red-500 rounded-full progress-bar" style="width: 85%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center">
+                <i class="fas fa-bed text-blue-500 mr-2"></i>
+                <span class="text-sm">Sono</span>
+              </div>
+              <span class="text-sm font-medium">75%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full progress-bar">
+              <div class="bg-blue-500 rounded-full progress-bar" style="width: 75%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center">
+                <i class="fas fa-dumbbell text-green-500 mr-2"></i>
+                <span class="text-sm">Atividade</span>
+              </div>
+              <span class="text-sm font-medium">90%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full progress-bar">
+              <div class="bg-green-500 rounded-full progress-bar" style="width: 90%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center">
+                <i class="fas fa-brain text-purple-500 mr-2"></i>
+                <span class="text-sm">Stress</span>
+              </div>
+              <span class="text-sm font-medium">70%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full progress-bar">
+              <div class="bg-purple-500 rounded-full progress-bar" style="width: 70%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Recovery & Training Readiness -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Prontidão para Treino</h2>
+      <div class="flex items-center justify-center mb-6">
+        <div class="relative">
+          <svg class="w-40 h-40" viewBox="0 0 100 100">
+            <circle class="text-gray-200" stroke-width="10" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+            <circle class="text-green-500" stroke-width="10" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" stroke-dasharray="251.2" stroke-dashoffset="62.8" />
+            <text x="50" y="50" font-size="20" text-anchor="middle" alignment-baseline="middle" fill="#10B981" font-weight="bold">75%</text>
+          </svg>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div class="flex items-center">
+            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+            <span>Recuperação muscular</span>
+          </div>
+          <span class="font-medium">Bom</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div class="flex items-center">
+            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+            <span>Energia disponível</span>
+          </div>
+          <span class="font-medium">Ótimo</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-circle text-yellow-500 mr-2"></i>
+            <span>Fadiga central</span>
+          </div>
+          <span class="font-medium">Moderada</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Recomendações</h2>
+      <div class="space-y-4">
+        <div class="p-4 border rounded-lg bg-green-50">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-thumbs-up text-green-500 mr-2"></i>
+            <h3 class="font-medium">Treino Recomendado Hoje</h3>
+          </div>
+          <p class="text-sm">Você está bem recuperado. Um treino de intensidade moderada a alta seria apropriado hoje.</p>
+          <div class="mt-3 flex space-x-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              Corrida
+            </span>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              Intensidade Moderada
+            </span>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              45-60 min
+            </span>
+          </div>
+        </div>
+        
+        <div class="p-4 border rounded-lg">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-lightbulb text-primary mr-2"></i>
+            <h3 class="font-medium">Dica de Recuperação</h3>
+          </div>
+          <p class="text-sm">Considere adicionar 15 minutos de alongamento após seu treino para melhorar a recuperação muscular.</p>
+        </div>
+        
+        <div class="p-4 border rounded-lg">
+          <div class="flex items-center mb-2">
+            <i class="fas fa-bed text-blue-500 mr-2"></i>
+            <h3 class="font-medium">Dica de Sono</h3>
+          </div>
+          <p class="text-sm">Sua qualidade de sono tem sido inconsistente. Tente manter um horário regular de sono para melhorar a recuperação.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sleep Analysis Chart
+    const sleepAnalysisCtx = document.getElementById('sleepAnalysisChart').getContext('2d');
+    new Chart(sleepAnalysisCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        datasets: [
+          {
+            label: 'Sono Profundo',
+            data: [2.1, 1.8, 2.2, 1.9, 2.0, 2.5, 2.3],
+            backgroundColor: 'rgba(99, 102, 241, 0.8)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Sono Leve',
+            data: [3.5, 3.8, 3.2, 3.6, 3.4, 3.7, 3.9],
+            backgroundColor: 'rgba(209, 213, 219, 0.8)',
+            borderColor: 'rgba(209, 213, 219, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'REM',
+            data: [1.5, 1.2, 1.4, 1.3, 1.6, 1.8, 1.7],
+            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            stacked: true
+          },
+          y: {
+            stacked: true,
+            title: {
+              display: true,
+              text: 'Horas'
+            }
+          }
+        }
+      }
+    });
+    
+    // Sleep Quality Chart
+    const sleepQualityCtx = document.getElementById('sleepQualityChart').getContext('2d');
+    new Chart(sleepQualityCtx, {
+      type: 'line',
+      data: {
+        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        datasets: [
+          {
+            label: 'Qualidade do Sono (0-100)',
+            data: [75, 68, 72, 70, 78, 85, 80],
+            borderColor: 'rgba(99, 102, 241, 1)',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            min: 0,
+            max: 100,
+            title: {
+              display: true,
+              text: 'Pontuação'
+            }
+          }
+        }
+      }
+    });
+    
+    // HRV Chart
+    const hrvCtx = document.getElementById('hrvChart').getContext('2d');
+    new Chart(hrvCtx, {
+      type: 'line',
+      data: {
+        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        datasets: [
+          {
+            label: 'HRV (ms)',
+            data: [65, 62, 58, 60, 68, 72, 70],
+            borderColor: 'rgba(99, 102, 241, 1)',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: 'Média de 7 dias',
+            data: [64, 64, 63, 62, 63, 64, 65],
+            borderColor: 'rgba(239, 68, 68, 1)',
+            borderDash: [5, 5],
+            fill: false,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'HRV (ms)'
+            }
+          }
+        }
+      }
+    });
+  });
+</script>

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuseLabs App - Visão Geral</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-dark);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-content {
+            color: var(--gray);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .architecture-diagram {
+            width: 100%;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 1rem 0;
+        }
+
+        .flow-diagram {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Estilos para gráficos SVG */
+        .svg-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 2rem auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .node rect {
+            fill: white;
+            stroke: var(--primary);
+            stroke-width: 2px;
+            rx: 5;
+            ry: 5;
+        }
+
+        .node text {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            fill: var(--dark);
+        }
+
+        .edge {
+            stroke: var(--primary);
+            stroke-width: 2px;
+            fill: none;
+        }
+
+        .arrow {
+            fill: var(--primary);
+        }
+
+        .process-step {
+            fill: white;
+            stroke: var(--primary);
+            stroke-width: 2px;
+        }
+
+        .process-text {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            fill: var(--dark);
+            text-anchor: middle;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-bar {
+            fill: var(--primary);
+            transition: fill 0.3s;
+        }
+
+        .chart-bar:hover {
+            fill: var(--primary-dark);
+        }
+
+        .chart-label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            fill: var(--dark);
+        }
+
+        .chart-value {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            fill: white;
+            text-anchor: middle;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FuseLabs App</h1>
+            <p class="description">Plataforma de tokenização para atividades físicas e sociais</p>
+        </header>
+
+        <div class="section">
+            <h2>Visão Geral da Arquitetura</h2>
+            <p>O FuseLabs App é uma aplicação distribuída que segue uma arquitetura de microsserviços. A aplicação é dividida em vários serviços independentes que se comunicam entre si através de APIs REST, GraphQL e mensagens assíncronas via Redis.</p>
+
+            <div class="svg-container">
+                <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Camada de Frontend -->
+                    <g class="node" transform="translate(100, 50)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">Frontend (Web)</text>
+                    </g>
+
+                    <g class="node" transform="translate(325, 50)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">API Gateway</text>
+                    </g>
+
+                    <g class="node" transform="translate(550, 50)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">Hasura GraphQL</text>
+                    </g>
+
+                    <!-- Conexões da primeira camada -->
+                    <path class="edge" d="M250,90 L325,90" />
+                    <polygon class="arrow" points="325,90 315,85 315,95" />
+
+                    <path class="edge" d="M475,90 L550,90" />
+                    <polygon class="arrow" points="550,90 540,85 540,95" />
+
+                    <!-- Camada de Serviços -->
+                    <g class="node" transform="translate(100, 200)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">Token Service</text>
+                    </g>
+
+                    <g class="node" transform="translate(325, 200)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">Strava Worker</text>
+                    </g>
+
+                    <g class="node" transform="translate(550, 200)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">Social Listener</text>
+                    </g>
+
+                    <!-- Conexões entre camadas -->
+                    <path class="edge" d="M175,130 L175,200" />
+                    <polygon class="arrow" points="175,200 170,190 180,190" />
+
+                    <path class="edge" d="M400,130 L400,200" />
+                    <polygon class="arrow" points="400,200 395,190 405,190" />
+
+                    <path class="edge" d="M625,130 L625,200" />
+                    <polygon class="arrow" points="625,200 620,190 630,190" />
+
+                    <!-- Conexões horizontais -->
+                    <path class="edge" d="M250,240 L325,240" />
+                    <polygon class="arrow" points="325,240 315,235 315,245" />
+
+                    <path class="edge" d="M475,240 L550,240" />
+                    <polygon class="arrow" points="550,240 540,235 540,245" />
+
+                    <!-- Camada de Serviços de Suporte -->
+                    <g class="node" transform="translate(100, 350)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">Fraud Detection</text>
+                    </g>
+
+                    <g class="node" transform="translate(325, 350)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">Gamification</text>
+                    </g>
+
+                    <g class="node" transform="translate(550, 350)">
+                        <rect width="150" height="80" />
+                        <text x="75" y="45" text-anchor="middle">Database</text>
+                    </g>
+
+                    <!-- Conexões entre camadas -->
+                    <path class="edge" d="M175,280 L175,350" />
+                    <polygon class="arrow" points="175,350 170,340 180,340" />
+
+                    <path class="edge" d="M400,280 L400,350" />
+                    <polygon class="arrow" points="400,350 395,340 405,340" />
+
+                    <path class="edge" d="M625,280 L625,350" />
+                    <polygon class="arrow" points="625,350 620,340 630,340" />
+
+                    <!-- Conexões horizontais -->
+                    <path class="edge" d="M250,390 L325,390" />
+                    <polygon class="arrow" points="325,390 315,385 315,395" />
+
+                    <path class="edge" d="M475,390 L550,390" />
+                    <polygon class="arrow" points="550,390 540,385 540,395" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Componentes Principais</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Frontend (Web)</h3>
+                    <div class="card-content">
+                        <p>Interface de usuário construída com Next.js, React e TailwindCSS. Responsável pela autenticação de usuários, exibição de dados e integração com carteiras de criptomoedas.</p>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Next.js</span>
+                            <span class="tech-badge">React</span>
+                            <span class="tech-badge">TailwindCSS</span>
+                            <span class="tech-badge">Apollo Client</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Token Service</h3>
+                    <div class="card-content">
+                        <p>Serviço responsável pela interação com a blockchain Base L2, mint e burn de tokens ERC-20, gerenciamento de transações e exposição de API para consulta de saldos.</p>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">Fastify</span>
+                            <span class="tech-badge">ethers.js</span>
+                            <span class="tech-badge">Redis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Strava Worker</h3>
+                    <div class="card-content">
+                        <p>Serviço responsável pela integração com a API do Strava, processamento de webhooks, verificação e validação de atividades físicas e cálculo de pontos.</p>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">Fastify</span>
+                            <span class="tech-badge">Redis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Social Listener</h3>
+                    <div class="card-content">
+                        <p>Serviço responsável pela integração com APIs de redes sociais, monitoramento de hashtags e menções, verificação de posts sociais e cálculo de pontos.</p>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">Fastify</span>
+                            <span class="tech-badge">Redis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Fraud Detection</h3>
+                    <div class="card-content">
+                        <p>Serviço responsável pela detecção de atividades fraudulentas, análise de padrões de atividades físicas e verificação de autenticidade de posts sociais.</p>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">Fastify</span>
+                            <span class="tech-badge">ML Libraries</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Gamification</h3>
+                    <div class="card-content">
+                        <p>Serviço responsável pelo gerenciamento de desafios, conquistas, leaderboards e sistema de níveis e recompensas.</p>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">Fastify</span>
+                            <span class="tech-badge">Redis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Fluxos Principais</h2>
+
+            <h3>Fluxo Earn "Corrida"</h3>
+            <div class="svg-container">
+                <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Processo de Earn "Corrida" -->
+                    <rect class="process-step" x="50" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="100" y="80">Conectar Strava</text>
+
+                    <path class="edge" d="M150,80 L200,80" />
+                    <polygon class="arrow" points="200,80 190,75 190,85" />
+
+                    <rect class="process-step" x="200" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="250" y="80">Completar Corrida</text>
+
+                    <path class="edge" d="M300,80 L350,80" />
+                    <polygon class="arrow" points="350,80 340,75 340,85" />
+
+                    <rect class="process-step" x="350" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="400" y="80">Processar Atividade</text>
+
+                    <path class="edge" d="M450,80 L500,80" />
+                    <polygon class="arrow" points="500,80 490,75 490,85" />
+
+                    <rect class="process-step" x="500" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="550" y="75">Verificar</text>
+                    <text class="process-text" x="550" y="90">Autenticidade</text>
+
+                    <path class="edge" d="M600,80 L650,80" />
+                    <polygon class="arrow" points="650,80 640,75 640,85" />
+
+                    <rect class="process-step" x="650" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="700" y="75">Mintar</text>
+                    <text class="process-text" x="700" y="90">Tokens</text>
+
+                    <path class="edge" d="M700,110 L700,140" />
+                    <polygon class="arrow" points="700,140 695,130 705,130" />
+
+                    <rect class="process-step" x="650" y="140" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="700" y="165">Atualizar</text>
+                    <text class="process-text" x="700" y="180">Gamificação</text>
+                </svg>
+            </div>
+
+            <h3>Fluxo Earn "Social"</h3>
+            <div class="svg-container">
+                <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Processo de Earn "Social" -->
+                    <rect class="process-step" x="50" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="100" y="75">Conectar</text>
+                    <text class="process-text" x="100" y="90">Rede Social</text>
+
+                    <path class="edge" d="M150,80 L200,80" />
+                    <polygon class="arrow" points="200,80 190,75 190,85" />
+
+                    <rect class="process-step" x="200" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="250" y="75">Publicar Post</text>
+                    <text class="process-text" x="250" y="90">#FuseLabs</text>
+
+                    <path class="edge" d="M300,80 L350,80" />
+                    <polygon class="arrow" points="350,80 340,75 340,85" />
+
+                    <rect class="process-step" x="350" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="400" y="75">Detectar</text>
+                    <text class="process-text" x="400" y="90">Post</text>
+
+                    <path class="edge" d="M450,80 L500,80" />
+                    <polygon class="arrow" points="500,80 490,75 490,85" />
+
+                    <rect class="process-step" x="500" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="550" y="75">Verificar</text>
+                    <text class="process-text" x="550" y="90">Autenticidade</text>
+
+                    <path class="edge" d="M600,80 L650,80" />
+                    <polygon class="arrow" points="650,80 640,75 640,85" />
+
+                    <rect class="process-step" x="650" y="50" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="700" y="75">Mintar</text>
+                    <text class="process-text" x="700" y="90">Tokens</text>
+
+                    <path class="edge" d="M700,110 L700,140" />
+                    <polygon class="arrow" points="700,140 695,130 705,130" />
+
+                    <rect class="process-step" x="650" y="140" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="700" y="165">Atualizar</text>
+                    <text class="process-text" x="700" y="180">Gamificação</text>
+                </svg>
+            </div>
+
+            <h3>Fluxo Burn</h3>
+            <div class="svg-container">
+                <svg viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Processo de Burn -->
+                    <rect class="process-step" x="50" y="30" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="100" y="55">Selecionar</text>
+                    <text class="process-text" x="100" y="70">Recompensa</text>
+
+                    <path class="edge" d="M150,60 L200,60" />
+                    <polygon class="arrow" points="200,60 190,55 190,65" />
+
+                    <rect class="process-step" x="200" y="30" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="250" y="55">Queimar</text>
+                    <text class="process-text" x="250" y="70">Tokens</text>
+
+                    <path class="edge" d="M300,60 L350,60" />
+                    <polygon class="arrow" points="350,60 340,55 340,65" />
+
+                    <rect class="process-step" x="350" y="30" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="400" y="55">Registrar</text>
+                    <text class="process-text" x="400" y="70">Atividade</text>
+
+                    <path class="edge" d="M450,60 L500,60" />
+                    <polygon class="arrow" points="500,60 490,55 490,65" />
+
+                    <rect class="process-step" x="500" y="30" width="100" height="60" rx="10" ry="10" />
+                    <text class="process-text" x="550" y="55">Receber</text>
+                    <text class="process-text" x="550" y="70">Recompensa</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Tecnologias Utilizadas</h2>
+
+            <div class="chart-container">
+                <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+                    <text x="250" y="30" text-anchor="middle" font-weight="bold" font-size="16">Distribuição de Tecnologias</text>
+
+                    <!-- Eixo Y -->
+                    <line x1="50" y1="50" x2="50" y2="250" stroke="#333" stroke-width="2" />
+
+                    <!-- Eixo X -->
+                    <line x1="50" y1="250" x2="450" y2="250" stroke="#333" stroke-width="2" />
+
+                    <!-- Barras do gráfico -->
+                    <rect class="chart-bar" x="80" y="100" width="60" height="150" />
+                    <text class="chart-label" x="110" y="270" text-anchor="middle">Frontend</text>
+                    <text class="chart-value" x="110" y="175" text-anchor="middle">30%</text>
+
+                    <rect class="chart-bar" x="180" y="70" width="60" height="180" />
+                    <text class="chart-label" x="210" y="270" text-anchor="middle">Backend</text>
+                    <text class="chart-value" x="210" y="160" text-anchor="middle">35%</text>
+
+                    <rect class="chart-bar" x="280" y="130" width="60" height="120" />
+                    <text class="chart-label" x="310" y="270" text-anchor="middle">Infraestrutura</text>
+                    <text class="chart-value" x="310" y="190" text-anchor="middle">25%</text>
+
+                    <rect class="chart-bar" x="380" y="180" width="60" height="70" />
+                    <text class="chart-label" x="410" y="270" text-anchor="middle">Blockchain</text>
+                    <text class="chart-value" x="410" y="215" text-anchor="middle">10%</text>
+                </svg>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li>Next.js</li>
+                        <li>React</li>
+                        <li>TailwindCSS</li>
+                        <li>Apollo Client</li>
+                        <li>ethers.js</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li>Node.js</li>
+                        <li>Fastify</li>
+                        <li>TypeScript</li>
+                        <li>Hasura GraphQL</li>
+                        <li>PostgreSQL</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Infraestrutura</h3>
+                    <ul>
+                        <li>Docker</li>
+                        <li>AWS ECS</li>
+                        <li>Redis</li>
+                        <li>GitHub Actions</li>
+                        <li>Terraform</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Blockchain</h3>
+                    <ul>
+                        <li>Base L2</li>
+                        <li>Solidity</li>
+                        <li>ERC-20</li>
+                        <li>ethers.js</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Mapa de Processo Completo</h2>
+            <p>Este diagrama mostra o fluxo completo de dados e processos no sistema FuseLabs, desde a entrada de dados até a tokenização e recompensas.</p>
+
+            <div class="svg-container">
+                <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Usuário -->
+                    <g class="node" transform="translate(50, 200)">
+                        <rect width="100" height="60" rx="30" ry="30" />
+                        <text x="50" y="35" text-anchor="middle">Usuário</text>
+                    </g>
+
+                    <!-- Fontes de Dados -->
+                    <g class="node" transform="translate(200, 100)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">Strava API</text>
+                    </g>
+
+                    <g class="node" transform="translate(200, 200)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">Social Media API</text>
+                    </g>
+
+                    <g class="node" transform="translate(200, 300)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">Manual Input</text>
+                    </g>
+
+                    <!-- Processamento -->
+                    <g class="node" transform="translate(400, 100)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">Strava Worker</text>
+                    </g>
+
+                    <g class="node" transform="translate(400, 200)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">Social Listener</text>
+                    </g>
+
+                    <g class="node" transform="translate(400, 300)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">API Gateway</text>
+                    </g>
+
+                    <!-- Verificação -->
+                    <g class="node" transform="translate(600, 200)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">Fraud Detection</text>
+                    </g>
+
+                    <!-- Tokenização e Gamificação -->
+                    <g class="node" transform="translate(750, 100)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">Token Service</text>
+                    </g>
+
+                    <g class="node" transform="translate(750, 300)">
+                        <rect width="120" height="60" />
+                        <text x="60" y="35" text-anchor="middle">Gamification</text>
+                    </g>
+
+                    <!-- Conexões -->
+                    <!-- Usuário para fontes -->
+                    <path class="edge" d="M150,200 L200,130" />
+                    <polygon class="arrow" points="200,130 190,125 195,135" />
+
+                    <path class="edge" d="M150,230 L200,230" />
+                    <polygon class="arrow" points="200,230 190,225 190,235" />
+
+                    <path class="edge" d="M150,260 L200,300" />
+                    <polygon class="arrow" points="200,300 190,295 195,305" />
+
+                    <!-- Fontes para processamento -->
+                    <path class="edge" d="M320,130 L400,130" />
+                    <polygon class="arrow" points="400,130 390,125 390,135" />
+
+                    <path class="edge" d="M320,230 L400,230" />
+                    <polygon class="arrow" points="400,230 390,225 390,235" />
+
+                    <path class="edge" d="M320,330 L400,330" />
+                    <polygon class="arrow" points="400,330 390,325 390,335" />
+
+                    <!-- Processamento para verificação -->
+                    <path class="edge" d="M520,130 L580,180 L600,200" />
+                    <polygon class="arrow" points="600,200 590,195 595,205" />
+
+                    <path class="edge" d="M520,230 L600,230" />
+                    <polygon class="arrow" points="600,230 590,225 590,235" />
+
+                    <path class="edge" d="M520,330 L580,280 L600,260" />
+                    <polygon class="arrow" points="600,260 590,255 595,265" />
+
+                    <!-- Verificação para tokenização -->
+                    <path class="edge" d="M720,200 L740,160 L750,130" />
+                    <polygon class="arrow" points="750,130 740,135 745,125" />
+
+                    <!-- Verificação para gamificação -->
+                    <path class="edge" d="M720,260 L740,300 L750,330" />
+                    <polygon class="arrow" points="750,330 740,325 745,335" />
+
+                    <!-- Token para gamificação -->
+                    <path class="edge" d="M810,160 L810,300" />
+                    <polygon class="arrow" points="810,300 805,290 815,290" />
+
+                    <!-- Gamificação para usuário (ciclo completo) -->
+                    <path class="edge" d="M750,360 L100,360 L100,260" />
+                    <polygon class="arrow" points="100,260 95,270 105,270" />
+                </svg>
+            </div>
+        </div>
+
+        <footer>
+            <p>FuseLabs App &copy; 2023 - Tokenize suas atividades físicas e sociais</p>
+        </footer>
+    </div>
+</body>
+</html>

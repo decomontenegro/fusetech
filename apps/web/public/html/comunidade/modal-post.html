@@ -1,0 +1,211 @@
+<!-- Post Details Modal Content -->
+<div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-auto">
+  <div class="flex h-full">
+    <!-- Left side - Post content -->
+    <div class="w-full md:w-1/2 border-r">
+      <!-- Post Header -->
+      <div class="p-4 flex justify-between items-start border-b">
+        <div class="flex space-x-3">
+          <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="João Silva">
+          <div>
+            <div class="flex items-center">
+              <h3 class="font-medium text-gray-900">João Silva</h3>
+              <span class="ml-2 bg-primary-light text-primary text-xs px-1.5 rounded-full">
+                Nível 5
+              </span>
+            </div>
+            <p class="text-xs text-gray-500">@joaosilva</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <span class="text-xs text-gray-500">2 horas atrás</span>
+          <button class="ml-2 text-gray-400 hover:text-gray-500">
+            <i class="fas fa-ellipsis-h"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Post Content -->
+      <div class="p-4">
+        <p class="text-gray-800 whitespace-pre-line mb-4">Acabei de completar minha primeira corrida de 10km! 🏃‍♂️💪
+
+Estou muito feliz com meu progresso nas últimas semanas. Obrigado a todos que me incentivaram!</p>
+        
+        <!-- Post Images -->
+        <div class="space-y-2 mb-4">
+          <img src="../images/posts/run-1.jpg" alt="Corrida" class="w-full h-48 object-cover rounded-lg">
+          <img src="../images/posts/run-2.jpg" alt="Corrida" class="w-full h-48 object-cover rounded-lg">
+        </div>
+        
+        <!-- Activity Card -->
+        <div class="bg-gray-50 rounded-lg p-3 mb-4">
+          <div class="flex items-center gap-2 mb-2">
+            <i class="fas fa-running text-orange-500"></i>
+            <span class="font-medium">Corrida</span>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <div>
+              <span class="text-gray-500">Distância</span>
+              <p class="font-medium">10.0 km</p>
+            </div>
+            
+            <div>
+              <span class="text-gray-500">Tempo</span>
+              <p class="font-medium">1h 0m 0s</p>
+            </div>
+            
+            <div>
+              <span class="text-gray-500">Ritmo</span>
+              <p class="font-medium">6:00/km</p>
+            </div>
+            
+            <div>
+              <span class="text-gray-500">Elevação</span>
+              <p class="font-medium">120 m</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-1 mt-2 text-xs text-gray-500">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Parque Ibirapuera, São Paulo</span>
+          </div>
+        </div>
+        
+        <!-- Post Stats -->
+        <div class="flex space-x-4 text-sm text-gray-500 mb-4">
+          <div class="flex items-center">
+            <i class="fas fa-heart text-red-500 mr-1"></i>
+            <span>24 curtidas</span>
+          </div>
+          <div class="flex items-center">
+            <i class="far fa-comment mr-1"></i>
+            <span>2 comentários</span>
+          </div>
+        </div>
+        
+        <!-- Post Actions -->
+        <div class="flex justify-between border-t border-b py-2 mb-4">
+          <button class="flex items-center space-x-1 text-gray-500 hover:text-primary">
+            <i class="fas fa-heart text-red-500"></i>
+            <span>Curtir</span>
+          </button>
+          <button class="flex items-center space-x-1 text-gray-500 hover:text-primary">
+            <i class="far fa-comment"></i>
+            <span>Comentar</span>
+          </button>
+          <button class="flex items-center space-x-1 text-gray-500 hover:text-primary">
+            <i class="fas fa-share-alt"></i>
+            <span>Compartilhar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right side - Comments -->
+    <div class="hidden md:block md:w-1/2">
+      <div class="p-4 border-b">
+        <h3 class="font-medium text-gray-900">Comentários</h3>
+      </div>
+      
+      <div class="p-4 space-y-4 max-h-[calc(90vh-120px)] overflow-y-auto">
+        <!-- Comment 1 -->
+        <div class="flex space-x-3">
+          <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Santos">
+          <div class="flex-1 bg-gray-50 rounded-lg p-3">
+            <div class="flex justify-between items-start">
+              <div class="font-medium text-gray-900">Maria Santos</div>
+              <span class="text-xs text-gray-500">30 min atrás</span>
+            </div>
+            <p class="text-sm mt-1">Parabéns! Continue assim! 👏</p>
+            <button class="text-xs text-gray-500 mt-2 hover:text-primary">Responder</button>
+          </div>
+        </div>
+        
+        <!-- Comment 2 -->
+        <div class="flex space-x-3">
+          <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/67.jpg" alt="Pedro Oliveira">
+          <div class="flex-1 bg-gray-50 rounded-lg p-3">
+            <div class="flex justify-between items-start">
+              <div class="font-medium text-gray-900">Pedro Oliveira</div>
+              <span class="text-xs text-gray-500">15 min atrás</span>
+            </div>
+            <p class="text-sm mt-1">Incrível! Qual foi seu ritmo médio?</p>
+            <button class="text-xs text-gray-500 mt-2 hover:text-primary">Responder</button>
+          </div>
+        </div>
+        
+        <!-- Add Comment -->
+        <div class="flex space-x-3 mt-4">
+          <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Você">
+          <div class="flex-1">
+            <textarea class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-primary focus:border-primary" rows="2" placeholder="Adicione um comentário..."></textarea>
+            <div class="flex justify-end mt-2">
+              <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+                <i class="fas fa-paper-plane mr-1"></i>
+                Enviar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Comments Section -->
+  <div class="md:hidden border-t">
+    <div class="p-4 border-b">
+      <h3 class="font-medium text-gray-900">Comentários</h3>
+    </div>
+    
+    <div class="p-4 space-y-4">
+      <!-- Comment 1 -->
+      <div class="flex space-x-3">
+        <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Santos">
+        <div class="flex-1 bg-gray-50 rounded-lg p-3">
+          <div class="flex justify-between items-start">
+            <div class="font-medium text-gray-900">Maria Santos</div>
+            <span class="text-xs text-gray-500">30 min atrás</span>
+          </div>
+          <p class="text-sm mt-1">Parabéns! Continue assim! 👏</p>
+          <button class="text-xs text-gray-500 mt-2 hover:text-primary">Responder</button>
+        </div>
+      </div>
+      
+      <!-- Comment 2 -->
+      <div class="flex space-x-3">
+        <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/67.jpg" alt="Pedro Oliveira">
+        <div class="flex-1 bg-gray-50 rounded-lg p-3">
+          <div class="flex justify-between items-start">
+            <div class="font-medium text-gray-900">Pedro Oliveira</div>
+            <span class="text-xs text-gray-500">15 min atrás</span>
+          </div>
+          <p class="text-sm mt-1">Incrível! Qual foi seu ritmo médio?</p>
+          <button class="text-xs text-gray-500 mt-2 hover:text-primary">Responder</button>
+        </div>
+      </div>
+      
+      <!-- Add Comment -->
+      <div class="flex space-x-3 mt-4">
+        <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Você">
+        <div class="flex-1">
+          <textarea class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-primary focus:border-primary" rows="2" placeholder="Adicione um comentário..."></textarea>
+          <div class="flex justify-end mt-2">
+            <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+              <i class="fas fa-paper-plane mr-1"></i>
+              Enviar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Close Button -->
+  <div class="p-4 border-t">
+    <button class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+      <i class="fas fa-times mr-2"></i>
+      Fechar
+    </button>
+  </div>
+</div>

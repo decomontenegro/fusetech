@@ -1,0 +1,113 @@
+<!-- Navbar -->
+<nav class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex">
+        <div class="flex-shrink-0 flex items-center">
+          <span class="font-bold text-xl text-primary">FuseLabs</span>
+        </div>
+        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <a href="index.html" class="nav-link" data-page="home">
+            <i class="fas fa-home mr-1"></i> Início
+          </a>
+          <a href="atividades.html" class="nav-link" data-page="activities">
+            <i class="fas fa-running mr-1"></i> Atividades
+          </a>
+          <a href="desafios.html" class="nav-link" data-page="challenges">
+            <i class="fas fa-trophy mr-1"></i> Desafios
+          </a>
+          <a href="comunidade.html" class="nav-link" data-page="community">
+            <i class="fas fa-users mr-1"></i> Comunidade
+          </a>
+          <a href="analytics.html" class="nav-link" data-page="analytics">
+            <i class="fas fa-chart-bar mr-1"></i> Análises
+          </a>
+          <a href="perfil.html" class="nav-link" data-page="profile">
+            <i class="fas fa-user mr-1"></i> Perfil
+          </a>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
+          <i class="fas fa-bell text-lg"></i>
+          <span class="absolute top-3 right-3 inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+        </button>
+        <div class="ml-3 relative">
+          <div>
+            <button class="flex text-sm rounded-full focus:outline-none" id="user-menu-button">
+              <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+            </button>
+          </div>
+          <!-- User dropdown menu -->
+          <div id="user-menu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+            <a href="perfil.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Seu Perfil</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Configurações</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sair</a>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile menu button -->
+      <div class="flex items-center sm:hidden">
+        <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false">
+          <span class="sr-only">Abrir menu principal</span>
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu, show/hide based on menu state. -->
+  <div id="mobile-menu" class="sm:hidden hidden">
+    <div class="pt-2 pb-3 space-y-1">
+      <a href="index.html" class="mobile-nav-link" data-page="home">
+        <i class="fas fa-home mr-1"></i> Início
+      </a>
+      <a href="atividades.html" class="mobile-nav-link" data-page="activities">
+        <i class="fas fa-running mr-1"></i> Atividades
+      </a>
+      <a href="desafios.html" class="mobile-nav-link" data-page="challenges">
+        <i class="fas fa-trophy mr-1"></i> Desafios
+      </a>
+      <a href="comunidade.html" class="mobile-nav-link" data-page="community">
+        <i class="fas fa-users mr-1"></i> Comunidade
+      </a>
+      <a href="analytics.html" class="mobile-nav-link" data-page="analytics">
+        <i class="fas fa-chart-bar mr-1"></i> Análises
+      </a>
+      <a href="perfil.html" class="mobile-nav-link" data-page="profile">
+        <i class="fas fa-user mr-1"></i> Perfil
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Destacar o link de navegação ativo com base na página atual
+  document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = document.body.getAttribute('data-page');
+    
+    if (currentPage) {
+      // Desktop nav links
+      document.querySelectorAll('.nav-link').forEach(link => {
+        if (link.getAttribute('data-page') === currentPage) {
+          link.classList.add('border-primary', 'text-primary');
+          link.classList.remove('border-transparent', 'text-gray-500');
+        } else {
+          link.classList.add('border-transparent', 'text-gray-500');
+          link.classList.remove('border-primary', 'text-primary');
+        }
+        link.classList.add('hover:text-gray-700', 'hover:border-gray-300', 'inline-flex', 'items-center', 'px-1', 'pt-1', 'border-b-2', 'text-sm', 'font-medium');
+      });
+      
+      // Mobile nav links
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        if (link.getAttribute('data-page') === currentPage) {
+          link.classList.add('bg-primary-light', 'text-primary');
+        } else {
+          link.classList.add('text-gray-600', 'hover:bg-gray-50', 'hover:text-gray-900');
+        }
+        link.classList.add('block', 'pl-3', 'pr-4', 'py-2', 'border-l-4', 'border-transparent', 'text-base', 'font-medium');
+      });
+    }
+  });
+</script>

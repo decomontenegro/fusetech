@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atividades - FUSEtech</title>
+
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Meta tags for PWA -->
+  <meta name="theme-color" content="#5046e5">
+  <meta name="description" content="Gerencie suas atividades físicas e acompanhe seu progresso no FUSEtech.">
+</head>
+<body data-page="activities">
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="flex justify-between items-center h-16">
+        <!-- Brand -->
+        <div class="flex items-center">
+          <a href="index.html" class="nav-brand">
+            <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mr-3">
+              <i class="fas fa-bolt text-white"></i>
+            </div>
+            FUSEtech
+          </a>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex nav-links">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-home mr-2"></i>
+            Dashboard
+          </a>
+          <a href="atividades.html" class="nav-link active">
+            <i class="fas fa-running mr-2"></i>
+            Atividades
+          </a>
+          <a href="achievements.html" class="nav-link">
+            <i class="fas fa-trophy mr-2"></i>
+            Conquistas
+          </a>
+          <a href="goals.html" class="nav-link">
+            <i class="fas fa-bullseye mr-2"></i>
+            Metas
+          </a>
+          <a href="marketplace.html" class="nav-link">
+            <i class="fas fa-store mr-2"></i>
+            Marketplace
+          </a>
+          <a href="community.html" class="nav-link">
+            <i class="fas fa-users mr-2"></i>
+            Comunidade
+          </a>
+        </div>
+
+        <!-- User Actions -->
+        <div class="flex items-center gap-4">
+          <!-- Tokens Balance -->
+          <div class="hidden sm:flex items-center bg-gradient-primary text-white px-4 py-2 rounded-full">
+            <i class="fas fa-coins mr-2"></i>
+            <span class="font-semibold">1,247</span>
+            <span class="text-xs ml-1 opacity-80">FUSE</span>
+          </div>
+
+          <!-- Notifications -->
+          <button class="btn-icon-only btn-ghost relative">
+            <i class="fas fa-bell"></i>
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full"></span>
+          </button>
+
+          <!-- User Avatar -->
+          <div class="avatar">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User Avatar">
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="md:hidden btn-icon-only btn-ghost">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Header Section -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Minhas Atividades</h1>
+        <p class="text-gray-600">Acompanhe seu histórico de exercícios e performance</p>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row gap-4 mt-4 lg:mt-0">
+        <button class="btn btn-outline">
+          <i class="fas fa-filter mr-2"></i>
+          Filtros
+        </button>
+        <button class="btn btn-outline">
+          <i class="fas fa-download mr-2"></i>
+          Exportar
+        </button>
+        <button class="btn btn-primary">
+          <i class="fas fa-plus mr-2"></i>
+          Nova Atividade
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="stat-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-running text-blue-600"></i>
+          </div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            +12%
+          </div>
+        </div>
+        <div class="stat-value">156</div>
+        <div class="stat-label">Total de Atividades</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-route text-green-600"></i>
+          </div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            +8%
+          </div>
+        </div>
+        <div class="stat-value">1,247 km</div>
+        <div class="stat-label">Distância Total</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-clock text-purple-600"></i>
+          </div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            +15%
+          </div>
+        </div>
+        <div class="stat-value">89h 32m</div>
+        <div class="stat-label">Tempo Total</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-coins text-orange-600"></i>
+          </div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            +23%
+          </div>
+        </div>
+        <div class="stat-value">2,847</div>
+        <div class="stat-label">FUSE Ganhos</div>
+      </div>
+    </div>
+
+    <!-- Activities Table -->
+    <div class="card card-elevated">
+      <div class="card-header">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-semibold">Histórico de Atividades</h3>
+          <div class="flex items-center gap-2">
+            <select class="input input-sm">
+              <option>Últimos 30 dias</option>
+              <option>Últimos 7 dias</option>
+              <option>Este mês</option>
+              <option>Este ano</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-body p-0">
+        <div class="overflow-x-auto">
+          <table class="desktop-table">
+            <thead>
+              <tr>
+                <th>Atividade</th>
+                <th>Data</th>
+                <th>Distância</th>
+                <th>Tempo</th>
+                <th>Ritmo</th>
+                <th>FUSE</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center mr-3">
+                      <i class="fas fa-running text-white text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium">Corrida Matinal</div>
+                      <div class="text-sm text-gray-500">Parque Ibirapuera</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>Hoje</div>
+                  <div class="text-sm text-gray-500">07:30</div>
+                </td>
+                <td>5.2 km</td>
+                <td>28:45</td>
+                <td>5:32/km</td>
+                <td>
+                  <span class="badge badge-success">+15 FUSE</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <button class="btn-icon-only btn-ghost btn-sm">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-icon-only btn-ghost btn-sm">
+                      <i class="fas fa-share"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr>
+                <td>
+                  <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-secondary rounded-full flex items-center justify-center mr-3">
+                      <i class="fas fa-bicycle text-white text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium">Ciclismo</div>
+                      <div class="text-sm text-gray-500">Ciclovia Marginal</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>Ontem</div>
+                  <div class="text-sm text-gray-500">18:00</div>
+                </td>
+                <td>15.8 km</td>
+                <td>45:20</td>
+                <td>20.9 km/h</td>
+                <td>
+                  <span class="badge badge-success">+25 FUSE</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <button class="btn-icon-only btn-ghost btn-sm">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-icon-only btn-ghost btn-sm">
+                      <i class="fas fa-share"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr>
+                <td>
+                  <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-3">
+                      <i class="fas fa-dumbbell text-white text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium">Treino de Força</div>
+                      <div class="text-sm text-gray-500">Academia Smart Fit</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>2 dias atrás</div>
+                  <div class="text-sm text-gray-500">19:30</div>
+                </td>
+                <td>-</td>
+                <td>60:00</td>
+                <td>-</td>
+                <td>
+                  <span class="badge badge-success">+20 FUSE</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <button class="btn-icon-only btn-ghost btn-sm">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-icon-only btn-ghost btn-sm">
+                      <i class="fas fa-share"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/performance.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/components.js" defer></script>
+  <script src="js/desktop-enhancements.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>

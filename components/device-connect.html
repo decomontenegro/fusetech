@@ -1,0 +1,347 @@
+<!-- Componente de Conexão de Dispositivos -->
+<div id="device-connect-component" class="bg-white shadow rounded-lg overflow-hidden">
+  <div class="p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-medium text-gray-900" data-i18n="devices.title">Dispositivos Conectados</h2>
+      <button id="sync-all-devices-btn" class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+        <i class="fas fa-sync-alt mr-2"></i> <span data-i18n="devices.sync_all">Sincronizar Todos</span>
+      </button>
+    </div>
+    
+    <div id="connected-devices-container" class="mb-6">
+      <div id="no-connected-devices" class="text-center py-8 border border-dashed border-gray-300 rounded-lg">
+        <div class="text-gray-400 mb-2">
+          <i class="fas fa-link-slash text-3xl"></i>
+        </div>
+        <p class="text-gray-500" data-i18n="devices.no_connected">Nenhum dispositivo conectado</p>
+        <p class="text-sm text-gray-400 mt-1" data-i18n="devices.connect_prompt">Conecte seus dispositivos para sincronizar automaticamente suas atividades</p>
+      </div>
+      
+      <div id="connected-devices-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+        <!-- Os dispositivos conectados serão inseridos aqui dinamicamente -->
+      </div>
+    </div>
+    
+    <div class="border-t border-gray-200 pt-4">
+      <h3 class="text-md font-medium text-gray-900 mb-3" data-i18n="devices.available">Dispositivos Disponíveis</h3>
+      
+      <div id="available-devices-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Os dispositivos disponíveis serão inseridos aqui dinamicamente -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Template para dispositivo conectado -->
+<template id="connected-device-template">
+  <div class="connected-device bg-gray-50 rounded-lg p-4 border border-gray-200 relative">
+    <div class="absolute top-2 right-2">
+      <button class="sync-device-btn text-gray-400 hover:text-primary p-1" title="Sincronizar">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <button class="disconnect-device-btn text-gray-400 hover:text-red-500 p-1" title="Desconectar">
+        <i class="fas fa-unlink"></i>
+      </button>
+    </div>
+    
+    <div class="flex items-center">
+      <div class="device-icon flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white">
+        <i class="fas"></i>
+      </div>
+      <div class="ml-3">
+        <h4 class="device-name text-sm font-medium text-gray-900"></h4>
+        <div class="flex items-center mt-1">
+          <span class="device-status text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-800">
+            <i class="fas fa-check-circle mr-1"></i> Conectado
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-3 text-xs text-gray-500">
+      <div class="flex justify-between mb-1">
+        <span data-i18n="devices.last_sync">Última sincronização:</span>
+        <span class="device-last-sync font-medium"></span>
+      </div>
+      <div class="flex justify-between">
+        <span data-i18n="devices.activities">Atividades:</span>
+        <span class="device-activity-count font-medium"></span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- Template para dispositivo disponível -->
+<template id="available-device-template">
+  <div class="available-device bg-white rounded-lg p-4 border border-gray-200 hover:border-primary transition-colors duration-200">
+    <div class="flex items-center mb-3">
+      <div class="device-icon flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white">
+        <i class="fas"></i>
+      </div>
+      <div class="ml-3">
+        <h4 class="device-name text-sm font-medium text-gray-900"></h4>
+      </div>
+    </div>
+    
+    <button class="connect-device-btn w-full py-1.5 px-3 text-xs font-medium rounded border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+      <i class="fas fa-link mr-1"></i> <span data-i18n="devices.connect">Conectar</span>
+    </button>
+  </div>
+</template>
+
+<!-- Modal de Configurações de Dispositivos -->
+<div id="device-settings-modal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+    <div class="flex justify-between items-center p-4 border-b border-gray-200">
+      <h3 class="text-lg font-medium text-gray-900" data-i18n="devices.settings">Configurações de Dispositivos</h3>
+      <button id="close-device-settings-btn" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="p-4">
+      <div class="mb-4">
+        <label for="sync-interval" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="devices.sync_interval">Intervalo de Sincronização</label>
+        <select id="sync-interval" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+          <option value="15">15 minutos</option>
+          <option value="30">30 minutos</option>
+          <option value="60">1 hora</option>
+          <option value="120">2 horas</option>
+          <option value="360">6 horas</option>
+          <option value="720">12 horas</option>
+          <option value="1440">24 horas</option>
+        </select>
+      </div>
+      
+      <div class="mb-4">
+        <label for="preferred-device" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="devices.preferred_device">Dispositivo Preferencial</label>
+        <select id="preferred-device" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+          <option value="">Nenhum</option>
+          <!-- Opções serão preenchidas dinamicamente -->
+        </select>
+        <p class="mt-1 text-xs text-gray-500" data-i18n="devices.preferred_device_help">Em caso de conflito, os dados deste dispositivo terão prioridade</p>
+      </div>
+      
+      <div class="mb-4">
+        <label for="merge-strategy" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="devices.merge_strategy">Estratégia de Mesclagem</label>
+        <select id="merge-strategy" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+          <option value="most_complete" data-i18n="devices.most_complete">Mais Completo</option>
+          <option value="most_recent" data-i18n="devices.most_recent">Mais Recente</option>
+          <option value="manual" data-i18n="devices.manual">Manual</option>
+        </select>
+      </div>
+      
+      <div class="flex items-center mb-4">
+        <input id="auto-sync" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+        <label for="auto-sync" class="ml-2 block text-sm text-gray-700" data-i18n="devices.auto_sync">Sincronizar automaticamente</label>
+      </div>
+    </div>
+    
+    <div class="px-4 py-3 bg-gray-50 flex justify-end rounded-b-lg">
+      <button id="save-device-settings-btn" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+        <span data-i18n="common.save">Salvar</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Instruções para Apple Health -->
+<div id="apple-health-modal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+    <div class="flex justify-between items-center p-4 border-b border-gray-200">
+      <h3 class="text-lg font-medium text-gray-900">Conectar Apple Health</h3>
+      <button class="close-modal-btn text-gray-400 hover:text-gray-500 focus:outline-none">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="p-4">
+      <div class="text-center mb-4">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-500 mb-3">
+          <i class="fab fa-apple text-xl"></i>
+        </div>
+        <h4 class="text-lg font-medium text-gray-900 mb-2">Instruções para Apple Health</h4>
+        <p class="text-sm text-gray-500">Para sincronizar com o Apple Health, você precisa usar nosso aplicativo iOS.</p>
+      </div>
+      
+      <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-600 mb-4">
+        <li>Baixe o aplicativo FuseLabs na App Store</li>
+        <li>Faça login com sua conta FuseLabs</li>
+        <li>Vá para Configurações > Conexões > Apple Health</li>
+        <li>Ative a sincronização e permita o acesso aos dados de saúde</li>
+      </ol>
+      
+      <div class="mt-4 text-center">
+        <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-900 focus:outline-none">
+          <i class="fab fa-apple mr-2"></i> Baixar na App Store
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script para inicializar o componente -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    initDeviceConnectComponent();
+  });
+  
+  function initDeviceConnectComponent() {
+    // Verificar se o serviço de integração está disponível
+    if (typeof deviceIntegration === 'undefined') {
+      console.error('Serviço de integração com dispositivos não encontrado');
+      return;
+    }
+    
+    // Renderizar dispositivos
+    renderDevices();
+    
+    // Configurar eventos
+    setupDeviceEvents();
+  }
+  
+  function renderDevices() {
+    // Obter dispositivos
+    const supportedDevices = deviceIntegration.getSupportedDevices();
+    const connectedDevices = deviceIntegration.getConnectedDevices();
+    
+    // Renderizar dispositivos conectados
+    renderConnectedDevices(connectedDevices);
+    
+    // Renderizar dispositivos disponíveis
+    renderAvailableDevices(supportedDevices.filter(d => !d.connected));
+  }
+  
+  function renderConnectedDevices(devices) {
+    const container = document.getElementById('connected-devices-list');
+    const noDevicesMessage = document.getElementById('no-connected-devices');
+    
+    // Limpar container
+    container.innerHTML = '';
+    
+    if (devices.length === 0) {
+      container.classList.add('hidden');
+      noDevicesMessage.classList.remove('hidden');
+      return;
+    }
+    
+    container.classList.remove('hidden');
+    noDevicesMessage.classList.add('hidden');
+    
+    // Renderizar cada dispositivo
+    devices.forEach(device => {
+      const template = document.getElementById('connected-device-template');
+      const clone = document.importNode(template.content, true);
+      
+      // Configurar elementos
+      clone.querySelector('.device-name').textContent = device.name;
+      clone.querySelector('.device-icon').style.backgroundColor = device.color;
+      clone.querySelector('.device-icon i').classList.add(device.icon);
+      
+      // Adicionar dados de conexão
+      const connection = deviceIntegration.connections[device.id];
+      if (connection) {
+        const lastSync = connection.lastSync 
+          ? new Date(connection.lastSync).toLocaleString() 
+          : 'Nunca';
+        clone.querySelector('.device-last-sync').textContent = lastSync;
+        clone.querySelector('.device-activity-count').textContent = connection.activityCount || '0';
+      }
+      
+      // Adicionar atributos de dados
+      const deviceElement = clone.querySelector('.connected-device');
+      deviceElement.dataset.deviceId = device.id;
+      
+      // Adicionar ao container
+      container.appendChild(clone);
+    });
+  }
+  
+  function renderAvailableDevices(devices) {
+    const container = document.getElementById('available-devices-list');
+    
+    // Limpar container
+    container.innerHTML = '';
+    
+    // Renderizar cada dispositivo
+    devices.forEach(device => {
+      const template = document.getElementById('available-device-template');
+      const clone = document.importNode(template.content, true);
+      
+      // Configurar elementos
+      clone.querySelector('.device-name').textContent = device.name;
+      clone.querySelector('.device-icon').style.backgroundColor = device.color;
+      clone.querySelector('.device-icon i').classList.add(device.icon);
+      
+      // Adicionar atributos de dados
+      const deviceElement = clone.querySelector('.available-device');
+      deviceElement.dataset.deviceId = device.id;
+      
+      // Adicionar ao container
+      container.appendChild(clone);
+    });
+  }
+  
+  function setupDeviceEvents() {
+    // Botão de sincronizar todos
+    const syncAllBtn = document.getElementById('sync-all-devices-btn');
+    if (syncAllBtn) {
+      syncAllBtn.addEventListener('click', async () => {
+        try {
+          await deviceIntegration.syncAll();
+          renderDevices(); // Atualizar UI após sincronização
+        } catch (error) {
+          console.error('Erro ao sincronizar dispositivos:', error);
+        }
+      });
+    }
+    
+    // Botões de conectar dispositivo
+    document.addEventListener('click', async (event) => {
+      const connectBtn = event.target.closest('.connect-device-btn');
+      if (connectBtn) {
+        const deviceElement = connectBtn.closest('.available-device');
+        const deviceId = deviceElement.dataset.deviceId;
+        
+        try {
+          await deviceIntegration.connectDevice(deviceId);
+          // A UI será atualizada quando a conexão for finalizada
+        } catch (error) {
+          console.error(`Erro ao conectar dispositivo ${deviceId}:`, error);
+        }
+      }
+    });
+    
+    // Botões de sincronizar dispositivo
+    document.addEventListener('click', async (event) => {
+      const syncBtn = event.target.closest('.sync-device-btn');
+      if (syncBtn) {
+        const deviceElement = syncBtn.closest('.connected-device');
+        const deviceId = deviceElement.dataset.deviceId;
+        
+        try {
+          await deviceIntegration.syncDevice(deviceId);
+          renderDevices(); // Atualizar UI após sincronização
+        } catch (error) {
+          console.error(`Erro ao sincronizar dispositivo ${deviceId}:`, error);
+        }
+      }
+    });
+    
+    // Botões de desconectar dispositivo
+    document.addEventListener('click', async (event) => {
+      const disconnectBtn = event.target.closest('.disconnect-device-btn');
+      if (disconnectBtn) {
+        const deviceElement = disconnectBtn.closest('.connected-device');
+        const deviceId = deviceElement.dataset.deviceId;
+        
+        try {
+          await deviceIntegration.disconnectDevice(deviceId);
+          renderDevices(); // Atualizar UI após desconexão
+        } catch (error) {
+          console.error(`Erro ao desconectar dispositivo ${deviceId}:`, error);
+        }
+      }
+    });
+  }
+</script>

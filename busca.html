@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FuseLabs - Busca</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-900" data-page="search">
+  
+  <!-- Cabeçalho -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="font-bold text-xl text-primary">FuseLabs</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="index_modular.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-home mr-1"></i> Início
+            </a>
+            <a href="atividades.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-running mr-1"></i> Atividades
+            </a>
+            <a href="desafios.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-trophy mr-1"></i> Desafios
+            </a>
+            <a href="comunidade.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-users mr-1"></i> Comunidade
+            </a>
+            <a href="analytics.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-bar mr-1"></i> Análises
+            </a>
+            <a href="previsoes.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-line mr-1"></i> Previsões
+            </a>
+            <a href="perfil.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-user mr-1"></i> Perfil
+            </a>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none hidden sm:block">
+            <i class="fas fa-bell text-lg"></i>
+            <span class="absolute top-3 right-3 inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+          </button>
+          <div class="ml-3 relative hidden sm:block">
+            <div id="auth-buttons" class="flex space-x-2">
+              <a href="login.html" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+                Entrar
+              </a>
+              <a href="registro.html" class="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                Registrar
+              </a>
+            </div>
+            <div id="user-profile" class="hidden">
+              <button class="flex text-sm rounded-full focus:outline-none" id="user-menu-button">
+                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              </button>
+            </div>
+          </div>
+          <!-- Botão do menu mobile -->
+          <div class="flex items-center sm:hidden ml-3">
+            <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Abrir menu principal</span>
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Cabeçalho da Busca -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 mb-4">Busca</h1>
+      <form id="search-form" class="space-y-4">
+        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+          <div class="flex-1">
+            <div class="relative rounded-md shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400"></i>
+              </div>
+              <input type="text" id="search-query" name="search-query" class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="Buscar atividades, desafios, usuários...">
+            </div>
+          </div>
+          <div>
+            <select id="search-type" name="search-type" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+              <option value="all">Todos</option>
+              <option value="activities">Atividades</option>
+              <option value="challenges">Desafios</option>
+              <option value="users">Usuários</option>
+              <option value="routes">Rotas</option>
+            </select>
+          </div>
+          <div>
+            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+              <i class="fas fa-search mr-2"></i> Buscar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Filtros avançados (inicialmente ocultos) -->
+        <div id="advanced-filters" class="hidden pt-4 border-t border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Filtros avançados</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div>
+              <label for="filter-date" class="block text-sm font-medium text-gray-700 mb-1">Data</label>
+              <select id="filter-date" name="filter-date" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                <option value="any">Qualquer data</option>
+                <option value="today">Hoje</option>
+                <option value="week">Esta semana</option>
+                <option value="month">Este mês</option>
+                <option value="year">Este ano</option>
+                <option value="custom">Personalizado</option>
+              </select>
+            </div>
+            
+            <div>
+              <label for="filter-distance" class="block text-sm font-medium text-gray-700 mb-1">Distância</label>
+              <select id="filter-distance" name="filter-distance" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                <option value="any">Qualquer distância</option>
+                <option value="5">Até 5 km</option>
+                <option value="10">Até 10 km</option>
+                <option value="21">Até 21 km</option>
+                <option value="42">Até 42 km</option>
+                <option value="custom">Personalizado</option>
+              </select>
+            </div>
+            
+            <div>
+              <label for="filter-activity" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Atividade</label>
+              <select id="filter-activity" name="filter-activity" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                <option value="any">Todos os tipos</option>
+                <option value="running">Corrida</option>
+                <option value="cycling">Ciclismo</option>
+                <option value="walking">Caminhada</option>
+                <option value="swimming">Natação</option>
+                <option value="other">Outros</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex justify-center">
+          <button type="button" id="toggle-filters" class="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+            <span id="filters-text">Mostrar filtros avançados</span> <i id="filters-icon" class="fas fa-chevron-down ml-2"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Resultados da Busca -->
+    <div class="bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-medium text-gray-900">Resultados da Busca</h2>
+        <div class="text-sm text-gray-500">
+          <span id="results-count">0</span> resultados encontrados
+        </div>
+      </div>
+      
+      <!-- Tabs de Resultados -->
+      <div class="mb-6">
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <button class="tab-button border-primary text-primary hover:text-primary group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tab="all-results">
+              <i class="fas fa-list mr-2"></i> Todos
+            </button>
+            <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tab="activities-results">
+              <i class="fas fa-running mr-2"></i> Atividades
+            </button>
+            <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tab="challenges-results">
+              <i class="fas fa-trophy mr-2"></i> Desafios
+            </button>
+            <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tab="users-results">
+              <i class="fas fa-users mr-2"></i> Usuários
+            </button>
+          </nav>
+        </div>
+      </div>
+      
+      <!-- Conteúdo das Tabs -->
+      <div>
+        <!-- Todos os Resultados -->
+        <div id="all-results" class="tab-content active">
+          <div id="search-results" class="space-y-6">
+            <div class="text-center py-8 text-gray-500">
+              <i class="fas fa-search text-4xl mb-4"></i>
+              <p>Digite sua busca acima para encontrar atividades, desafios e usuários.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Resultados de Atividades -->
+        <div id="activities-results" class="tab-content">
+          <div class="text-center py-8 text-gray-500">
+            <p>Os resultados de atividades serão exibidos aqui.</p>
+          </div>
+        </div>
+        
+        <!-- Resultados de Desafios -->
+        <div id="challenges-results" class="tab-content">
+          <div class="text-center py-8 text-gray-500">
+            <p>Os resultados de desafios serão exibidos aqui.</p>
+          </div>
+        </div>
+        
+        <!-- Resultados de Usuários -->
+        <div id="users-results" class="tab-content">
+          <div class="text-center py-8 text-gray-500">
+            <p>Os resultados de usuários serão exibidos aqui.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Paginação -->
+      <div id="pagination" class="mt-6 flex justify-center hidden">
+        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+          <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            <span class="sr-only">Anterior</span>
+            <i class="fas fa-chevron-left"></i>
+          </a>
+          <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+            1
+          </a>
+          <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+            2
+          </a>
+          <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+            3
+          </a>
+          <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-gray-50 text-sm font-medium text-gray-700">
+            ...
+          </span>
+          <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+            10
+          </a>
+          <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            <span class="sr-only">Próxima</span>
+            <i class="fas fa-chevron-right"></i>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>

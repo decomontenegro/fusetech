@@ -1,0 +1,337 @@
+<!-- Performance Content -->
+<div class="space-y-6">
+  <!-- Performance Metrics -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Ritmo Médio</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-tachometer-alt text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">5:45</p>
+          <p class="text-sm text-gray-500">min/km</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-up mr-1"></i>
+          8%
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Evolução</span>
+          <span>8% mais rápido</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-green-500 rounded-full progress-bar" style="width: 75%"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Frequência Cardíaca</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-heartbeat text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">145</p>
+          <p class="text-sm text-gray-500">bpm (média)</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-down mr-1"></i>
+          3%
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Zona alvo</span>
+          <span>130-160 bpm</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-primary rounded-full progress-bar" style="width: 60%"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">VO2 Max</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-lungs text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">42.5</p>
+          <p class="text-sm text-gray-500">ml/kg/min</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-up mr-1"></i>
+          5%
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Classificação</span>
+          <span>Bom</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-primary rounded-full progress-bar" style="width: 70%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Performance Charts -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Evolução do Ritmo</h2>
+      <div class="chart-container">
+        <canvas id="paceChart"></canvas>
+      </div>
+    </div>
+    
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Zonas de Frequência Cardíaca</h2>
+      <div class="chart-container">
+        <canvas id="heartRateZonesChart"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Personal Records -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Recordes Pessoais</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="border rounded-lg p-4 bg-primary-light">
+        <div class="flex items-center mb-2">
+          <i class="fas fa-medal text-primary mr-2"></i>
+          <h3 class="font-medium">5K</h3>
+        </div>
+        <p class="text-2xl font-bold">25:30</p>
+        <p class="text-sm text-gray-500">10/04/2023</p>
+      </div>
+      
+      <div class="border rounded-lg p-4 bg-primary-light">
+        <div class="flex items-center mb-2">
+          <i class="fas fa-medal text-primary mr-2"></i>
+          <h3 class="font-medium">10K</h3>
+        </div>
+        <p class="text-2xl font-bold">52:15</p>
+        <p class="text-sm text-gray-500">25/03/2023</p>
+      </div>
+      
+      <div class="border rounded-lg p-4 bg-primary-light">
+        <div class="flex items-center mb-2">
+          <i class="fas fa-medal text-primary mr-2"></i>
+          <h3 class="font-medium">Meia Maratona</h3>
+        </div>
+        <p class="text-2xl font-bold">1:55:40</p>
+        <p class="text-sm text-gray-500">15/02/2023</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Performance Comparison -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-medium text-gray-900">Comparação de Desempenho</h2>
+      <div class="flex space-x-2">
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+          Corrida
+        </button>
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          Ciclismo
+        </button>
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          Caminhada
+        </button>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="performanceComparisonChart"></canvas>
+    </div>
+  </div>
+  
+  <!-- Training Load -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Carga de Treinamento</h2>
+    <div class="chart-container">
+      <canvas id="trainingLoadChart"></canvas>
+    </div>
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+      <div class="p-3 bg-green-50 rounded-lg">
+        <p class="text-sm text-gray-500">Carga Atual</p>
+        <p class="text-xl font-bold text-green-600">420</p>
+      </div>
+      <div class="p-3 bg-blue-50 rounded-lg">
+        <p class="text-sm text-gray-500">Forma Física</p>
+        <p class="text-xl font-bold text-blue-600">Boa</p>
+      </div>
+      <div class="p-3 bg-yellow-50 rounded-lg">
+        <p class="text-sm text-gray-500">Fadiga</p>
+        <p class="text-xl font-bold text-yellow-600">Baixa</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Pace Chart
+    const paceCtx = document.getElementById('paceChart').getContext('2d');
+    new Chart(paceCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+        datasets: [{
+          label: 'Ritmo Médio (min/km)',
+          data: [6.5, 6.2, 5.9, 5.7, 5.45],
+          borderColor: 'rgba(99, 102, 241, 1)',
+          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            reverse: true,
+            title: {
+              display: true,
+              text: 'Ritmo (min/km)'
+            }
+          }
+        }
+      }
+    });
+    
+    // Heart Rate Zones Chart
+    const heartRateZonesCtx = document.getElementById('heartRateZonesChart').getContext('2d');
+    new Chart(heartRateZonesCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Zona 1 (50-60%)', 'Zona 2 (60-70%)', 'Zona 3 (70-80%)', 'Zona 4 (80-90%)', 'Zona 5 (90-100%)'],
+        datasets: [{
+          data: [10, 25, 40, 20, 5],
+          backgroundColor: [
+            'rgba(16, 185, 129, 0.8)',
+            'rgba(59, 130, 246, 0.8)',
+            'rgba(99, 102, 241, 0.8)',
+            'rgba(239, 68, 68, 0.8)',
+            'rgba(153, 27, 27, 0.8)'
+          ],
+          borderColor: [
+            'rgba(16, 185, 129, 1)',
+            'rgba(59, 130, 246, 1)',
+            'rgba(99, 102, 241, 1)',
+            'rgba(239, 68, 68, 1)',
+            'rgba(153, 27, 27, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+    
+    // Performance Comparison Chart
+    const performanceComparisonCtx = document.getElementById('performanceComparisonChart').getContext('2d');
+    new Chart(performanceComparisonCtx, {
+      type: 'radar',
+      data: {
+        labels: ['Velocidade', 'Resistência', 'Força', 'Recuperação', 'Consistência', 'Técnica'],
+        datasets: [
+          {
+            label: 'Atual',
+            data: [80, 70, 65, 75, 85, 60],
+            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(99, 102, 241, 1)'
+          },
+          {
+            label: '3 meses atrás',
+            data: [65, 60, 55, 70, 75, 50],
+            backgroundColor: 'rgba(209, 213, 219, 0.2)',
+            borderColor: 'rgba(209, 213, 219, 1)',
+            pointBackgroundColor: 'rgba(209, 213, 219, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(209, 213, 219, 1)'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            angleLines: {
+              display: true
+            },
+            suggestedMin: 0,
+            suggestedMax: 100
+          }
+        }
+      }
+    });
+    
+    // Training Load Chart
+    const trainingLoadCtx = document.getElementById('trainingLoadChart').getContext('2d');
+    new Chart(trainingLoadCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5', 'Semana 6', 'Semana 7', 'Semana 8'],
+        datasets: [
+          {
+            label: 'Carga de Treinamento',
+            data: [320, 350, 380, 400, 370, 390, 410, 420],
+            backgroundColor: 'rgba(99, 102, 241, 0.8)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Limite Recomendado',
+            type: 'line',
+            data: [350, 350, 350, 350, 350, 350, 350, 350],
+            borderColor: 'rgba(239, 68, 68, 1)',
+            borderDash: [5, 5],
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Carga (unidades arbitrárias)'
+            }
+          }
+        }
+      }
+    });
+  });
+</script>

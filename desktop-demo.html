@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desktop Features Demo - FUSEtech</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    .demo-section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      border: 2px dashed #e5e7eb;
+      border-radius: 1rem;
+    }
+    
+    .demo-title {
+      color: #5046e5;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .demo-description {
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+    
+    .keyboard-shortcut {
+      background: #f3f4f6;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <a href="index.html" class="nav-brand">
+            <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mr-3">
+              <i class="fas fa-bolt text-white"></i>
+            </div>
+            FUSEtech Desktop Demo
+          </a>
+        </div>
+
+        <div class="hidden md:flex nav-links">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-home mr-2"></i>
+            Dashboard
+          </a>
+          <a href="atividades-desktop.html" class="nav-link">
+            <i class="fas fa-running mr-2"></i>
+            Atividades
+          </a>
+          <a href="desktop-demo.html" class="nav-link active">
+            <i class="fas fa-desktop mr-2"></i>
+            Demo
+          </a>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="hidden sm:flex items-center bg-gradient-primary text-white px-4 py-2 rounded-full">
+            <i class="fas fa-coins mr-2"></i>
+            <span class="font-semibold">1,247</span>
+            <span class="text-xs ml-1 opacity-80">FUSE</span>
+          </div>
+          
+          <button class="btn-icon-only btn-ghost relative">
+            <i class="fas fa-bell"></i>
+          </button>
+          
+          <div class="avatar">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User">
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Desktop Features Demo</h1>
+      <p class="text-gray-600">Demonstração das funcionalidades aprimoradas para desktop</p>
+    </div>
+
+    <!-- Sidebar Demo -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-bars mr-2"></i>
+        Sidebar Navigation
+      </h2>
+      <p class="demo-description">
+        Sidebar colapsável com navegação organizada e atalhos de teclado.
+      </p>
+      <div class="flex items-center gap-4 mb-4">
+        <button onclick="window.desktopEnhancements?.toggleSidebar()" class="btn btn-primary">
+          <i class="fas fa-bars mr-2"></i>
+          Toggle Sidebar
+        </button>
+        <span class="text-sm text-gray-500">
+          Ou use <span class="keyboard-shortcut">Ctrl+B</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Search Demo -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-search mr-2"></i>
+        Enhanced Search
+      </h2>
+      <p class="demo-description">
+        Busca aprimorada com atalhos de teclado e sugestões.
+      </p>
+      <div class="desktop-search max-w-md">
+        <div class="relative">
+          <i class="fas fa-search desktop-search-icon"></i>
+          <input 
+            type="text" 
+            placeholder="Buscar atividades, conquistas..." 
+            class="desktop-search-input"
+            id="demo-search"
+          >
+          <span class="desktop-search-shortcut">Ctrl+K</span>
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 mt-2">
+        Use <span class="keyboard-shortcut">Ctrl+K</span> para focar na busca
+      </p>
+    </div>
+
+    <!-- Grid Layouts Demo -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-th mr-2"></i>
+        Responsive Grid Layouts
+      </h2>
+      <p class="demo-description">
+        Layouts de grid otimizados para desktop com melhor uso do espaço horizontal.
+      </p>
+      
+      <h3 class="font-semibold mb-3">Desktop 3-Column Layout</h3>
+      <div class="desktop-3-column mb-6">
+        <div class="card card-desktop-enhanced">
+          <div class="card-body text-center">
+            <i class="fas fa-running text-blue-600 text-2xl mb-3"></i>
+            <h4 class="font-semibold">Atividades</h4>
+            <p class="text-sm text-gray-500">156 registradas</p>
+          </div>
+        </div>
+        <div class="card card-desktop-enhanced">
+          <div class="card-body text-center">
+            <i class="fas fa-trophy text-yellow-600 text-2xl mb-3"></i>
+            <h4 class="font-semibold">Conquistas</h4>
+            <p class="text-sm text-gray-500">23 desbloqueadas</p>
+          </div>
+        </div>
+        <div class="card card-desktop-enhanced">
+          <div class="card-body text-center">
+            <i class="fas fa-coins text-green-600 text-2xl mb-3"></i>
+            <h4 class="font-semibold">Tokens</h4>
+            <p class="text-sm text-gray-500">1,247 FUSE</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Table Demo -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-table mr-2"></i>
+        Enhanced Data Tables
+      </h2>
+      <p class="demo-description">
+        Tabelas otimizadas para desktop com hover effects e melhor organização.
+      </p>
+      
+      <div class="card">
+        <div class="card-body p-0">
+          <table class="desktop-table">
+            <thead>
+              <tr>
+                <th>Atividade</th>
+                <th>Data</th>
+                <th>Distância</th>
+                <th>Tempo</th>
+                <th>FUSE</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="flex items-center">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                      <i class="fas fa-running text-blue-600 text-sm"></i>
+                    </div>
+                    Corrida Matinal
+                  </div>
+                </td>
+                <td>Hoje</td>
+                <td>5.2 km</td>
+                <td>28:45</td>
+                <td><span class="badge badge-success">+15</span></td>
+                <td>
+                  <button class="btn-icon-only btn-ghost btn-sm desktop-tooltip" data-tooltip="Ver detalhes">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="flex items-center">
+                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                      <i class="fas fa-bicycle text-green-600 text-sm"></i>
+                    </div>
+                    Ciclismo
+                  </div>
+                </td>
+                <td>Ontem</td>
+                <td>15.8 km</td>
+                <td>45:20</td>
+                <td><span class="badge badge-success">+25</span></td>
+                <td>
+                  <button class="btn-icon-only btn-ghost btn-sm desktop-tooltip" data-tooltip="Ver detalhes">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Elements Demo -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-mouse-pointer mr-2"></i>
+        Interactive Elements
+      </h2>
+      <p class="demo-description">
+        Elementos interativos com hover effects, tooltips e animações.
+      </p>
+      
+      <div class="flex flex-wrap gap-4">
+        <button class="btn btn-primary desktop-hover-scale">
+          <i class="fas fa-plus mr-2"></i>
+          Hover Scale
+        </button>
+        
+        <button class="btn btn-secondary desktop-hover-lift">
+          <i class="fas fa-star mr-2"></i>
+          Hover Lift
+        </button>
+        
+        <button class="btn btn-outline desktop-hover-glow">
+          <i class="fas fa-magic mr-2"></i>
+          Hover Glow
+        </button>
+        
+        <button class="btn btn-ghost desktop-tooltip" data-tooltip="Este é um tooltip!">
+          <i class="fas fa-info mr-2"></i>
+          Tooltip Demo
+        </button>
+      </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Reference -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-keyboard mr-2"></i>
+        Keyboard Shortcuts
+      </h2>
+      <p class="demo-description">
+        Atalhos de teclado para navegação rápida e eficiente.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span>Toggle Sidebar</span>
+          <span class="keyboard-shortcut">Ctrl+B</span>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span>Focus Search</span>
+          <span class="keyboard-shortcut">Ctrl+K</span>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span>Close Modal/Sidebar</span>
+          <span class="keyboard-shortcut">Escape</span>
+        </div>
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span>Navigate Links</span>
+          <span class="keyboard-shortcut">Tab</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/performance.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/components.js" defer></script>
+  <script src="js/desktop-enhancements.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>

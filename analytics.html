@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FuseLabs - Análises</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900" data-page="analytics">
+
+  <!-- Cabeçalho -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="font-bold text-xl text-primary">FuseLabs</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="index_modular.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-home mr-1"></i> Início
+            </a>
+            <a href="atividades.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-running mr-1"></i> Atividades
+            </a>
+            <a href="desafios.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-trophy mr-1"></i> Desafios
+            </a>
+            <a href="comunidade.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-users mr-1"></i> Comunidade
+            </a>
+            <a href="analytics.html" class="border-primary text-primary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-bar mr-1"></i> Análises
+            </a>
+            <a href="perfil.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-user mr-1"></i> Perfil
+            </a>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <!-- Botão do menu mobile -->
+          <div class="flex items-center sm:hidden mr-3">
+            <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Abrir menu principal</span>
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+
+          <!-- Status de conexão -->
+          <div class="hidden sm:flex items-center mr-4 text-xs">
+            <span class="mr-1" data-i18n="common.status">Status:</span>
+            <span id="connection-status" class="font-medium text-green-500" data-i18n="common.online">Online</span>
+          </div>
+
+          <!-- Seletor de idioma -->
+          <div class="hidden sm:flex items-center mr-4">
+            <select id="language-selector" class="text-sm border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+              <option value="pt-BR">Português</option>
+              <option value="en-US">English</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+
+          <button id="notifications-button" class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
+            <i class="fas fa-bell text-lg"></i>
+            <span class="absolute top-3 right-3 inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+          </button>
+          <!-- Menu dropdown de notificações -->
+          <div id="notifications-dropdown" class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-50" role="menu" aria-orientation="vertical" aria-labelledby="notifications-button" tabindex="-1">
+            <div class="px-4 py-2 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-medium text-gray-900">Notificações</h3>
+                <div class="flex space-x-2">
+                  <button id="mark-all-read-btn" class="text-xs text-primary hover:text-indigo-700">
+                    Marcar todas como lidas
+                  </button>
+                  <button id="notifications-settings-btn" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-cog"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div id="notifications-list" class="max-h-60 overflow-y-auto">
+              <a href="#" class="block px-4 py-3 hover:bg-gray-50 transition duration-150 ease-in-out">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                  </div>
+                  <div class="ml-3 w-0 flex-1">
+                    <p class="text-sm font-medium text-gray-900">Ana Silva</p>
+                    <p class="text-sm text-gray-500">Comentou na sua atividade de corrida</p>
+                    <p class="mt-1 text-xs text-gray-400">Há 2 horas</p>
+                  </div>
+                  <div class="ml-3 flex-shrink-0">
+                    <span class="inline-block h-2 w-2 rounded-full bg-primary"></span>
+                  </div>
+                </div>
+              </a>
+              <a href="#" class="block px-4 py-3 hover:bg-gray-50 transition duration-150 ease-in-out">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+                      <i class="fas fa-trophy text-primary"></i>
+                    </div>
+                  </div>
+                  <div class="ml-3 w-0 flex-1">
+                    <p class="text-sm font-medium text-gray-900">Novo desafio disponível</p>
+                    <p class="text-sm text-gray-500">Desafio de 10K de Verão está aberto para inscrições</p>
+                    <p class="mt-1 text-xs text-gray-400">Há 1 dia</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="border-t border-gray-200">
+              <a href="#" id="view-all-notifications" class="block text-center px-4 py-2 text-sm text-primary hover:bg-gray-50">
+                Ver todas as notificações
+              </a>
+            </div>
+          </div>
+          <div class="ml-3 relative">
+            <div>
+              <button class="flex text-sm rounded-full focus:outline-none" id="user-menu-button">
+                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              </button>
+            </div>
+            <!-- Menu dropdown do usuário -->
+            <div id="user-menu-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+              <a href="perfil.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Seu Perfil</a>
+              <a href="#" id="user-settings-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Configurações</a>
+              <a href="#" id="user-logout-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sair</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Menu Mobile -->
+  <div id="mobile-menu" class="sm:hidden hidden">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <a href="index_modular.html" class="mobile-nav-link text-gray-600 hover:bg-gray-50 hover:text-gray-900 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium" data-page="home">
+        <i class="fas fa-home mr-2"></i> Início
+      </a>
+      <a href="atividades.html" class="mobile-nav-link text-gray-600 hover:bg-gray-50 hover:text-gray-900 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium" data-page="activities">
+        <i class="fas fa-running mr-2"></i> Atividades
+      </a>
+      <a href="desafios.html" class="mobile-nav-link text-gray-600 hover:bg-gray-50 hover:text-gray-900 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium" data-page="challenges">
+        <i class="fas fa-trophy mr-2"></i> Desafios
+      </a>
+      <a href="comunidade.html" class="mobile-nav-link text-gray-600 hover:bg-gray-50 hover:text-gray-900 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium" data-page="community">
+        <i class="fas fa-users mr-2"></i> Comunidade
+      </a>
+      <a href="analytics.html" class="mobile-nav-link bg-primary-light text-primary block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium" data-page="analytics">
+        <i class="fas fa-chart-bar mr-2"></i> Análises
+      </a>
+      <a href="perfil.html" class="mobile-nav-link text-gray-600 hover:bg-gray-50 hover:text-gray-900 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium" data-page="profile">
+        <i class="fas fa-user mr-2"></i> Perfil
+      </a>
+    </div>
+
+    <!-- Seção de autenticação mobile -->
+    <div id="mobile-auth-buttons" class="px-2 pt-3 pb-3 border-t border-gray-200">
+      <a href="login.html" class="block text-center w-full px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-indigo-700 focus:outline-none mb-2">
+        <i class="fas fa-sign-in-alt mr-2"></i> Entrar
+      </a>
+      <a href="registro.html" class="block text-center w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+        <i class="fas fa-user-plus mr-2"></i> Registrar
+      </a>
+    </div>
+
+    <!-- Perfil do usuário mobile (mostrado quando logado) -->
+    <div id="mobile-user-profile" class="hidden px-2 pt-3 pb-3 border-t border-gray-200">
+      <div class="flex items-center px-3 py-2">
+        <img id="mobile-user-avatar" class="h-10 w-10 rounded-full mr-3" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Avatar do usuário">
+        <div>
+          <div id="mobile-user-name" class="text-sm font-medium text-gray-900">João Silva</div>
+          <div id="mobile-user-email" class="text-sm text-gray-500">usuario@exemplo.com</div>
+        </div>
+      </div>
+      <div class="mt-3 space-y-1">
+        <a href="perfil.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+          <i class="fas fa-user-circle mr-2"></i> Ver perfil
+        </a>
+        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+          <i class="fas fa-cog mr-2"></i> Configurações
+        </a>
+        <button id="mobile-logout-button" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+          <i class="fas fa-sign-out-alt mr-2"></i> Sair
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900" data-i18n="analytics.title">Análises</h1>
+        <p class="mt-1 text-sm text-gray-500" data-i18n="analytics.subtitle">Visualize e analise seu desempenho</p>
+      </div>
+      <div class="mt-4 md:mt-0 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3">
+        <div class="dropdown relative order-first md:order-last">
+          <button id="export-all-button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary w-full md:w-auto justify-center" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-download mr-2"></i> <span data-i18n="analytics.export_data">Exportar Dados</span>
+          </button>
+          <div id="export-all-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="export-all-button">
+            <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="csv" data-type="all">CSV</a>
+            <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="json" data-type="all">JSON</a>
+            <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="pdf" data-type="all">PDF</a>
+            <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="excel" data-type="all">Excel</a>
+          </div>
+        </div>
+        <div class="relative">
+          <select id="activity-type-filter" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+            <option value="all" data-i18n="common.all">Todas atividades</option>
+            <option value="running">Corrida</option>
+            <option value="cycling">Ciclismo</option>
+            <option value="walking">Caminhada</option>
+          </select>
+        </div>
+        <div class="relative">
+          <select id="date-range-filter" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+            <option value="last30" data-i18n="analytics.last_30_days">Últimos 30 dias</option>
+            <option value="last90" data-i18n="analytics.last_90_days">Últimos 90 dias</option>
+            <option value="year" data-i18n="analytics.this_year">Este ano</option>
+            <option value="all" data-i18n="analytics.all_time">Todo o período</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumo -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Resumo</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="analytics-card p-4 bg-primary-light rounded-lg">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-primary bg-opacity-20 mr-4">
+              <i class="fas fa-road text-primary text-xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Distância Total</div>
+              <div class="text-2xl font-bold">1,245 km</div>
+            </div>
+          </div>
+        </div>
+        <div class="analytics-card p-4 bg-blue-50 rounded-lg">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-500 bg-opacity-20 mr-4">
+              <i class="fas fa-stopwatch text-blue-500 text-xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Tempo Total</div>
+              <div class="text-2xl font-bold">124h 35m</div>
+            </div>
+          </div>
+        </div>
+        <div class="analytics-card p-4 bg-green-50 rounded-lg">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-500 bg-opacity-20 mr-4">
+              <i class="fas fa-fire text-green-500 text-xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Calorias</div>
+              <div class="text-2xl font-bold">78,450</div>
+            </div>
+          </div>
+        </div>
+        <div class="analytics-card p-4 bg-purple-50 rounded-lg">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-purple-500 bg-opacity-20 mr-4">
+              <i class="fas fa-running text-purple-500 text-xl"></i>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Atividades</div>
+              <div class="text-2xl font-bold">256</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <!-- Gráfico Semanal -->
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-medium text-gray-900" data-i18n="analytics.weekly_activity">Atividade Semanal</h2>
+          <div class="dropdown relative">
+            <button id="export-weekly-button" class="text-sm text-gray-600 hover:text-primary flex items-center focus:outline-none" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-download mr-1"></i> <span data-i18n="common.export">Exportar</span>
+            </button>
+            <div id="export-weekly-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="export-weekly-button">
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="csv" data-type="weekly">CSV</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="json" data-type="weekly">JSON</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="pdf" data-type="weekly">PDF</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="excel" data-type="weekly">Excel</a>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container" role="img" aria-label="Gráfico de atividade semanal mostrando distância percorrida por dia">
+          <canvas id="weekly-chart"></canvas>
+        </div>
+        <!-- Tabela acessível com os mesmos dados do gráfico (visualmente escondida) -->
+        <div class="sr-only">
+          <table>
+            <caption>Distância percorrida por dia da semana</caption>
+            <thead>
+              <tr>
+                <th scope="col">Dia</th>
+                <th scope="col">Distância (km)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Segunda</td><td>5.2</td></tr>
+              <tr><td>Terça</td><td>0</td></tr>
+              <tr><td>Quarta</td><td>8.5</td></tr>
+              <tr><td>Quinta</td><td>4.2</td></tr>
+              <tr><td>Sexta</td><td>0</td></tr>
+              <tr><td>Sábado</td><td>12.3</td></tr>
+              <tr><td>Domingo</td><td>6.8</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Gráfico Mensal -->
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-medium text-gray-900" data-i18n="analytics.monthly_activity">Atividade Mensal</h2>
+          <div class="dropdown relative">
+            <button id="export-monthly-button" class="text-sm text-gray-600 hover:text-primary flex items-center focus:outline-none" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-download mr-1"></i> <span data-i18n="common.export">Exportar</span>
+            </button>
+            <div id="export-monthly-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="export-monthly-button">
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="csv" data-type="monthly">CSV</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="json" data-type="monthly">JSON</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="pdf" data-type="monthly">PDF</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="excel" data-type="monthly">Excel</a>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container" role="img" aria-label="Gráfico de atividade mensal mostrando distância percorrida por semana">
+          <canvas id="monthly-chart"></canvas>
+        </div>
+        <!-- Tabela acessível com os mesmos dados do gráfico (visualmente escondida) -->
+        <div class="sr-only">
+          <table>
+            <caption>Distância percorrida por semana do mês</caption>
+            <thead>
+              <tr>
+                <th scope="col">Semana</th>
+                <th scope="col">Distância (km)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Semana 1</td><td>35</td></tr>
+              <tr><td>Semana 2</td><td>42</td></tr>
+              <tr><td>Semana 3</td><td>38</td></tr>
+              <tr><td>Semana 4</td><td>41</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <!-- Gráfico Anual -->
+      <div class="bg-white shadow rounded-lg p-6 md:col-span-2">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-medium text-gray-900" data-i18n="analytics.yearly_activity">Atividade Anual</h2>
+          <div class="dropdown relative">
+            <button id="export-yearly-button" class="text-sm text-gray-600 hover:text-primary flex items-center focus:outline-none" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-download mr-1"></i> <span data-i18n="common.export">Exportar</span>
+            </button>
+            <div id="export-yearly-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="export-yearly-button">
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="csv" data-type="yearly">CSV</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="json" data-type="yearly">JSON</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="pdf" data-type="yearly">PDF</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="excel" data-type="yearly">Excel</a>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container" role="img" aria-label="Gráfico de atividade anual mostrando distância percorrida por mês">
+          <canvas id="yearly-chart"></canvas>
+        </div>
+        <!-- Tabela acessível com os mesmos dados do gráfico (visualmente escondida) -->
+        <div class="sr-only">
+          <table>
+            <caption>Distância percorrida por mês do ano</caption>
+            <thead>
+              <tr>
+                <th scope="col">Mês</th>
+                <th scope="col">Distância (km)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Janeiro</td><td>120</td></tr>
+              <tr><td>Fevereiro</td><td>145</td></tr>
+              <tr><td>Março</td><td>160</td></tr>
+              <tr><td>Abril</td><td>175</td></tr>
+              <tr><td>Maio</td><td>190</td></tr>
+              <tr><td>Junho</td><td>210</td></tr>
+              <tr><td>Julho</td><td>230</td></tr>
+              <tr><td>Agosto</td><td>245</td></tr>
+              <tr><td>Setembro</td><td>260</td></tr>
+              <tr><td>Outubro</td><td>280</td></tr>
+              <tr><td>Novembro</td><td>300</td></tr>
+              <tr><td>Dezembro</td><td>320</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Distribuição de Atividades -->
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-medium text-gray-900" data-i18n="analytics.activity_distribution">Distribuição de Atividades</h2>
+          <div class="dropdown relative">
+            <button id="export-distribution-button" class="text-sm text-gray-600 hover:text-primary flex items-center focus:outline-none" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-download mr-1"></i> <span data-i18n="common.export">Exportar</span>
+            </button>
+            <div id="export-distribution-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="export-distribution-button">
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="csv" data-type="distribution">CSV</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="json" data-type="distribution">JSON</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="pdf" data-type="distribution">PDF</a>
+              <a href="#" class="export-option block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-format="excel" data-type="distribution">Excel</a>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container" role="img" aria-label="Gráfico de distribuição de atividades por tipo">
+          <canvas id="activity-distribution"></canvas>
+        </div>
+        <!-- Tabela acessível com os mesmos dados do gráfico (visualmente escondida) -->
+        <div class="sr-only">
+          <table>
+            <caption>Distribuição de atividades por tipo</caption>
+            <thead>
+              <tr>
+                <th scope="col">Tipo de Atividade</th>
+                <th scope="col">Porcentagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Corrida</td><td>45%</td></tr>
+              <tr><td>Ciclismo</td><td>25%</td></tr>
+              <tr><td>Caminhada</td><td>15%</td></tr>
+              <tr><td>Natação</td><td>10%</td></tr>
+              <tr><td>Outros</td><td>5%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Análises Avançadas -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Análises Avançadas</h2>
+
+      <!-- Tabs -->
+      <div class="mb-6">
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Análises avançadas">
+            <button class="advanced-tab-button border-primary text-primary hover:text-primary group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
+                    data-tab="comparison"
+                    role="tab"
+                    aria-controls="comparison"
+                    aria-selected="true"
+                    id="tab-comparison">
+              <i class="fas fa-users mr-2" aria-hidden="true"></i> Comparação com outros usuários
+            </button>
+            <button class="advanced-tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
+                    data-tab="zones"
+                    role="tab"
+                    aria-controls="zones"
+                    aria-selected="false"
+                    id="tab-zones">
+              <i class="fas fa-heartbeat mr-2" aria-hidden="true"></i> Zonas de Treinamento
+            </button>
+            <button class="advanced-tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap"
+                    data-tab="trends"
+                    role="tab"
+                    aria-controls="trends"
+                    aria-selected="false"
+                    id="tab-trends">
+              <i class="fas fa-chart-line mr-2" aria-hidden="true"></i> Análise de Tendências
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Conteúdo das Tabs -->
+      <div class="advanced-tab-content">
+        <!-- Comparação com outros usuários -->
+        <div id="comparison" class="advanced-tab-panel" role="tabpanel" aria-labelledby="tab-comparison">
+          <div class="mb-4">
+            <p class="text-sm text-gray-600 mb-4">Compare seu desempenho com outros usuários da plataforma para entender como você está se saindo em relação a diferentes grupos.</p>
+
+            <div id="comparison-chart" class="chart-container h-80">
+              <!-- O gráfico será renderizado aqui pelo JavaScript -->
+              <div class="flex items-center justify-center h-full">
+                <div class="text-center">
+                  <i class="fas fa-spinner fa-spin text-primary text-2xl mb-2"></i>
+                  <p class="text-gray-500">Carregando dados de comparação...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zonas de Treinamento -->
+        <div id="zones" class="advanced-tab-panel hidden" role="tabpanel" aria-labelledby="tab-zones">
+          <div class="mb-4">
+            <p class="text-sm text-gray-600 mb-4">Analise a distribuição de suas atividades por zonas de treinamento para otimizar seu treinamento e melhorar seu desempenho.</p>
+
+            <div id="zones-chart" class="chart-container h-80">
+              <!-- O gráfico será renderizado aqui pelo JavaScript -->
+              <div class="flex items-center justify-center h-full">
+                <div class="text-center">
+                  <i class="fas fa-spinner fa-spin text-primary text-2xl mb-2"></i>
+                  <p class="text-gray-500">Carregando dados de zonas de treinamento...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Análise de Tendências -->
+        <div id="trends" class="advanced-tab-panel hidden" role="tabpanel" aria-labelledby="tab-trends">
+          <div class="mb-4">
+            <p class="text-sm text-gray-600 mb-4">Visualize as tendências de seu desempenho ao longo do tempo para identificar padrões e áreas de melhoria.</p>
+
+            <div id="trends-chart" class="chart-container h-80">
+              <!-- O gráfico será renderizado aqui pelo JavaScript -->
+              <div class="flex items-center justify-center h-full">
+                <div class="text-center">
+                  <i class="fas fa-spinner fa-spin text-primary text-2xl mb-2"></i>
+                  <p class="text-gray-500">Carregando dados de tendências...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estatísticas Detalhadas -->
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Estatísticas Detalhadas</h2>
+
+      <!-- Tabs -->
+      <div class="mb-6">
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8" aria-label="Estatísticas por tipo de atividade">
+            <button class="tab-button border-primary text-primary hover:text-primary group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm"
+                    data-tab="running"
+                    role="tab"
+                    aria-controls="running"
+                    aria-selected="true"
+                    id="tab-running">
+              <i class="fas fa-running mr-2" aria-hidden="true"></i> Corrida
+            </button>
+            <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm"
+                    data-tab="cycling"
+                    role="tab"
+                    aria-controls="cycling"
+                    aria-selected="false"
+                    id="tab-cycling">
+              <i class="fas fa-bicycle mr-2" aria-hidden="true"></i> Ciclismo
+            </button>
+            <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm"
+                    data-tab="walking"
+                    role="tab"
+                    aria-controls="walking"
+                    aria-selected="false"
+                    id="tab-walking">
+              <i class="fas fa-walking mr-2" aria-hidden="true"></i> Caminhada
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Conteúdo das Tabs -->
+      <div role="tabpanel">
+        <!-- Corrida -->
+        <div id="running" class="tab-content active" role="tabpanel" aria-labelledby="tab-running">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Distância Média</div>
+              <div class="text-xl font-bold">8.3 km</div>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Ritmo Médio</div>
+              <div class="text-xl font-bold">5:45 min/km</div>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Frequência Cardíaca Média</div>
+              <div class="text-xl font-bold">158 bpm</div>
+            </div>
+          </div>
+
+          <h3 class="text-md font-medium text-gray-900 mb-2">Melhores Desempenhos</h3>
+          <div class="overflow-x-auto responsive-table">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Distância</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Melhor Tempo</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ritmo</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">5K</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">23:45</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4:45 min/km</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15/04/2023</td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">10K</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">49:32</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4:57 min/km</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">02/03/2023</td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Meia Maratona</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1:52:18</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5:20 min/km</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10/01/2023</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Ciclismo -->
+        <div id="cycling" class="tab-content" role="tabpanel" aria-labelledby="tab-cycling">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Distância Média</div>
+              <div class="text-xl font-bold">25.7 km</div>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Velocidade Média</div>
+              <div class="text-xl font-bold">22.5 km/h</div>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Elevação Média</div>
+              <div class="text-xl font-bold">320 m</div>
+            </div>
+          </div>
+
+          <p class="text-center text-gray-500 py-4">Mais estatísticas detalhadas de ciclismo serão exibidas aqui.</p>
+        </div>
+
+        <!-- Caminhada -->
+        <div id="walking" class="tab-content" role="tabpanel" aria-labelledby="tab-walking">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Distância Média</div>
+              <div class="text-xl font-bold">4.2 km</div>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Ritmo Médio</div>
+              <div class="text-xl font-bold">12:30 min/km</div>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <div class="text-sm text-gray-500">Passos Médios</div>
+              <div class="text-xl font-bold">5,800</div>
+            </div>
+          </div>
+
+          <p class="text-center text-gray-500 py-4">Mais estatísticas detalhadas de caminhada serão exibidas aqui.</p>
+        </div>
+      </div>
+
+      <!-- Seção de Previsões e Tendências -->
+      <div class="mt-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="analytics.predictions">Previsões</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Previsão de Desempenho -->
+          <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-900">Previsão de Desempenho</h3>
+              <div class="relative">
+                <select id="prediction-type" class="text-sm border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                  <option value="running">Corrida</option>
+                  <option value="cycling">Ciclismo</option>
+                  <option value="walking">Caminhada</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-container h-64" role="img" aria-label="Gráfico de previsão de desempenho">
+              <canvas id="prediction-chart"></canvas>
+            </div>
+            <div class="mt-4 text-sm text-gray-500">
+              <p>Previsão baseada no seu histórico de atividades. Os valores podem variar dependendo de diversos fatores.</p>
+            </div>
+          </div>
+
+          <!-- Tendências de Desempenho -->
+          <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-900">Tendências de Desempenho</h3>
+              <div class="relative">
+                <select id="trend-metric" class="text-sm border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                  <option value="distance">Distância</option>
+                  <option value="pace">Ritmo</option>
+                  <option value="duration">Duração</option>
+                  <option value="calories">Calorias</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-container h-64" role="img" aria-label="Gráfico de tendências de desempenho">
+              <canvas id="trend-chart"></canvas>
+            </div>
+            <div id="trend-summary" class="mt-4 p-3 rounded-lg bg-gray-50">
+              <div class="flex items-center">
+                <div id="trend-icon" class="mr-3 text-2xl text-green-500">
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <div>
+                  <p id="trend-text" class="font-medium">Seu desempenho está melhorando</p>
+                  <p id="trend-detail" class="text-sm text-gray-500">Melhoria de 15% nos últimos 30 dias</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recomendações Personalizadas -->
+          <div class="bg-white shadow rounded-lg p-6 md:col-span-2">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Recomendações Personalizadas</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="p-4 rounded-lg bg-blue-50 border border-blue-100">
+                <div class="text-blue-500 text-xl mb-2">
+                  <i class="fas fa-running"></i>
+                </div>
+                <h4 class="font-medium text-gray-900 mb-1">Aumente sua distância</h4>
+                <p class="text-sm text-gray-600">Tente aumentar gradualmente sua distância de corrida em 10% por semana para melhorar sua resistência.</p>
+              </div>
+              <div class="p-4 rounded-lg bg-green-50 border border-green-100">
+                <div class="text-green-500 text-xl mb-2">
+                  <i class="fas fa-heartbeat"></i>
+                </div>
+                <h4 class="font-medium text-gray-900 mb-1">Treinamento intervalado</h4>
+                <p class="text-sm text-gray-600">Adicione sessões de treinamento intervalado para melhorar seu ritmo e queimar mais calorias.</p>
+              </div>
+              <div class="p-4 rounded-lg bg-purple-50 border border-purple-100">
+                <div class="text-purple-500 text-xl mb-2">
+                  <i class="fas fa-bed"></i>
+                </div>
+                <h4 class="font-medium text-gray-900 mb-1">Melhore sua recuperação</h4>
+                <p class="text-sm text-gray-600">Seus padrões de atividade sugerem que você pode se beneficiar de mais dias de descanso entre treinos intensos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/lazy-loader.js"></script>
+  <script src="js/module-loader.js"></script>
+  <script src="js/accessibility.js"></script>
+  <script src="js/push-notifications.js"></script>
+  <script src="js/social-sharing.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/user-menu.js"></script>
+  <script src="js/mobile-menu.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/data-export.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/offline-sync.js"></script>
+  <script src="js/advanced-analytics.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/pwa.js"></script>
+
+  <script>
+    // Inicializar análises avançadas
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configurar tabs de análises avançadas
+      const advancedTabButtons = document.querySelectorAll('.advanced-tab-button');
+      const advancedTabPanels = document.querySelectorAll('.advanced-tab-panel');
+
+      advancedTabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remover classe ativa de todos os botões
+          advancedTabButtons.forEach(btn => {
+            btn.classList.remove('border-primary', 'text-primary');
+            btn.classList.add('border-transparent', 'text-gray-500');
+            btn.setAttribute('aria-selected', 'false');
+          });
+
+          // Adicionar classe ativa ao botão clicado
+          button.classList.remove('border-transparent', 'text-gray-500');
+          button.classList.add('border-primary', 'text-primary');
+          button.setAttribute('aria-selected', 'true');
+
+          // Esconder todos os painéis
+          advancedTabPanels.forEach(panel => {
+            panel.classList.add('hidden');
+          });
+
+          // Mostrar painel correspondente
+          const tabName = button.getAttribute('data-tab');
+          const tabPanel = document.getElementById(tabName);
+          tabPanel.classList.remove('hidden');
+
+          // Renderizar gráficos correspondentes
+          if (tabName === 'comparison' && window.advancedAnalytics) {
+            window.advancedAnalytics.renderComparisonChart('comparison-chart', 'similar');
+          } else if (tabName === 'zones' && window.advancedAnalytics) {
+            window.advancedAnalytics.renderTrainingZonesChart('zones-chart', 'running', 'heartRate');
+          } else if (tabName === 'trends' && window.advancedAnalytics) {
+            // Renderizar gráfico de tendências usando dados existentes
+            const trendsChart = document.getElementById('trends-chart');
+            if (trendsChart && window.Chart) {
+              // Limpar conteúdo existente
+              trendsChart.innerHTML = '';
+
+              // Criar canvas
+              const canvas = document.createElement('canvas');
+              trendsChart.appendChild(canvas);
+
+              // Obter tendências
+              const trends = window.advancedAnalytics.getTrends('running', 'distance', 6);
+
+              // Criar gráfico
+              new Chart(canvas, {
+                type: 'line',
+                data: {
+                  labels: trends.data.map(period => `Período ${period.period}`),
+                  datasets: [{
+                    label: 'Distância média (km)',
+                    data: trends.data.map(period => period.average),
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    tension: 0.3
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'top'
+                    },
+                    tooltip: {
+                      mode: 'index',
+                      intersect: false
+                    }
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Distância (km)'
+                      }
+                    },
+                    x: {
+                      title: {
+                        display: true,
+                        text: 'Período'
+                      }
+                    }
+                  }
+                }
+              });
+
+              // Adicionar informações de tendência
+              const trendInfo = document.createElement('div');
+              trendInfo.className = 'mt-4 p-4 rounded-lg bg-gray-50';
+
+              let trendIcon, trendColor, trendText;
+
+              switch (trends.trend) {
+                case 'improving':
+                  trendIcon = 'fa-arrow-up';
+                  trendColor = 'text-green-500';
+                  trendText = 'Tendência de melhoria';
+                  break;
+                case 'declining':
+                  trendIcon = 'fa-arrow-down';
+                  trendColor = 'text-red-500';
+                  trendText = 'Tendência de declínio';
+                  break;
+                default:
+                  trendIcon = 'fa-equals';
+                  trendColor = 'text-yellow-500';
+                  trendText = 'Tendência estável';
+              }
+
+              trendInfo.innerHTML = `
+                <div class="flex items-center">
+                  <div class="p-2 rounded-full ${trendColor} bg-opacity-20 mr-3">
+                    <i class="fas ${trendIcon} ${trendColor}"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium">${trendText}</p>
+                    <p class="text-sm text-gray-600">Variação de ${trends.changePercent > 0 ? '+' : ''}${trends.changePercent}% no período analisado</p>
+                  </div>
+                </div>
+              `;
+
+              trendsChart.parentNode.appendChild(trendInfo);
+            }
+          }
+        });
+      });
+
+      // Inicializar gráfico de comparação
+      if (window.advancedAnalytics) {
+        window.advancedAnalytics.renderComparisonChart('comparison-chart', 'similar');
+      }
+    });
+  </script>
+
+  <!-- Toast para feedback de ações -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 hidden">
+    <div class="bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center">
+      <i class="fas fa-check-circle mr-2"></i>
+      <span id="toast-message">Ação realizada com sucesso!</span>
+    </div>
+  </div>
+
+  <script>
+    // Função para mostrar toast de feedback
+    function showToast(message, type = 'success', duration = 3000) {
+      const toastContainer = document.getElementById('toast-container');
+      const toastMessage = document.getElementById('toast-message');
+      const toast = toastContainer.querySelector('div');
+
+      // Definir mensagem
+      toastMessage.textContent = message;
+
+      // Definir tipo
+      toast.className = 'px-4 py-3 rounded-lg shadow-lg flex items-center';
+      if (type === 'success') {
+        toast.classList.add('bg-green-500', 'text-white');
+        toast.querySelector('i').className = 'fas fa-check-circle mr-2';
+      } else if (type === 'error') {
+        toast.classList.add('bg-red-500', 'text-white');
+        toast.querySelector('i').className = 'fas fa-exclamation-circle mr-2';
+      } else if (type === 'warning') {
+        toast.classList.add('bg-yellow-500', 'text-white');
+        toast.querySelector('i').className = 'fas fa-exclamation-triangle mr-2';
+      } else if (type === 'info') {
+        toast.classList.add('bg-blue-500', 'text-white');
+        toast.querySelector('i').className = 'fas fa-info-circle mr-2';
+      }
+
+      // Mostrar toast
+      toastContainer.classList.remove('hidden');
+
+      // Esconder toast após duração
+      setTimeout(() => {
+        toastContainer.classList.add('hidden');
+      }, duration);
+    }
+  </script>
+</body>
+</html>

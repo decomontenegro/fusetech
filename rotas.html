@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FuseLabs - Rotas</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <style>
+    .map-container {
+      height: 500px;
+      width: 100%;
+      border-radius: 0.5rem;
+    }
+    .route-card {
+      transition: all 0.2s ease;
+    }
+    .route-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .route-card.active {
+      border-color: #6366f1;
+      background-color: rgba(99, 102, 241, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900" data-page="routes">
+  
+  <!-- Cabeçalho -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="font-bold text-xl text-primary">FuseLabs</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="index_modular.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-home mr-1"></i> Início
+            </a>
+            <a href="atividades.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-running mr-1"></i> Atividades
+            </a>
+            <a href="desafios.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-trophy mr-1"></i> Desafios
+            </a>
+            <a href="comunidade.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-users mr-1"></i> Comunidade
+            </a>
+            <a href="analytics.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-bar mr-1"></i> Análises
+            </a>
+            <a href="previsoes.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-line mr-1"></i> Previsões
+            </a>
+            <a href="rotas.html" class="border-primary text-primary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-map-marked-alt mr-1"></i> Rotas
+            </a>
+            <a href="perfil.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-user mr-1"></i> Perfil
+            </a>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <a href="busca.html" class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none hidden sm:block mr-2">
+            <i class="fas fa-search text-lg"></i>
+          </a>
+          <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none hidden sm:block">
+            <i class="fas fa-bell text-lg"></i>
+            <span class="absolute top-3 right-3 inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+          </button>
+          <div class="ml-3 relative hidden sm:block">
+            <div id="auth-buttons" class="flex space-x-2">
+              <a href="login.html" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+                Entrar
+              </a>
+              <a href="registro.html" class="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                Registrar
+              </a>
+            </div>
+            <div id="user-profile" class="hidden">
+              <button class="flex text-sm rounded-full focus:outline-none" id="user-menu-button">
+                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              </button>
+            </div>
+          </div>
+          <!-- Botão do menu mobile -->
+          <div class="flex items-center sm:hidden ml-3">
+            <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Abrir menu principal</span>
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Cabeçalho da Página -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Rotas</h1>
+        <p class="mt-1 text-sm text-gray-500">Visualize e gerencie suas rotas de atividades</p>
+      </div>
+      <div class="mt-4 md:mt-0 flex space-x-3">
+        <button id="create-route-btn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+          <i class="fas fa-plus mr-2"></i> Nova Rota
+        </button>
+        <button id="import-route-btn" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          <i class="fas fa-file-import mr-2"></i> Importar GPX
+        </button>
+      </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
+      <!-- Lista de Rotas -->
+      <div class="lg:w-1/3">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+          <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Suas Rotas</h3>
+            <div class="flex items-center">
+              <div class="relative">
+                <select id="route-filter" class="block w-full pl-3 pr-10 py-1 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                  <option value="all">Todas</option>
+                  <option value="running">Corrida</option>
+                  <option value="cycling">Ciclismo</option>
+                  <option value="walking">Caminhada</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="overflow-y-auto" style="max-height: 500px;">
+            <ul id="routes-list" class="divide-y divide-gray-200">
+              <!-- Rotas serão carregadas dinamicamente via JavaScript -->
+              <li class="p-4 text-center text-gray-500">
+                <i class="fas fa-spinner fa-spin mr-2"></i> Carregando rotas...
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mapa e Detalhes -->
+      <div class="lg:w-2/3">
+        <div class="bg-white shadow rounded-lg p-6">
+          <div id="map-container" class="map-container mb-6">
+            <!-- O mapa será carregado aqui -->
+          </div>
+          
+          <div id="route-details" class="hidden">
+            <div class="border-t border-gray-200 pt-4">
+              <h3 id="route-name" class="text-lg font-medium text-gray-900 mb-2">Nome da Rota</h3>
+              
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <div class="bg-gray-50 p-3 rounded-lg">
+                  <div class="text-sm text-gray-500">Distância</div>
+                  <div id="route-distance" class="text-lg font-semibold">0 km</div>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                  <div class="text-sm text-gray-500">Elevação</div>
+                  <div id="route-elevation" class="text-lg font-semibold">0 m</div>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                  <div class="text-sm text-gray-500">Tipo</div>
+                  <div id="route-type" class="text-lg font-semibold">Corrida</div>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                  <div class="text-sm text-gray-500">Criada em</div>
+                  <div id="route-date" class="text-lg font-semibold">01/01/2023</div>
+                </div>
+              </div>
+              
+              <div class="flex space-x-2 mt-4">
+                <button id="start-activity-btn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none">
+                  <i class="fas fa-play mr-2"></i> Iniciar Atividade
+                </button>
+                <button id="edit-route-btn" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                  <i class="fas fa-edit mr-2"></i> Editar
+                </button>
+                <button id="share-route-btn" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                  <i class="fas fa-share-alt mr-2"></i> Compartilhar
+                </button>
+                <button id="delete-route-btn" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-red-600 bg-white hover:bg-red-50 focus:outline-none">
+                  <i class="fas fa-trash-alt mr-2"></i> Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div id="route-empty-state" class="text-center py-8">
+            <i class="fas fa-map-marked-alt text-gray-300 text-5xl mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhuma rota selecionada</h3>
+            <p class="text-gray-500 mb-4">Selecione uma rota da lista ou crie uma nova para visualizar no mapa.</p>
+            <button id="create-route-btn-empty" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+              <i class="fas fa-plus mr-2"></i> Nova Rota
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Modal de Importação de GPX -->
+  <div id="import-gpx-modal" class="fixed inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                Importar Arquivo GPX
+              </h3>
+              <div class="mt-4">
+                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                  <div class="space-y-1 text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <div class="flex text-sm text-gray-600">
+                      <label for="gpx-file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                        <span>Fazer upload de arquivo</span>
+                        <input id="gpx-file-upload" name="gpx-file-upload" type="file" accept=".gpx" class="sr-only">
+                      </label>
+                      <p class="pl-1">ou arraste e solte</p>
+                    </div>
+                    <p class="text-xs text-gray-500">
+                      GPX até 10MB
+                    </p>
+                  </div>
+                </div>
+                <div id="gpx-file-info" class="mt-4 hidden">
+                  <div class="flex items-center">
+                    <i class="fas fa-file-alt text-primary text-xl mr-2"></i>
+                    <div>
+                      <p id="gpx-filename" class="text-sm font-medium text-gray-900">arquivo.gpx</p>
+                      <p id="gpx-filesize" class="text-xs text-gray-500">123 KB</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <label for="route-name-input" class="block text-sm font-medium text-gray-700">Nome da Rota</label>
+                  <input type="text" name="route-name-input" id="route-name-input" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Ex: Corrida no Parque">
+                </div>
+                <div class="mt-4">
+                  <label for="route-type-input" class="block text-sm font-medium text-gray-700">Tipo de Atividade</label>
+                  <select id="route-type-input" name="route-type-input" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                    <option value="running">Corrida</option>
+                    <option value="cycling">Ciclismo</option>
+                    <option value="walking">Caminhada</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button type="button" id="import-gpx-btn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm" disabled>
+            Importar
+          </button>
+          <button type="button" id="cancel-import-btn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/routes.js"></script>
+</body>
+</html>

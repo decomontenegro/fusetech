@@ -1,0 +1,148 @@
+<!-- Menu Mobile -->
+<div id="mobile-menu" class="sm:hidden hidden">
+  <div class="px-2 pt-2 pb-3 space-y-1">
+    <a href="index_modular.html" class="mobile-nav-link" data-page="home">
+      <i class="fas fa-home mr-2"></i> Início
+    </a>
+    <a href="atividades.html" class="mobile-nav-link" data-page="activities">
+      <i class="fas fa-running mr-2"></i> Atividades
+    </a>
+    <a href="desafios.html" class="mobile-nav-link" data-page="challenges">
+      <i class="fas fa-trophy mr-2"></i> Desafios
+    </a>
+    <a href="comunidade.html" class="mobile-nav-link" data-page="community">
+      <i class="fas fa-users mr-2"></i> Comunidade
+    </a>
+    <a href="analytics.html" class="mobile-nav-link" data-page="analytics">
+      <i class="fas fa-chart-bar mr-2"></i> Análises
+    </a>
+    <a href="previsoes.html" class="mobile-nav-link" data-page="predictions">
+      <i class="fas fa-chart-line mr-2"></i> Previsões
+    </a>
+    <a href="perfil.html" class="mobile-nav-link" data-page="profile">
+      <i class="fas fa-user mr-2"></i> Perfil
+    </a>
+  </div>
+  
+  <!-- Seção de autenticação mobile -->
+  <div id="mobile-auth-buttons" class="px-2 pt-3 pb-3 border-t border-gray-200">
+    <a href="login.html" class="block text-center w-full px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-indigo-700 focus:outline-none mb-2">
+      <i class="fas fa-sign-in-alt mr-2"></i> Entrar
+    </a>
+    <a href="registro.html" class="block text-center w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+      <i class="fas fa-user-plus mr-2"></i> Registrar
+    </a>
+  </div>
+  
+  <!-- Perfil do usuário mobile (mostrado quando logado) -->
+  <div id="mobile-user-profile" class="hidden px-2 pt-3 pb-3 border-t border-gray-200">
+    <div class="flex items-center px-3 py-2">
+      <img id="mobile-user-avatar" class="h-10 w-10 rounded-full mr-3" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Avatar do usuário">
+      <div>
+        <div id="mobile-user-name" class="text-sm font-medium text-gray-900">João Silva</div>
+        <div id="mobile-user-email" class="text-sm text-gray-500">usuario@exemplo.com</div>
+      </div>
+    </div>
+    <div class="mt-3 space-y-1">
+      <a href="perfil.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+        <i class="fas fa-user-circle mr-2"></i> Ver perfil
+      </a>
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+        <i class="fas fa-cog mr-2"></i> Configurações
+      </a>
+      <button id="mobile-logout-button" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+        <i class="fas fa-sign-out-alt mr-2"></i> Sair
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Atualizar o menu mobile com base no estado de autenticação
+  function updateMobileAuthUI() {
+    // Verificar se o gerenciador de autenticação está disponível
+    if (typeof authManager === 'undefined') {
+      console.warn('Gerenciador de autenticação não encontrado');
+      return;
+    }
+    
+    const mobileAuthButtons = document.getElementById('mobile-auth-buttons');
+    const mobileUserProfile = document.getElementById('mobile-user-profile');
+    
+    if (!mobileAuthButtons || !mobileUserProfile) {
+      console.warn('Elementos de autenticação mobile não encontrados');
+      return;
+    }
+    
+    if (authManager.isAuthenticated()) {
+      // Usuário está logado
+      mobileAuthButtons.classList.add('hidden');
+      mobileUserProfile.classList.remove('hidden');
+      
+      // Atualizar dados do usuário
+      const user = authManager.getCurrentUser();
+      if (user) {
+        const mobileUserAvatar = document.getElementById('mobile-user-avatar');
+        const mobileUserName = document.getElementById('mobile-user-name');
+        const mobileUserEmail = document.getElementById('mobile-user-email');
+        
+        if (mobileUserAvatar && user.avatar) {
+          mobileUserAvatar.src = user.avatar;
+          mobileUserAvatar.alt = user.name || 'Avatar do usuário';
+        }
+        
+        if (mobileUserName && user.name) {
+          mobileUserName.textContent = user.name;
+        }
+        
+        if (mobileUserEmail && user.email) {
+          mobileUserEmail.textContent = user.email;
+        }
+      }
+    } else {
+      // Usuário não está logado
+      mobileAuthButtons.classList.remove('hidden');
+      mobileUserProfile.classList.add('hidden');
+    }
+  }
+  
+  // Configurar botão de logout mobile
+  const mobileLogoutButton = document.getElementById('mobile-logout-button');
+  if (mobileLogoutButton) {
+    mobileLogoutButton.addEventListener('click', function() {
+      // Verificar se o gerenciador de autenticação está disponível
+      if (typeof authManager !== 'undefined') {
+        authManager.logout();
+        window.location.href = 'login.html';
+      } else {
+        console.error('Gerenciador de autenticação não encontrado');
+      }
+    });
+  }
+  
+  // Destacar o link de navegação ativo com base na página atual
+  const currentPage = document.body.getAttribute('data-page');
+  if (currentPage) {
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      if (link.getAttribute('data-page') === currentPage) {
+        link.classList.add('bg-primary-light', 'text-primary');
+      } else {
+        link.classList.add('text-gray-600', 'hover:bg-gray-50', 'hover:text-gray-900');
+      }
+      link.classList.add('block', 'pl-3', 'pr-4', 'py-2', 'border-l-4', 'border-transparent', 'text-base', 'font-medium');
+    });
+  }
+  
+  // Atualizar UI quando o script de autenticação estiver carregado
+  if (typeof authManager === 'undefined') {
+    // Verificar periodicamente se o authManager foi carregado
+    const authCheckInterval = setInterval(function() {
+      if (typeof authManager !== 'undefined') {
+        updateMobileAuthUI();
+        clearInterval(authCheckInterval);
+      }
+    }, 100);
+  } else {
+    updateMobileAuthUI();
+  }
+</script>

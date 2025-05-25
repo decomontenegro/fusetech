@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FuseLabs - Testes</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .test-header {
+      margin-bottom: 2rem;
+    }
+    
+    .test-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .test-total {
+      font-weight: bold;
+    }
+    
+    .test-passed {
+      color: #10B981;
+    }
+    
+    .test-failed {
+      color: #EF4444;
+    }
+    
+    .test-skipped {
+      color: #F59E0B;
+    }
+    
+    .test-suite {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      background-color: #F9FAFB;
+    }
+    
+    .test-suite h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #111827;
+    }
+    
+    .test-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .test-item {
+      padding: 0.5rem;
+      margin-bottom: 0.25rem;
+      border-radius: 0.25rem;
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    
+    .test-passed {
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+    
+    .test-failed {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+    
+    .test-skipped {
+      background-color: rgba(245, 158, 11, 0.1);
+    }
+    
+    .test-status {
+      margin-right: 0.5rem;
+    }
+    
+    .test-name {
+      flex: 1;
+    }
+    
+    .test-error {
+      width: 100%;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background-color: rgba(239, 68, 68, 0.2);
+      border-radius: 0.25rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      color: #7F1D1D;
+    }
+    
+    .loading-spinner {
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      border: 0.25rem solid rgba(79, 70, 229, 0.3);
+      border-radius: 50%;
+      border-top-color: #4F46E5;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">FuseLabs - Testes</h1>
+        <p class="mt-1 text-sm text-gray-500">Testes automatizados para garantir a qualidade do código</p>
+      </div>
+      <a href="../index_modular.html" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700">
+        <i class="fas fa-home mr-2"></i> Voltar para o site
+      </a>
+    </div>
+  </header>
+  
+  <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">Executar Testes</h2>
+        <button id="run-tests-button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700">
+          <i class="fas fa-play mr-2"></i> Executar Testes
+        </button>
+      </div>
+      
+      <div id="loading" class="hidden text-center py-8">
+        <div class="loading-spinner mb-4"></div>
+        <p class="text-gray-600">Executando testes...</p>
+      </div>
+      
+      <div id="test-results" class="mt-6">
+        <div class="text-center py-8 text-gray-500">
+          <i class="fas fa-vial text-4xl mb-4"></i>
+          <p>Clique no botão "Executar Testes" para iniciar os testes automatizados.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Scripts necessários para os testes -->
+  <script src="../js/auth-service.js"></script>
+  <script src="../js/data-export.js"></script>
+  
+  <!-- Test Runner -->
+  <script src="test-runner.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const runTestsButton = document.getElementById('run-tests-button');
+      const loadingElement = document.getElementById('loading');
+      const resultsElement = document.getElementById('test-results');
+      
+      runTestsButton.addEventListener('click', async function() {
+        // Mostrar loading
+        loadingElement.classList.remove('hidden');
+        resultsElement.innerHTML = '';
+        
+        try {
+          // Carregar arquivos de teste
+          await loadTests();
+          
+          // Executar testes
+          const results = await TestRunner.run();
+          
+          // Exibir resultados
+          displayResults(results);
+        } catch (error) {
+          console.error('Erro ao executar testes:', error);
+          resultsElement.innerHTML = `
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              <strong class="font-bold">Erro!</strong>
+              <span class="block sm:inline"> ${error.message}</span>
+            </div>
+          `;
+        } finally {
+          // Esconder loading
+          loadingElement.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

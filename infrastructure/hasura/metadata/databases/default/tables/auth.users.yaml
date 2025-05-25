@@ -1,0 +1,85 @@
+table:
+  name: users
+  schema: auth
+array_relationships:
+  - name: physical_activities
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: physical_activities
+          schema: public
+  - name: social_activities
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: social_activities
+          schema: public
+  - name: token_transactions
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: token_transactions
+          schema: public
+  - name: user_achievements
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_achievements
+          schema: public
+  - name: user_challenges
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_challenges
+          schema: public
+  - name: wallets
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: wallets
+          schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - username
+        - name
+        - bio
+        - avatar_url
+        - level
+        - points
+        - created_at
+        - updated_at
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+  - role: user
+    permission:
+      columns:
+        - id
+        - username
+        - name
+        - bio
+        - avatar_url
+        - level
+        - points
+        - created_at
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - name
+        - bio
+        - avatar_url
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null

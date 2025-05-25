@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metas - FUSEtech</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f0ff',
+              500: '#5046e5',
+              600: '#4338ca',
+              700: '#3730a3'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    .gradient-primary { background: linear-gradient(135deg, #5046e5 0%, #4338ca 100%); }
+    .hover-lift { transition: transform 0.2s ease; }
+    .hover-lift:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: linear-gradient(135deg, #5046e5 0%, #4338ca 100%);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(80, 70, 229, 0.3);
+    }
+    .btn-outline {
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #374151;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      border-color: #5046e5;
+      color: #5046e5;
+      transform: translateY(-1px);
+    }
+    .card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      color: #6b7280;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #5046e5;
+      background: #f0f0ff;
+    }
+    .progress-circle {
+      transform: rotate(-90deg);
+    }
+    .progress-circle circle {
+      transition: stroke-dashoffset 0.5s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Brand -->
+        <div class="flex items-center">
+          <div class="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center mr-3">
+            <i class="fas fa-bolt text-white"></i>
+          </div>
+          <span class="text-xl font-bold text-gray-900">FUSEtech</span>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex space-x-2">
+          <a href="index-clean.html" class="nav-link">
+            <i class="fas fa-home mr-2"></i>
+            Dashboard
+          </a>
+          <a href="atividades-clean.html" class="nav-link">
+            <i class="fas fa-running mr-2"></i>
+            Atividades
+          </a>
+          <a href="achievements-clean.html" class="nav-link">
+            <i class="fas fa-trophy mr-2"></i>
+            Conquistas
+          </a>
+          <a href="goals-clean.html" class="nav-link active">
+            <i class="fas fa-bullseye mr-2"></i>
+            Metas
+          </a>
+          <a href="marketplace-clean.html" class="nav-link">
+            <i class="fas fa-store mr-2"></i>
+            Marketplace
+          </a>
+          <a href="community-clean.html" class="nav-link">
+            <i class="fas fa-users mr-2"></i>
+            Comunidade
+          </a>
+        </div>
+
+        <!-- User Actions -->
+        <div class="flex items-center space-x-4">
+          <!-- Tokens Balance -->
+          <div class="hidden sm:flex items-center gradient-primary text-white px-4 py-2 rounded-full">
+            <i class="fas fa-coins mr-2"></i>
+            <span class="font-semibold">1,247</span>
+            <span class="text-xs ml-1 opacity-80">FUSE</span>
+          </div>
+
+          <!-- Notifications -->
+          <button class="relative p-2 text-gray-600 hover:text-gray-900">
+            <i class="fas fa-bell"></i>
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+          </button>
+
+          <!-- User Avatar -->
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
+               alt="User" class="w-10 h-10 rounded-full">
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-green-600 to-blue-600 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl font-bold mb-2">Suas Metas</h1>
+          <p class="text-xl opacity-90">Defina objetivos e acompanhe seu progresso</p>
+        </div>
+        <button onclick="createNewGoal()" class="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+          <i class="fas fa-plus mr-2"></i>
+          Nova Meta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="card text-center">
+        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-check-circle text-green-600"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Concluídas</h3>
+        <div class="text-2xl font-bold text-green-600">8</div>
+        <div class="text-sm text-gray-500">Este mês</div>
+      </div>
+      
+      <div class="card text-center">
+        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-clock text-blue-600"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Em Progresso</h3>
+        <div class="text-2xl font-bold text-blue-600">3</div>
+        <div class="text-sm text-gray-500">Ativas agora</div>
+      </div>
+      
+      <div class="card text-center">
+        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-target text-orange-600"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Taxa de Sucesso</h3>
+        <div class="text-2xl font-bold text-orange-600">73%</div>
+        <div class="text-sm text-gray-500">Últimos 3 meses</div>
+      </div>
+      
+      <div class="card text-center">
+        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-coins text-purple-600"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-1">Bônus Ganhos</h3>
+        <div class="text-2xl font-bold text-purple-600">+180</div>
+        <div class="text-sm text-gray-500">FUSE por metas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <!-- Active Goals -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Metas Ativas</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Goal 1 -->
+        <div class="card hover-lift">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">Corredor de 50km</h3>
+              <p class="text-gray-600">Acumule 50km de corrida este mês</p>
+            </div>
+            <div class="w-16 h-16 relative">
+              <svg class="w-16 h-16 progress-circle" viewBox="0 0 36 36">
+                <path class="text-gray-200" stroke="currentColor" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="text-blue-600" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="78, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span class="text-sm font-bold text-blue-600">78%</span>
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="flex justify-between text-sm text-gray-600 mb-1">
+              <span>Progresso</span>
+              <span>39/50 km</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-blue-600 h-2 rounded-full" style="width: 78%"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-500">
+              <i class="fas fa-calendar mr-1"></i>
+              5 dias restantes
+            </div>
+            <div class="text-sm font-semibold text-green-600">
+              +50 FUSE ao completar
+            </div>
+          </div>
+        </div>
+
+        <!-- Goal 2 -->
+        <div class="card hover-lift">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">Sequência de 14 dias</h3>
+              <p class="text-gray-600">Mantenha atividade por 14 dias consecutivos</p>
+            </div>
+            <div class="w-16 h-16 relative">
+              <svg class="w-16 h-16 progress-circle" viewBox="0 0 36 36">
+                <path class="text-gray-200" stroke="currentColor" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="text-orange-600" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="50, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span class="text-sm font-bold text-orange-600">50%</span>
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="flex justify-between text-sm text-gray-600 mb-1">
+              <span>Progresso</span>
+              <span>7/14 dias</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-orange-600 h-2 rounded-full" style="width: 50%"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-500">
+              <i class="fas fa-fire mr-1"></i>
+              Sequência atual: 7 dias
+            </div>
+            <div class="text-sm font-semibold text-green-600">
+              +30 FUSE ao completar
+            </div>
+          </div>
+        </div>
+
+        <!-- Goal 3 -->
+        <div class="card hover-lift">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">Queima de Calorias</h3>
+              <p class="text-gray-600">Queime 5000 calorias esta semana</p>
+            </div>
+            <div class="w-16 h-16 relative">
+              <svg class="w-16 h-16 progress-circle" viewBox="0 0 36 36">
+                <path class="text-gray-200" stroke="currentColor" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="text-red-600" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="65, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span class="text-sm font-bold text-red-600">65%</span>
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="flex justify-between text-sm text-gray-600 mb-1">
+              <span>Progresso</span>
+              <span>3,250/5,000 cal</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-red-600 h-2 rounded-full" style="width: 65%"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-500">
+              <i class="fas fa-calendar mr-1"></i>
+              3 dias restantes
+            </div>
+            <div class="text-sm font-semibold text-green-600">
+              +25 FUSE ao completar
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Completed Goals -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Metas Concluídas Recentemente</h2>
+      <div class="space-y-4">
+        
+        <div class="card">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                <i class="fas fa-check text-green-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Primeira Maratona</h3>
+                <p class="text-gray-600">Complete 42km em atividades</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-lg font-bold text-green-600">+100 FUSE</div>
+              <div class="text-sm text-gray-500">Concluída ontem</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                <i class="fas fa-check text-green-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Velocista</h3>
+                <p class="text-gray-600">Atinja 15 km/h de velocidade média</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-lg font-bold text-green-600">+40 FUSE</div>
+              <div class="text-sm text-gray-500">Concluída há 3 dias</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Goal Templates -->
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Modelos de Metas</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div class="card hover-lift cursor-pointer" onclick="createGoalFromTemplate('distance')">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <i class="fas fa-route text-blue-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Meta de Distância</h3>
+            <p class="text-sm text-gray-600 mb-3">Defina uma distância para percorrer</p>
+            <div class="text-xs text-gray-500">Recompensa: 20-100 FUSE</div>
+          </div>
+        </div>
+
+        <div class="card hover-lift cursor-pointer" onclick="createGoalFromTemplate('time')">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <i class="fas fa-clock text-green-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Meta de Tempo</h3>
+            <p class="text-sm text-gray-600 mb-3">Defina um tempo de atividade</p>
+            <div class="text-xs text-gray-500">Recompensa: 15-80 FUSE</div>
+          </div>
+        </div>
+
+        <div class="card hover-lift cursor-pointer" onclick="createGoalFromTemplate('consistency')">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <i class="fas fa-calendar-check text-orange-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Meta de Consistência</h3>
+            <p class="text-sm text-gray-600 mb-3">Mantenha uma sequência de dias</p>
+            <div class="text-xs text-gray-500">Recompensa: 30-150 FUSE</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- JavaScript Functions -->
+  <script>
+    function createNewGoal() {
+      alert('🎯 Modal de criação de meta seria aberto aqui!\n\nOpções:\n- Escolher tipo de meta\n- Definir valor objetivo\n- Selecionar prazo\n- Configurar recompensa\n- Adicionar motivação pessoal');
+    }
+    
+    function createGoalFromTemplate(type) {
+      const templates = {
+        distance: 'Meta de Distância\n\nExemplos:\n- Correr 50km este mês\n- Pedalar 100km esta semana\n- Caminhar 10km hoje',
+        time: 'Meta de Tempo\n\nExemplos:\n- Exercitar-se por 5 horas esta semana\n- Correr por 30 minutos hoje\n- Treinar por 2 horas este fim de semana',
+        consistency: 'Meta de Consistência\n\nExemplos:\n- Exercitar-se por 7 dias consecutivos\n- Correr 3x por semana durante 1 mês\n- Não perder nenhum dia de treino'
+      };
+      
+      alert(`🎯 ${templates[type]}\n\nEsta meta seria criada com valores personalizáveis!`);
+      console.log(`Criando meta do tipo: ${type}`);
+    }
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Página de Metas carregada com sucesso!');
+      
+      // Add click events to active goals
+      document.querySelectorAll('.card.hover-lift').forEach(card => {
+        if (!card.onclick) {
+          card.addEventListener('click', function() {
+            const title = this.querySelector('h3')?.textContent;
+            if (title && !title.includes('Meta de')) {
+              alert(`📊 Detalhes da meta: ${title}\n\nInformações:\n- Progresso detalhado\n- Histórico de atividades\n- Dicas para completar\n- Opções de ajuste`);
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+/* Estilos principais do FuseLabs */
+:root {
+  --color-primary: #6366f1;
+  --color-primary-light: rgba(99, 102, 241, 0.1);
+  --color-background: #f9fafb;
+  --color-card: #ffffff;
+  --color-text: #111827;
+  --color-text-secondary: #6b7280;
+  --color-border: #e5e7eb;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+
+  /* Cores de acessibilidade */
+  --focus-ring-color: #4f46e5;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  /* Cores de alto contraste */
+  --high-contrast-primary: #0000ff;
+  --high-contrast-background: #ffffff;
+  --high-contrast-card: #ffffff;
+  --high-contrast-text: #000000;
+  --high-contrast-border: #000000;
+}
+
+/* Modo escuro */
+.dark {
+  --color-primary: #818cf8;
+  --color-primary-light: rgba(129, 140, 248, 0.1);
+  --color-background: #111827;
+  --color-card: #1f2937;
+  --color-text: #f9fafb;
+  --color-text-secondary: #d1d5db;
+  --color-border: #374151;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* Transições suaves */
+body, .bg-white, .bg-gray-50, .text-gray-900, .text-gray-500, .border-gray-200, .border-gray-300 {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Cores principais */
+.bg-primary { background-color: var(--color-primary); }
+.text-primary { color: var(--color-primary); }
+.border-primary { border-color: var(--color-primary); }
+.bg-primary-light { background-color: var(--color-primary-light); }
+
+/* Elementos básicos */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.bg-white {
+  background-color: var(--color-card);
+}
+
+.bg-gray-50 {
+  background-color: var(--color-background);
+}
+
+.text-gray-900 {
+  color: var(--color-text);
+}
+
+.text-gray-500, .text-gray-600, .text-gray-700 {
+  color: var(--color-text-secondary);
+}
+
+.border-gray-200, .border-gray-300 {
+  border-color: var(--color-border);
+}
+
+/* Componentes */
+.progress-bar { height: 8px; border-radius: 4px; }
+
+.challenge-card {
+  transition: all 0.3s ease;
+  background-color: var(--color-card);
+}
+
+.challenge-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px var(--color-shadow);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Botão de tema */
+#theme-toggle {
+  margin-right: 0.5rem;
+}
+
+/* Estilos responsivos */
+@media (max-width: 640px) {
+  .mobile-nav-link.active {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border-left-color: var(--color-primary);
+  }
+
+  /* Ajustes para o menu mobile */
+  #mobile-menu {
+    position: fixed;
+    top: 64px; /* Altura da navbar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-card);
+    z-index: 40;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+  }
+
+  /* Impedir rolagem do body quando o menu mobile estiver aberto */
+  body.overflow-hidden {
+    overflow: hidden;
+  }
+
+  /* Ajustes para cards em telas pequenas */
+  .challenge-card:hover {
+    transform: none;
+  }
+
+  /* Ajustes para tabelas em telas pequenas */
+  .responsive-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Estilos para o perfil */
+.profile-header {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 2rem 0;
+}
+
+.profile-avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.profile-stats-card {
+  transition: all 0.2s ease;
+}
+
+.profile-stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.activity-item {
+  border-left: 2px solid #e5e7eb;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.activity-item::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #6366f1;
+  left: -7px;
+  top: 0;
+}
+
+.activity-item:last-child {
+  border-left-color: transparent;
+}
+
+/* Estilos para desafios */
+.challenge-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.challenge-category {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+}
+
+.challenge-image {
+  height: 160px;
+  object-fit: cover;
+}
+
+/* Estilos para análises */
+.analytics-card {
+  transition: all 0.3s ease;
+}
+
+.analytics-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+  height: 250px;
+  position: relative;
+}
+
+/* Estilos de acessibilidade */
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.3s;
+  border-radius: 0 0 4px 0;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Foco visível */
+a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Classe para foco via teclado */
+.keyboard-focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color) !important;
+  outline-offset: var(--focus-ring-offset) !important;
+}
+
+/* Modo de alto contraste */
+.high-contrast {
+  --color-primary: var(--high-contrast-primary);
+  --color-background: var(--high-contrast-background);
+  --color-card: var(--high-contrast-card);
+  --color-text: var(--high-contrast-text);
+  --color-text-secondary: var(--high-contrast-text);
+  --color-border: var(--high-contrast-border);
+  --focus-ring-color: var(--high-contrast-primary);
+}
+
+.high-contrast img {
+  border: 1px solid var(--high-contrast-border);
+}
+
+.high-contrast button,
+.high-contrast a {
+  border: 1px solid currentColor;
+}
+
+/* Texto grande */
+.large-text {
+  font-size: 120% !important;
+  line-height: 1.5 !important;
+}
+
+.large-text h1 { font-size: 2.5rem !important; }
+.large-text h2 { font-size: 2rem !important; }
+.large-text h3 { font-size: 1.75rem !important; }
+.large-text h4 { font-size: 1.5rem !important; }
+.large-text h5 { font-size: 1.25rem !important; }
+.large-text h6 { font-size: 1.1rem !important; }
+
+.large-text button,
+.large-text input,
+.large-text select,
+.large-text textarea {
+  font-size: 1.1rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+/* Redução de movimento */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.001s !important;
+  transition-duration: 0.001s !important;
+  scroll-behavior: auto !important;
+}
+
+.reduced-motion .challenge-card:hover,
+.reduced-motion .analytics-card:hover,
+.reduced-motion .profile-stats-card:hover {
+  transform: none !important;
+}
+
+/* Botão de acessibilidade */
+.accessibility-button {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  border: none;
+  cursor: pointer;
+}
+
+/* Esconder visualmente, mas manter acessível para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

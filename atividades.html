@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FuseLabs - Atividades</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-900" data-page="activities">
+
+  <!-- Cabeçalho -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="font-bold text-xl text-primary">FuseLabs</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="index_modular.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-home mr-1"></i> Início
+            </a>
+            <a href="atividades.html" class="border-primary text-primary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-running mr-1"></i> Atividades
+            </a>
+            <a href="desafios.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-trophy mr-1"></i> Desafios
+            </a>
+            <a href="comunidade.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-users mr-1"></i> Comunidade
+            </a>
+            <a href="analytics.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-bar mr-1"></i> Análises
+            </a>
+            <a href="previsoes.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-line mr-1"></i> Previsões
+            </a>
+            <a href="conquistas.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-medal mr-1"></i> Conquistas
+            </a>
+            <a href="perfil.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-user mr-1"></i> Perfil
+            </a>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
+            <i class="fas fa-bell text-lg"></i>
+            <span class="absolute top-3 right-3 inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+          </button>
+          <div class="ml-3 relative">
+            <div>
+              <button class="flex text-sm rounded-full focus:outline-none" id="user-menu-button">
+                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Atividades</h1>
+        <p class="mt-1 text-sm text-gray-500">Gerencie e visualize suas atividades físicas</p>
+      </div>
+      <div class="mt-4 md:mt-0 flex space-x-3">
+        <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+          <i class="fas fa-plus mr-2"></i> Nova Atividade
+        </button>
+        <button id="import-activity-btn" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          <i class="fas fa-file-import mr-2"></i> Importar
+        </button>
+        <div class="relative">
+          <select class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+            <option value="all">Todas atividades</option>
+            <option value="running">Corrida</option>
+            <option value="cycling">Ciclismo</option>
+            <option value="walking">Caminhada</option>
+            <option value="swimming">Natação</option>
+            <option value="other">Outros</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="mb-6">
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <button class="tab-button border-primary text-primary hover:text-primary group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tab="all">
+            <i class="fas fa-list mr-2"></i> Todas
+          </button>
+          <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tab="recent">
+            <i class="fas fa-clock mr-2"></i> Recentes
+          </button>
+          <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tab="favorites">
+            <i class="fas fa-star mr-2"></i> Favoritas
+          </button>
+          <button class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tab="routes">
+            <i class="fas fa-map-marked-alt mr-2"></i> Rotas
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Conteúdo das Tabs -->
+    <div>
+      <!-- Todas as Atividades -->
+      <div id="all" class="tab-content active">
+        <!-- Resumo e Previsão do Tempo -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <!-- Resumo do Mês -->
+          <div class="lg:col-span-2">
+            <div class="bg-white shadow rounded-lg p-6">
+              <h2 class="text-lg font-medium text-gray-900 mb-4">Resumo do Mês</h2>
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="analytics-card p-4 bg-primary-light rounded-lg">
+                  <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-primary bg-opacity-20 mr-4">
+                      <i class="fas fa-road text-primary text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="text-sm text-gray-500">Distância</div>
+                      <div class="text-2xl font-bold">125 km</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="analytics-card p-4 bg-blue-50 rounded-lg">
+                  <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-500 bg-opacity-20 mr-4">
+                      <i class="fas fa-stopwatch text-blue-500 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="text-sm text-gray-500">Tempo</div>
+                      <div class="text-2xl font-bold">12h 35m</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="analytics-card p-4 bg-green-50 rounded-lg">
+                  <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-500 bg-opacity-20 mr-4">
+                      <i class="fas fa-fire text-green-500 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="text-sm text-gray-500">Calorias</div>
+                      <div class="text-2xl font-bold">8,450</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="analytics-card p-4 bg-purple-50 rounded-lg">
+                  <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-500 bg-opacity-20 mr-4">
+                      <i class="fas fa-running text-purple-500 text-xl"></i>
+                    </div>
+                    <div>
+                      <div class="text-sm text-gray-500">Atividades</div>
+                      <div class="text-2xl font-bold">15</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget de Previsão do Tempo -->
+          <div id="weather-widget-container" class="lg:col-span-1">
+            <!-- O widget será carregado aqui via JavaScript -->
+            <div class="bg-white shadow rounded-lg p-6 text-center">
+              <i class="fas fa-cloud-sun text-primary text-3xl mb-3"></i>
+              <p class="text-gray-500">Carregando previsão do tempo...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de Atividades -->
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+          <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Suas Atividades</h3>
+            <div class="flex items-center">
+              <span class="mr-2 text-sm text-gray-500">Ordenar por:</span>
+              <select class="block w-full pl-3 pr-10 py-1 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                <option value="recent">Mais recentes</option>
+                <option value="oldest">Mais antigas</option>
+                <option value="distance">Maior distância</option>
+                <option value="duration">Maior duração</option>
+              </select>
+            </div>
+          </div>
+
+          <ul class="divide-y divide-gray-200">
+            <!-- Atividade 1 -->
+            <li class="p-4 hover:bg-gray-50">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                  <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-running text-blue-500 text-xl"></i>
+                  </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-gray-900 truncate">
+                      Corrida Matinal
+                    </p>
+                    <div class="flex items-center">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-2">
+                        <i class="fas fa-check-circle mr-1"></i> Concluída
+                      </span>
+                      <span class="text-sm text-gray-500">Hoje, 07:30</span>
+                    </div>
+                  </div>
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <i class="fas fa-road mr-1"></i> 5 km
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <i class="fas fa-stopwatch mr-1"></i> 28 min
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <i class="fas fa-fire mr-1"></i> 320 kcal
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                      <i class="fas fa-heartbeat mr-1"></i> 155 bpm
+                    </span>
+                  </div>
+                </div>
+                <div class="flex-shrink-0 flex space-x-2">
+                  <button class="inline-flex items-center p-1 border border-transparent rounded-full text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-star"></i>
+                  </button>
+                  <button class="inline-flex items-center p-1 border border-transparent rounded-full text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="inline-flex items-center p-1 border border-transparent rounded-full text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-ellipsis-h"></i>
+                  </button>
+                </div>
+              </div>
+            </li>
+
+            <!-- Atividade 2 -->
+            <li class="p-4 hover:bg-gray-50">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                  <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                    <i class="fas fa-bicycle text-green-500 text-xl"></i>
+                  </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-gray-900 truncate">
+                      Ciclismo no Parque
+                    </p>
+                    <div class="flex items-center">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-2">
+                        <i class="fas fa-check-circle mr-1"></i> Concluída
+                      </span>
+                      <span class="text-sm text-gray-500">Ontem, 16:45</span>
+                    </div>
+                  </div>
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <i class="fas fa-road mr-1"></i> 15 km
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <i class="fas fa-stopwatch mr-1"></i> 45 min
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <i class="fas fa-fire mr-1"></i> 450 kcal
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                      <i class="fas fa-heartbeat mr-1"></i> 140 bpm
+                    </span>
+                  </div>
+                </div>
+                <div class="flex-shrink-0 flex space-x-2">
+                  <button class="inline-flex items-center p-1 border border-transparent rounded-full text-yellow-400 hover:text-yellow-500">
+                    <i class="fas fa-star"></i>
+                  </button>
+                  <button class="inline-flex items-center p-1 border border-transparent rounded-full text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="inline-flex items-center p-1 border border-transparent rounded-full text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-ellipsis-h"></i>
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <div class="px-4 py-4 bg-gray-50 border-t border-gray-200 text-center">
+            <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+              <i class="fas fa-plus mr-2"></i> Carregar mais
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outras tabs -->
+      <div id="recent" class="tab-content">
+        <p class="text-center text-gray-500 py-8">Conteúdo de atividades recentes será carregado aqui.</p>
+      </div>
+
+      <div id="favorites" class="tab-content">
+        <p class="text-center text-gray-500 py-8">Conteúdo de atividades favoritas será carregado aqui.</p>
+      </div>
+
+      <div id="routes" class="tab-content">
+        <p class="text-center text-gray-500 py-8">Conteúdo de rotas será carregado aqui.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/lazy-loader.js"></script>
+  <script src="js/module-loader.js"></script>
+  <script src="js/accessibility.js"></script>
+  <script src="js/push-notifications.js"></script>
+  <script src="js/social-sharing.js"></script>
+  <script src="js/device-integration.js"></script>
+  <script src="js/gamification.js"></script>
+  <script src="js/atividades.js"></script>
+</body>
+</html>

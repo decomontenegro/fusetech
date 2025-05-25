@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Behavioral UX Demo - FUSEtech</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    .demo-section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      border: 2px dashed #e5e7eb;
+      border-radius: 1rem;
+      background: white;
+    }
+    
+    .demo-title {
+      color: #5046e5;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .demo-description {
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .psychology-principle {
+      background: #f8fafc;
+      border-left: 4px solid #5046e5;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0 0.5rem 0.5rem 0;
+    }
+    
+    .principle-title {
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+    
+    .principle-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    .behavioral-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    
+    .metric-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #5046e5;
+    }
+    
+    .metric-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .trigger-demo {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border: 1px solid #f87171;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .trigger-active {
+      animation: triggerPulse 2s infinite;
+    }
+    
+    @keyframes triggerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    
+    .ab-test-variant {
+      border: 2px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .ab-test-variant:hover {
+      border-color: #5046e5;
+      background: #f8fafc;
+    }
+    
+    .ab-test-variant.selected {
+      border-color: #5046e5;
+      background: #eff6ff;
+    }
+    
+    .commitment-device {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 1px solid #f59e0b;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body data-page="behavioral-demo">
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <a href="index.html" class="nav-brand">
+            <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mr-3">
+              <i class="fas fa-bolt text-white"></i>
+            </div>
+            FUSEtech Behavioral UX
+          </a>
+        </div>
+
+        <div class="hidden md:flex nav-links">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-home mr-2"></i>
+            Dashboard
+          </a>
+          <a href="desktop-demo.html" class="nav-link">
+            <i class="fas fa-desktop mr-2"></i>
+            Desktop Demo
+          </a>
+          <a href="behavioral-ux-demo.html" class="nav-link active">
+            <i class="fas fa-brain mr-2"></i>
+            Behavioral UX
+          </a>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="hidden sm:flex items-center bg-gradient-primary text-white px-4 py-2 rounded-full">
+            <i class="fas fa-coins mr-2"></i>
+            <span class="font-semibold">1,247</span>
+            <span class="text-xs ml-1 opacity-80">FUSE</span>
+          </div>
+          
+          <button class="btn-icon-only btn-ghost relative">
+            <i class="fas fa-bell"></i>
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full"></span>
+          </button>
+          
+          <div class="avatar">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User">
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="bg-gradient-hero py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center text-white">
+        <h1 class="text-4xl font-bold mb-4">🧠 Behavioral UX Improvements</h1>
+        <p class="text-xl opacity-90 mb-8 max-w-3xl mx-auto">
+          Demonstração das melhorias baseadas em psicologia comportamental e economia comportamental implementadas no FUSEtech
+        </p>
+        
+        <div class="behavioral-metrics">
+          <div class="metric-card">
+            <div class="metric-value">+47%</div>
+            <div class="metric-label">Engagement Rate</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">+32%</div>
+            <div class="metric-label">Retention Rate</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">+28%</div>
+            <div class="metric-label">Activity Frequency</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">+65%</div>
+            <div class="metric-label">Goal Completion</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    
+    <!-- Psychological Ownership -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-user-crown"></i>
+        Psychological Ownership
+      </h2>
+      <p class="demo-description">
+        Fazer o usuário sentir "dono" do seu progresso através de personalização profunda e investimento emocional.
+      </p>
+      
+      <div class="psychology-principle">
+        <div class="principle-title">Princípio: Endowment Effect</div>
+        <div class="principle-description">
+          Pessoas valorizam mais aquilo que sentem que possuem. Criamos um "universo pessoal" onde cada conquista é única do usuário.
+        </div>
+      </div>
+      
+      <!-- Personal Universe Demo -->
+      <div id="personal-universe-demo"></div>
+      
+      <button class="btn btn-primary" onclick="demonstratePersonalUniverse()">
+        <i class="fas fa-magic mr-2"></i>
+        Demonstrar Universo Pessoal
+      </button>
+    </div>
+
+    <!-- Loss Aversion -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-exclamation-triangle"></i>
+        Loss Aversion
+      </h2>
+      <p class="demo-description">
+        Explorar o medo natural de perder progresso para motivar ação. Pessoas sentem mais dor ao perder do que prazer ao ganhar.
+      </p>
+      
+      <div class="psychology-principle">
+        <div class="principle-title">Princípio: Loss Aversion (Kahneman & Tversky)</div>
+        <div class="principle-description">
+          A dor de perder é 2x mais forte que o prazer de ganhar. Mostramos o que o usuário pode perder se não agir.
+        </div>
+      </div>
+      
+      <!-- Streak Risk Demo -->
+      <div id="streak-risk-demo"></div>
+      
+      <button class="btn btn-warning" onclick="demonstrateStreakRisk()">
+        <i class="fas fa-fire mr-2"></i>
+        Simular Risco de Sequência
+      </button>
+    </div>
+
+    <!-- Variable Ratio Reinforcement -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-dice"></i>
+        Variable Ratio Reinforcement
+      </h2>
+      <p class="demo-description">
+        Recompensas imprevisíveis são mais viciantes que recompensas fixas. Como máquinas caça-níqueis, mas para fitness.
+      </p>
+      
+      <div class="psychology-principle">
+        <div class="principle-title">Princípio: Skinner's Variable Ratio Schedule</div>
+        <div class="principle-description">
+          Recompensas aleatórias criam o maior nível de engajamento e resistência à extinção do comportamento.
+        </div>
+      </div>
+      
+      <div class="trigger-demo" id="variable-reward-demo">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="font-semibold">🎰 Sistema de Recompensas Variáveis</div>
+            <div class="text-sm text-gray-600">Próxima recompensa: ???</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="triggerVariableReward()">
+            Completar Atividade
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Proof -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-users"></i>
+        Social Proof & Behavioral Segmentation
+      </h2>
+      <p class="demo-description">
+        Mostrar que "pessoas como você" estão fazendo determinadas ações. Segmentação comportamental para relevância máxima.
+      </p>
+      
+      <div class="psychology-principle">
+        <div class="principle-title">Princípio: Social Proof (Cialdini)</div>
+        <div class="principle-description">
+          Pessoas seguem o comportamento de outros similares a elas. Criamos segmentos comportamentais específicos.
+        </div>
+      </div>
+      
+      <!-- Behavioral Segment Demo -->
+      <div id="behavioral-segment-demo"></div>
+      
+      <button class="btn btn-secondary" onclick="demonstrateBehavioralSegment()">
+        <i class="fas fa-user-friends mr-2"></i>
+        Mostrar Meu Segmento
+      </button>
+    </div>
+
+    <!-- Commitment Devices -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-handshake"></i>
+        Commitment Devices
+      </h2>
+      <p class="demo-description">
+        Permitir que usuários "apostem" tokens em suas metas, criando compromisso financeiro e psicológico.
+      </p>
+      
+      <div class="psychology-principle">
+        <div class="principle-title">Princípio: Commitment Device (Behavioral Economics)</div>
+        <div class="principle-description">
+          Pessoas são mais propensas a cumprir metas quando há algo em risco. "Skin in the game" aumenta comprometimento.
+        </div>
+      </div>
+      
+      <!-- Token Staking Demo -->
+      <div id="token-staking-demo"></div>
+      
+      <button class="btn btn-warning" onclick="demonstrateTokenStaking()">
+        <i class="fas fa-coins mr-2"></i>
+        Apostar em Mim Mesmo
+      </button>
+    </div>
+
+    <!-- Intelligent Triggers -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-brain"></i>
+        Intelligent Contextual Triggers
+      </h2>
+      <p class="demo-description">
+        Sistema de triggers que aprende padrões comportamentais e otimiza timing, mensagem e contexto automaticamente.
+      </p>
+      
+      <div class="psychology-principle">
+        <div class="principle-title">Princípio: Implementation Intentions (Gollwitzer)</div>
+        <div class="principle-description">
+          "Se X então Y" - triggers contextuais baseados em situação, tempo, localização e comportamento passado.
+        </div>
+      </div>
+      
+      <div class="trigger-demo" id="intelligent-trigger-demo">
+        <div class="font-semibold mb-2">🤖 Sistema de Triggers Inteligentes</div>
+        <div class="text-sm text-gray-600 mb-3">Monitorando contexto e otimizando timing...</div>
+        <div id="trigger-log" class="space-y-2"></div>
+      </div>
+      
+      <button class="btn btn-primary" onclick="demonstrateIntelligentTriggers()">
+        <i class="fas fa-robot mr-2"></i>
+        Ativar Triggers Inteligentes
+      </button>
+    </div>
+
+    <!-- A/B Testing -->
+    <div class="demo-section">
+      <h2 class="demo-title">
+        <i class="fas fa-flask"></i>
+        Continuous A/B Testing
+      </h2>
+      <p class="demo-description">
+        Sistema de testes A/B contínuos para otimizar mensagens, timing e estratégias comportamentais.
+      </p>
+      
+      <div class="psychology-principle">
+        <div class="principle-title">Princípio: Evidence-Based Optimization</div>
+        <div class="principle-description">
+          Testar diferentes abordagens psicológicas e medir impacto real no comportamento do usuário.
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="ab-test-variant" onclick="selectVariant('A')">
+          <div class="font-semibold">Variante A: Achievement Focus</div>
+          <div class="text-sm text-gray-600">"🏆 Você está a 1 atividade do seu recorde!"</div>
+        </div>
+        <div class="ab-test-variant" onclick="selectVariant('B')">
+          <div class="font-semibold">Variante B: Social Focus</div>
+          <div class="text-sm text-gray-600">"👥 3 amigos já treinaram hoje. Não fique para trás!"</div>
+        </div>
+      </div>
+      
+      <div class="mt-4">
+        <div class="text-sm text-gray-600">Resultados atuais:</div>
+        <div class="flex gap-4 mt-2">
+          <div class="text-sm">Variante A: <span class="font-semibold text-blue-600">23% conversão</span></div>
+          <div class="text-sm">Variante B: <span class="font-semibold text-green-600">31% conversão</span></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/performance.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/components.js" defer></script>
+  <script src="js/desktop-enhancements.js" defer></script>
+  <script src="js/desktop-notifications.js" defer></script>
+  <script src="js/behavioral-psychology.js" defer></script>
+  <script src="js/intelligent-triggers.js" defer></script>
+  <script src="js/app.js" defer></script>
+
+  <script>
+    // Demo Functions
+    function demonstratePersonalUniverse() {
+      const demo = document.getElementById('personal-universe-demo');
+      demo.innerHTML = `
+        <div class="personal-universe">
+          <div class="universe-header">
+            <h2>Seu Universo FUSEtech</h2>
+            <p>Este é o seu espaço pessoal de conquistas e crescimento</p>
+          </div>
+          
+          <div class="universe-stats">
+            <div class="stat-personal">
+              <div class="stat-icon">🏆</div>
+              <div class="stat-content">
+                <div class="stat-value">127</div>
+                <div class="stat-label">Dias na jornada</div>
+              </div>
+            </div>
+            
+            <div class="stat-personal">
+              <div class="stat-icon">💪</div>
+              <div class="stat-content">
+                <div class="stat-value">89</div>
+                <div class="stat-label">Atividades completadas</div>
+              </div>
+            </div>
+            
+            <div class="stat-personal">
+              <div class="stat-icon">🔥</div>
+              <div class="stat-content">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Sequência atual</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      if (window.desktopNotifications) {
+        window.desktopNotifications.success(
+          'Universo Pessoal Ativado!',
+          'Agora você tem um espaço único e personalizado'
+        );
+      }
+    }
+
+    function demonstrateStreakRisk() {
+      const demo = document.getElementById('streak-risk-demo');
+      demo.innerHTML = `
+        <div class="streak-risk-container">
+          <div class="streak-risk-alert high">
+            <div class="risk-icon">🚨</div>
+            <div class="risk-content">
+              <div class="risk-title">Sequência em risco! 3h restantes</div>
+              <div class="risk-action">
+                <button class="btn btn-primary btn-sm save-streak-btn">
+                  <i class="fas fa-shield-alt"></i>
+                  Salvar Sequência
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="streak-visualization">
+            <div class="streak-calendar">
+              ${generateStreakCalendar()}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      if (window.desktopNotifications) {
+        window.desktopNotifications.warning(
+          'Sequência em Risco!',
+          'Sua sequência de 7 dias pode ser perdida em 3 horas',
+          {
+            actions: [
+              { id: 'save', label: 'Salvar Agora', handler: () => alert('Sequência salva!') }
+            ]
+          }
+        );
+      }
+    }
+
+    function generateStreakCalendar() {
+      let calendar = '';
+      for (let i = 0; i < 14; i++) {
+        const isActive = Math.random() > 0.3;
+        calendar += `
+          <div class="streak-day ${isActive ? 'active' : 'inactive'}">
+            <div class="day-number">${i + 1}</div>
+            <div class="day-indicator">${isActive ? '🔥' : '⭕'}</div>
+          </div>
+        `;
+      }
+      return calendar;
+    }
+
+    function triggerVariableReward() {
+      const rewards = [
+        { type: 'tokens', amount: 15, message: '🪙 +15 FUSE!' },
+        { type: 'badge', message: '🏅 Nova conquista desbloqueada!' },
+        { type: 'bonus', amount: 50, message: '🎉 Bônus surpresa: +50 FUSE!' },
+        { type: 'nothing', message: '💪 Continue assim!' }
+      ];
+      
+      const reward = rewards[Math.floor(Math.random() * rewards.length)];
+      
+      if (window.desktopNotifications) {
+        if (reward.type === 'nothing') {
+          window.desktopNotifications.info('Atividade Completa!', reward.message);
+        } else {
+          window.desktopNotifications.success('Recompensa!', reward.message);
+        }
+      }
+    }
+
+    function demonstrateBehavioralSegment() {
+      const demo = document.getElementById('behavioral-segment-demo');
+      demo.innerHTML = `
+        <div class="behavioral-segment-info">
+          <div class="segment-card">
+            <div class="segment-header">
+              <div class="segment-icon">🌅</div>
+              <div class="segment-title">Você é um Guerreiro Matinal</div>
+            </div>
+            <div class="segment-stats">
+              <div class="segment-stat">
+                <span class="stat-value">5.2</span>
+                <span class="stat-label">atividades/semana em média</span>
+              </div>
+              <div class="segment-comparison">
+                Você está 15% acima da média do seu grupo
+              </div>
+            </div>
+            <div class="segment-peers">
+              <div class="peers-title">Outros Guerreiros Matinais estão fazendo:</div>
+              <div class="peers-activities">
+                <div class="peer-activity">🏃‍♂️ Ana correu 5km às 6:30</div>
+                <div class="peer-activity">🚴‍♂️ Carlos pedalou 12km às 7:00</div>
+                <div class="peer-activity">💪 Maria fez treino de força às 6:45</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function demonstrateTokenStaking() {
+      const demo = document.getElementById('token-staking-demo');
+      demo.innerHTML = `
+        <div class="token-staking-system">
+          <div class="staking-card">
+            <div class="staking-header">
+              <h3>Aposte em Você Mesmo</h3>
+              <p>Coloque tokens em risco para aumentar sua motivação</p>
+            </div>
+            
+            <div class="staking-options">
+              <div class="stake-option" onclick="stakeTokens(50)">
+                <div class="stake-amount">50 FUSE</div>
+                <div class="stake-goal">Meta semanal</div>
+                <div class="stake-reward">+25 FUSE se conseguir</div>
+              </div>
+              
+              <div class="stake-option" onclick="stakeTokens(100)">
+                <div class="stake-amount">100 FUSE</div>
+                <div class="stake-goal">Sequência de 7 dias</div>
+                <div class="stake-reward">+50 FUSE se conseguir</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function stakeTokens(amount) {
+      if (window.desktopNotifications) {
+        window.desktopNotifications.warning(
+          'Tokens Apostados!',
+          `Você apostou ${amount} FUSE na sua meta. Não desista agora!`,
+          {
+            actions: [
+              { id: 'start', label: 'Começar Agora', handler: () => alert('Vamos lá!') }
+            ]
+          }
+        );
+      }
+    }
+
+    function demonstrateIntelligentTriggers() {
+      const log = document.getElementById('trigger-log');
+      const triggers = [
+        '🌤️ Clima perfeito detectado - sugerindo atividade outdoor',
+        '👥 3 amigos ativos detectados - trigger social ativado',
+        '⏰ Horário ótimo identificado (18:30) - enviando lembrete',
+        '📍 Localização próxima à academia - sugerindo treino',
+        '🔥 Risco de sequência detectado - trigger urgente'
+      ];
+      
+      log.innerHTML = '';
+      
+      triggers.forEach((trigger, index) => {
+        setTimeout(() => {
+          const triggerElement = document.createElement('div');
+          triggerElement.className = 'text-sm p-2 bg-blue-50 border border-blue-200 rounded';
+          triggerElement.textContent = trigger;
+          log.appendChild(triggerElement);
+        }, index * 1000);
+      });
+    }
+
+    function selectVariant(variant) {
+      document.querySelectorAll('.ab-test-variant').forEach(el => {
+        el.classList.remove('selected');
+      });
+      event.target.closest('.ab-test-variant').classList.add('selected');
+      
+      if (window.desktopNotifications) {
+        window.desktopNotifications.info(
+          'Variante Selecionada',
+          `Testando abordagem ${variant} - dados sendo coletados`
+        );
+      }
+    }
+
+    // Auto-demonstração
+    setTimeout(() => {
+      if (window.desktopNotifications) {
+        window.desktopNotifications.achievement(
+          'Sistema Comportamental Ativo!',
+          'Todas as melhorias de UX comportamental estão funcionando'
+        );
+      }
+    }, 2000);
+  </script>
+</body>
+</html>

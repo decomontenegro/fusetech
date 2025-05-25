@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace - FUSEtech</title>
+
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="styles/design-system.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/marketplace.css">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Meta tags for PWA -->
+  <meta name="theme-color" content="#5046e5">
+  <meta name="description" content="Troque seus tokens FUSE por produtos incríveis de nossos parceiros. Suplementos, equipamentos, planos de academia e muito mais.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="flex justify-between items-center h-16">
+        <!-- Brand -->
+        <div class="flex items-center">
+          <a href="index.html" class="nav-brand">
+            <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mr-3">
+              <i class="fas fa-bolt text-white"></i>
+            </div>
+            FUSEtech
+          </a>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex nav-links">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-home mr-2"></i>
+            Dashboard
+          </a>
+          <a href="atividades.html" class="nav-link">
+            <i class="fas fa-running mr-2"></i>
+            Atividades
+          </a>
+          <a href="achievements.html" class="nav-link">
+            <i class="fas fa-trophy mr-2"></i>
+            Conquistas
+          </a>
+          <a href="goals.html" class="nav-link">
+            <i class="fas fa-bullseye mr-2"></i>
+            Metas
+          </a>
+          <a href="marketplace.html" class="nav-link active">
+            <i class="fas fa-store mr-2"></i>
+            Marketplace
+          </a>
+          <a href="community.html" class="nav-link">
+            <i class="fas fa-users mr-2"></i>
+            Comunidade
+          </a>
+        </div>
+
+        <!-- User Actions -->
+        <div class="flex items-center gap-4">
+          <!-- Tokens Balance -->
+          <div class="hidden sm:flex items-center bg-gradient-primary text-white px-4 py-2 rounded-full">
+            <i class="fas fa-coins mr-2"></i>
+            <span class="font-semibold">1,247</span>
+            <span class="text-xs ml-1 opacity-80">FUSE</span>
+          </div>
+
+          <!-- Cart -->
+          <button class="btn-icon-only btn-ghost relative" id="cart-button">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full text-xs text-white flex items-center justify-center" id="cart-count">0</span>
+          </button>
+
+          <!-- Notifications -->
+          <button class="btn-icon-only btn-ghost relative">
+            <i class="fas fa-bell"></i>
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full"></span>
+          </button>
+
+          <!-- User Avatar -->
+          <div class="avatar">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User Avatar">
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="md:hidden btn-icon-only btn-ghost">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-hero py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center text-white animate-fade-in">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Marketplace FUSEtech
+        </h1>
+        <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+          Transforme seus tokens FUSE em produtos incríveis. Suplementos, equipamentos, planos de academia e muito mais.
+        </p>
+        <div class="flex items-center justify-center gap-8 text-sm">
+          <div class="flex items-center">
+            <i class="fas fa-shipping-fast mr-2"></i>
+            Entrega Grátis
+          </div>
+          <div class="flex items-center">
+            <i class="fas fa-shield-alt mr-2"></i>
+            Produtos Originais
+          </div>
+          <div class="flex items-center">
+            <i class="fas fa-handshake mr-2"></i>
+            Parceiros Verificados
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters and Search -->
+  <section class="bg-white border-b sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <!-- Search -->
+        <div class="relative flex-1 max-w-md">
+          <input type="text"
+                 placeholder="Buscar produtos..."
+                 class="input pl-10"
+                 id="search-input">
+          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex gap-2 overflow-x-auto">
+          <button class="btn btn-sm btn-primary category-filter active" data-category="all">
+            Todos
+          </button>
+          <button class="btn btn-sm btn-outline category-filter" data-category="supplements">
+            Suplementos
+          </button>
+          <button class="btn btn-sm btn-outline category-filter" data-category="equipment">
+            Equipamentos
+          </button>
+          <button class="btn btn-sm btn-outline category-filter" data-category="apparel">
+            Roupas
+          </button>
+          <button class="btn btn-sm btn-outline category-filter" data-category="gym">
+            Academia
+          </button>
+          <button class="btn btn-sm btn-outline category-filter" data-category="nutrition">
+            Nutrição
+          </button>
+        </div>
+
+        <!-- Sort -->
+        <select class="input w-auto" id="sort-select">
+          <option value="featured">Destaques</option>
+          <option value="price-low">Menor Preço</option>
+          <option value="price-high">Maior Preço</option>
+          <option value="newest">Mais Novos</option>
+          <option value="popular">Mais Populares</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Produtos em Destaque</h2>
+        <p class="text-lg text-gray-600">Os produtos mais populares entre nossos usuários</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" id="featured-products">
+        <!-- Featured products will be loaded here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- All Products -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-2xl font-bold text-gray-900">Todos os Produtos</h2>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-gray-500" id="products-count">Carregando...</span>
+          <div class="flex gap-2">
+            <button class="btn-icon-only btn-ghost" id="grid-view" title="Visualização em Grade">
+              <i class="fas fa-th"></i>
+            </button>
+            <button class="btn-icon-only btn-outline" id="list-view" title="Visualização em Lista">
+              <i class="fas fa-list"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="products-grid">
+        <!-- Products will be loaded here -->
+      </div>
+
+      <!-- Loading State -->
+      <div class="text-center py-12" id="loading-state">
+        <div class="inline-flex items-center gap-3">
+          <i class="fas fa-spinner animate-spin text-primary text-xl"></i>
+          <span class="text-gray-600">Carregando produtos...</span>
+        </div>
+      </div>
+
+      <!-- Load More -->
+      <div class="text-center mt-12">
+        <button class="btn btn-lg btn-outline" id="load-more" style="display: none;">
+          Carregar Mais Produtos
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners Section -->
+  <section class="py-16 bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">Nossos Parceiros</h2>
+        <p class="text-xl opacity-90">Marcas de confiança que você já conhece</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
+        <div class="partner-logo">
+          <img src="https://via.placeholder.com/120x60/ffffff/000000?text=Growth" alt="Growth Supplements" class="h-12 mx-auto opacity-70 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="partner-logo">
+          <img src="https://via.placeholder.com/120x60/ffffff/000000?text=Nike" alt="Nike" class="h-12 mx-auto opacity-70 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="partner-logo">
+          <img src="https://via.placeholder.com/120x60/ffffff/000000?text=Smart+Fit" alt="Smart Fit" class="h-12 mx-auto opacity-70 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="partner-logo">
+          <img src="https://via.placeholder.com/120x60/ffffff/000000?text=Adidas" alt="Adidas" class="h-12 mx-auto opacity-70 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="partner-logo">
+          <img src="https://via.placeholder.com/120x60/ffffff/000000?text=Optimum" alt="Optimum Nutrition" class="h-12 mx-auto opacity-70 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="partner-logo">
+          <img src="https://via.placeholder.com/120x60/ffffff/000000?text=Under+Armour" alt="Under Armour" class="h-12 mx-auto opacity-70 hover:opacity-100 transition-opacity">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Brand -->
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center mb-4">
+            <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mr-3">
+              <i class="fas fa-bolt text-white"></i>
+            </div>
+            <span class="text-xl font-bold">FUSEtech</span>
+          </div>
+          <p class="text-gray-400 mb-6 max-w-md">
+            Transforme sua jornada fitness em recompensas reais. Ganhe tokens por suas atividades e troque por produtos incríveis.
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div>
+          <h4 class="font-semibold mb-4">Marketplace</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors">Suplementos</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Equipamentos</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Roupas Esportivas</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Planos de Academia</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Suporte</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors">Central de Ajuda</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Política de Troca</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Rastreamento</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Contato</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 text-sm">
+          © 2024 FUSEtech. Todos os direitos reservados.
+        </p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Privacidade</a>
+          <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Termos</a>
+          <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/animations.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/marketplace.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

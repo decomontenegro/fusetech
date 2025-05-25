@@ -1,0 +1,630 @@
+<!-- Componente de Comentários -->
+<div id="comments-section" class="bg-white shadow rounded-lg overflow-hidden">
+  <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+    <div>
+      <h3 class="text-lg font-medium leading-6 text-gray-900">Comentários</h3>
+      <p class="mt-1 text-sm text-gray-500"><span id="comments-count">0</span> comentários</p>
+    </div>
+    <div>
+      <button id="sort-comments-btn" class="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+        <i class="fas fa-sort mr-1"></i> <span id="sort-label">Mais recentes</span>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Formulário de Comentário -->
+  <div class="p-4 border-b border-gray-200">
+    <form id="comment-form" class="space-y-4">
+      <div>
+        <textarea id="comment-text" name="comment-text" rows="3" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Adicione um comentário..."></textarea>
+      </div>
+      <div class="flex justify-end">
+        <button type="submit" id="post-comment-btn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+          <i class="fas fa-paper-plane mr-2"></i> Publicar
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Lista de Comentários -->
+  <div id="comments-list" class="divide-y divide-gray-200">
+    <!-- Os comentários serão inseridos aqui via JavaScript -->
+    <div class="p-4 text-center text-gray-500">
+      <p>Seja o primeiro a comentar!</p>
+    </div>
+  </div>
+  
+  <!-- Paginação -->
+  <div id="comments-pagination" class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between hidden">
+    <div class="flex-1 flex justify-between sm:hidden">
+      <button id="prev-comments-mobile" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        Anterior
+      </button>
+      <button id="next-comments-mobile" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        Próxima
+      </button>
+    </div>
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm text-gray-700">
+          Mostrando <span id="comments-range-start">1</span> a <span id="comments-range-end">5</span> de <span id="comments-total">0</span> comentários
+        </p>
+      </div>
+      <div>
+        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+          <button id="prev-comments" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            <span class="sr-only">Anterior</span>
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span id="pagination-numbers">
+            <!-- Números de página serão inseridos aqui -->
+          </span>
+          <button id="next-comments" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            <span class="sr-only">Próxima</span>
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  class CommentsManager {
+    constructor(options = {}) {
+      // Configurações padrão
+      this.options = {
+        commentsPerPage: 5,
+        sortOrder: 'newest', // 'newest' ou 'oldest'
+        entityType: options.entityType || 'activity', // Tipo de entidade (atividade, desafio, etc.)
+        entityId: options.entityId || '1', // ID da entidade
+        currentUser: options.currentUser || {
+          id: '1',
+          name: 'Usuário Atual',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+        }
+      };
+      
+      // Estado
+      this.comments = [];
+      this.currentPage = 1;
+      this.totalPages = 1;
+      
+      // Elementos do DOM
+      this.commentsSection = document.getElementById('comments-section');
+      this.commentsList = document.getElementById('comments-list');
+      this.commentsCount = document.getElementById('comments-count');
+      this.commentForm = document.getElementById('comment-form');
+      this.commentText = document.getElementById('comment-text');
+      this.postCommentBtn = document.getElementById('post-comment-btn');
+      this.sortCommentsBtn = document.getElementById('sort-comments-btn');
+      this.sortLabel = document.getElementById('sort-label');
+      this.commentsPagination = document.getElementById('comments-pagination');
+      this.commentsRangeStart = document.getElementById('comments-range-start');
+      this.commentsRangeEnd = document.getElementById('comments-range-end');
+      this.commentsTotal = document.getElementById('comments-total');
+      this.paginationNumbers = document.getElementById('pagination-numbers');
+      this.prevCommentsBtn = document.getElementById('prev-comments');
+      this.nextCommentsBtn = document.getElementById('next-comments');
+      this.prevCommentsMobileBtn = document.getElementById('prev-comments-mobile');
+      this.nextCommentsMobileBtn = document.getElementById('next-comments-mobile');
+      
+      // Inicializar
+      this.init();
+    }
+    
+    init() {
+      // Carregar comentários
+      this.loadComments();
+      
+      // Configurar eventos
+      this.setupEventListeners();
+    }
+    
+    loadComments() {
+      // Em um ambiente real, isso seria uma chamada de API
+      // Para fins de demonstração, usaremos dados simulados
+      
+      // Simular delay de rede
+      setTimeout(() => {
+        this.comments = this.generateSampleComments();
+        this.renderComments();
+      }, 500);
+    }
+    
+    generateSampleComments() {
+      // Gerar comentários de exemplo
+      const sampleComments = [];
+      
+      // Se não houver comentários, retornar array vazio
+      if (Math.random() > 0.2) { // 80% de chance de ter comentários
+        const numComments = Math.floor(Math.random() * 15) + 1; // 1-15 comentários
+        
+        for (let i = 0; i < numComments; i++) {
+          const date = new Date();
+          date.setDate(date.getDate() - Math.floor(Math.random() * 30)); // Até 30 dias atrás
+          
+          sampleComments.push({
+            id: i + 1,
+            user: {
+              id: `user_${i % 3 + 1}`,
+              name: ['João Silva', 'Maria Oliveira', 'Carlos Santos'][i % 3],
+              avatar: [
+                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+                'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+              ][i % 3]
+            },
+            text: [
+              'Ótima atividade! Continue assim!',
+              'Parabéns pelo desempenho!',
+              'Impressionante! Qual é o seu segredo para manter esse ritmo?',
+              'Estou tentando melhorar meu tempo também. Alguma dica?',
+              'Você está melhorando a cada dia!',
+              'Que percurso incrível! Já fiz esse também.',
+              'Adorei ver seu progresso!',
+              'Quantas calorias você queimou nessa atividade?',
+              'Você usa algum app específico para monitorar seu desempenho?',
+              'Vamos fazer uma atividade juntos qualquer dia desses!'
+            ][Math.floor(Math.random() * 10)],
+            date: date,
+            likes: Math.floor(Math.random() * 10),
+            isLiked: Math.random() > 0.5,
+            replies: []
+          });
+        }
+      }
+      
+      // Ordenar comentários
+      return this.sortComments(sampleComments);
+    }
+    
+    sortComments(comments) {
+      return [...comments].sort((a, b) => {
+        if (this.options.sortOrder === 'newest') {
+          return new Date(b.date) - new Date(a.date);
+        } else {
+          return new Date(a.date) - new Date(b.date);
+        }
+      });
+    }
+    
+    renderComments() {
+      // Atualizar contagem
+      this.updateCommentsCount();
+      
+      // Limpar lista
+      this.commentsList.innerHTML = '';
+      
+      // Se não houver comentários, mostrar mensagem
+      if (this.comments.length === 0) {
+        this.commentsList.innerHTML = `
+          <div class="p-4 text-center text-gray-500">
+            <p>Seja o primeiro a comentar!</p>
+          </div>
+        `;
+        this.commentsPagination.classList.add('hidden');
+        return;
+      }
+      
+      // Calcular paginação
+      this.totalPages = Math.ceil(this.comments.length / this.options.commentsPerPage);
+      const startIndex = (this.currentPage - 1) * this.options.commentsPerPage;
+      const endIndex = Math.min(startIndex + this.options.commentsPerPage, this.comments.length);
+      const commentsToShow = this.comments.slice(startIndex, endIndex);
+      
+      // Renderizar comentários
+      commentsToShow.forEach(comment => {
+        const commentElement = this.createCommentElement(comment);
+        this.commentsList.appendChild(commentElement);
+      });
+      
+      // Atualizar paginação
+      this.updatePagination(startIndex, endIndex);
+    }
+    
+    createCommentElement(comment) {
+      const commentElement = document.createElement('div');
+      commentElement.className = 'p-4';
+      commentElement.dataset.commentId = comment.id;
+      
+      // Formatar data
+      const formattedDate = this.formatDate(comment.date);
+      
+      // Verificar se o comentário é do usuário atual
+      const isCurrentUser = comment.user.id === this.options.currentUser.id;
+      
+      // Criar HTML do comentário
+      commentElement.innerHTML = `
+        <div class="flex space-x-3">
+          <div class="flex-shrink-0">
+            <img class="h-10 w-10 rounded-full" src="${comment.user.avatar}" alt="${comment.user.name}">
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-gray-900">
+                ${comment.user.name} ${isCurrentUser ? '<span class="text-xs text-gray-500">(você)</span>' : ''}
+              </p>
+              <p class="text-sm text-gray-500">${formattedDate}</p>
+            </div>
+            <p class="text-sm text-gray-500 mt-1">${comment.text}</p>
+            <div class="mt-2 flex items-center space-x-4">
+              <button class="like-button text-sm text-gray-500 hover:text-gray-700 flex items-center ${comment.isLiked ? 'text-primary' : ''}">
+                <i class="fas fa-thumbs-up mr-1"></i> <span class="like-count">${comment.likes}</span>
+              </button>
+              <button class="reply-button text-sm text-gray-500 hover:text-gray-700 flex items-center">
+                <i class="fas fa-reply mr-1"></i> Responder
+              </button>
+              ${isCurrentUser ? `
+                <button class="edit-button text-sm text-gray-500 hover:text-gray-700 flex items-center">
+                  <i class="fas fa-edit mr-1"></i> Editar
+                </button>
+                <button class="delete-button text-sm text-red-500 hover:text-red-700 flex items-center">
+                  <i class="fas fa-trash-alt mr-1"></i> Excluir
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Configurar eventos
+      const likeButton = commentElement.querySelector('.like-button');
+      const replyButton = commentElement.querySelector('.reply-button');
+      const editButton = commentElement.querySelector('.edit-button');
+      const deleteButton = commentElement.querySelector('.delete-button');
+      
+      if (likeButton) {
+        likeButton.addEventListener('click', () => this.toggleLike(comment.id));
+      }
+      
+      if (replyButton) {
+        replyButton.addEventListener('click', () => this.showReplyForm(comment.id));
+      }
+      
+      if (editButton) {
+        editButton.addEventListener('click', () => this.showEditForm(comment.id));
+      }
+      
+      if (deleteButton) {
+        deleteButton.addEventListener('click', () => this.deleteComment(comment.id));
+      }
+      
+      return commentElement;
+    }
+    
+    updateCommentsCount() {
+      if (this.commentsCount) {
+        this.commentsCount.textContent = this.comments.length;
+      }
+      
+      if (this.commentsTotal) {
+        this.commentsTotal.textContent = this.comments.length;
+      }
+    }
+    
+    updatePagination(startIndex, endIndex) {
+      // Atualizar range
+      if (this.commentsRangeStart) {
+        this.commentsRangeStart.textContent = startIndex + 1;
+      }
+      
+      if (this.commentsRangeEnd) {
+        this.commentsRangeEnd.textContent = endIndex;
+      }
+      
+      // Mostrar/ocultar paginação
+      if (this.comments.length > this.options.commentsPerPage) {
+        this.commentsPagination.classList.remove('hidden');
+      } else {
+        this.commentsPagination.classList.add('hidden');
+      }
+      
+      // Atualizar números de página
+      if (this.paginationNumbers) {
+        this.paginationNumbers.innerHTML = '';
+        
+        for (let i = 1; i <= this.totalPages; i++) {
+          const pageButton = document.createElement('button');
+          pageButton.className = `relative inline-flex items-center px-4 py-2 border ${i === this.currentPage ? 'border-primary bg-primary-light text-primary' : 'border-gray-300 bg-white text-gray-700'} text-sm font-medium`;
+          pageButton.textContent = i;
+          
+          pageButton.addEventListener('click', () => {
+            this.goToPage(i);
+          });
+          
+          this.paginationNumbers.appendChild(pageButton);
+        }
+      }
+      
+      // Desabilitar botões de navegação se necessário
+      if (this.prevCommentsBtn) {
+        this.prevCommentsBtn.disabled = this.currentPage === 1;
+        this.prevCommentsBtn.classList.toggle('opacity-50', this.currentPage === 1);
+      }
+      
+      if (this.nextCommentsBtn) {
+        this.nextCommentsBtn.disabled = this.currentPage === this.totalPages;
+        this.nextCommentsBtn.classList.toggle('opacity-50', this.currentPage === this.totalPages);
+      }
+      
+      if (this.prevCommentsMobileBtn) {
+        this.prevCommentsMobileBtn.disabled = this.currentPage === 1;
+        this.prevCommentsMobileBtn.classList.toggle('opacity-50', this.currentPage === 1);
+      }
+      
+      if (this.nextCommentsMobileBtn) {
+        this.nextCommentsMobileBtn.disabled = this.currentPage === this.totalPages;
+        this.nextCommentsMobileBtn.classList.toggle('opacity-50', this.currentPage === this.totalPages);
+      }
+    }
+    
+    setupEventListeners() {
+      // Formulário de comentário
+      if (this.commentForm) {
+        this.commentForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.addComment();
+        });
+      }
+      
+      // Botão de ordenação
+      if (this.sortCommentsBtn) {
+        this.sortCommentsBtn.addEventListener('click', () => {
+          this.toggleSortOrder();
+        });
+      }
+      
+      // Botões de paginação
+      if (this.prevCommentsBtn) {
+        this.prevCommentsBtn.addEventListener('click', () => {
+          if (this.currentPage > 1) {
+            this.goToPage(this.currentPage - 1);
+          }
+        });
+      }
+      
+      if (this.nextCommentsBtn) {
+        this.nextCommentsBtn.addEventListener('click', () => {
+          if (this.currentPage < this.totalPages) {
+            this.goToPage(this.currentPage + 1);
+          }
+        });
+      }
+      
+      if (this.prevCommentsMobileBtn) {
+        this.prevCommentsMobileBtn.addEventListener('click', () => {
+          if (this.currentPage > 1) {
+            this.goToPage(this.currentPage - 1);
+          }
+        });
+      }
+      
+      if (this.nextCommentsMobileBtn) {
+        this.nextCommentsMobileBtn.addEventListener('click', () => {
+          if (this.currentPage < this.totalPages) {
+            this.goToPage(this.currentPage + 1);
+          }
+        });
+      }
+    }
+    
+    goToPage(page) {
+      this.currentPage = page;
+      this.renderComments();
+      
+      // Rolar para o topo da seção de comentários
+      if (this.commentsSection) {
+        this.commentsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    
+    toggleSortOrder() {
+      this.options.sortOrder = this.options.sortOrder === 'newest' ? 'oldest' : 'newest';
+      
+      // Atualizar label
+      if (this.sortLabel) {
+        this.sortLabel.textContent = this.options.sortOrder === 'newest' ? 'Mais recentes' : 'Mais antigos';
+      }
+      
+      // Reordenar comentários
+      this.comments = this.sortComments(this.comments);
+      
+      // Voltar para a primeira página
+      this.currentPage = 1;
+      
+      // Renderizar comentários
+      this.renderComments();
+    }
+    
+    addComment() {
+      const text = this.commentText.value.trim();
+      
+      if (!text) {
+        // Mostrar erro
+        alert('Por favor, digite um comentário.');
+        return;
+      }
+      
+      // Criar novo comentário
+      const newComment = {
+        id: this.comments.length + 1,
+        user: this.options.currentUser,
+        text: text,
+        date: new Date(),
+        likes: 0,
+        isLiked: false,
+        replies: []
+      };
+      
+      // Adicionar ao início ou fim da lista, dependendo da ordenação
+      if (this.options.sortOrder === 'newest') {
+        this.comments.unshift(newComment);
+      } else {
+        this.comments.push(newComment);
+      }
+      
+      // Limpar formulário
+      this.commentText.value = '';
+      
+      // Renderizar comentários
+      this.renderComments();
+      
+      // Mostrar notificação
+      if (window.animationsManager) {
+        window.animationsManager.animateNotification('Comentário adicionado com sucesso!', 'success');
+      } else {
+        alert('Comentário adicionado com sucesso!');
+      }
+    }
+    
+    toggleLike(commentId) {
+      // Encontrar comentário
+      const comment = this.comments.find(c => c.id === commentId);
+      if (!comment) return;
+      
+      // Alternar like
+      if (comment.isLiked) {
+        comment.likes--;
+        comment.isLiked = false;
+      } else {
+        comment.likes++;
+        comment.isLiked = true;
+      }
+      
+      // Atualizar UI
+      const commentElement = this.commentsList.querySelector(`[data-comment-id="${commentId}"]`);
+      if (commentElement) {
+        const likeButton = commentElement.querySelector('.like-button');
+        const likeCount = commentElement.querySelector('.like-count');
+        
+        if (likeButton) {
+          likeButton.classList.toggle('text-primary', comment.isLiked);
+        }
+        
+        if (likeCount) {
+          likeCount.textContent = comment.likes;
+        }
+      }
+    }
+    
+    showReplyForm(commentId) {
+      // Em um ambiente real, isso mostraria um formulário de resposta
+      alert('Funcionalidade de resposta será implementada em breve!');
+    }
+    
+    showEditForm(commentId) {
+      // Encontrar comentário
+      const comment = this.comments.find(c => c.id === commentId);
+      if (!comment) return;
+      
+      // Encontrar elemento do comentário
+      const commentElement = this.commentsList.querySelector(`[data-comment-id="${commentId}"]`);
+      if (!commentElement) return;
+      
+      // Obter texto atual
+      const commentTextElement = commentElement.querySelector('p.text-sm.text-gray-500.mt-1');
+      if (!commentTextElement) return;
+      
+      const currentText = comment.text;
+      
+      // Substituir por formulário de edição
+      commentTextElement.innerHTML = `
+        <div class="mt-2 mb-2">
+          <textarea class="edit-comment-text mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">${currentText}</textarea>
+          <div class="mt-2 flex justify-end space-x-2">
+            <button class="cancel-edit-btn inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+              Cancelar
+            </button>
+            <button class="save-edit-btn inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+              Salvar
+            </button>
+          </div>
+        </div>
+      `;
+      
+      // Configurar eventos
+      const editTextarea = commentElement.querySelector('.edit-comment-text');
+      const cancelEditBtn = commentElement.querySelector('.cancel-edit-btn');
+      const saveEditBtn = commentElement.querySelector('.save-edit-btn');
+      
+      if (editTextarea) {
+        editTextarea.focus();
+      }
+      
+      if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', () => {
+          commentTextElement.textContent = currentText;
+        });
+      }
+      
+      if (saveEditBtn) {
+        saveEditBtn.addEventListener('click', () => {
+          const newText = editTextarea.value.trim();
+          
+          if (!newText) {
+            alert('Por favor, digite um comentário.');
+            return;
+          }
+          
+          // Atualizar comentário
+          comment.text = newText;
+          
+          // Atualizar UI
+          commentTextElement.textContent = newText;
+          
+          // Mostrar notificação
+          if (window.animationsManager) {
+            window.animationsManager.animateNotification('Comentário atualizado com sucesso!', 'success');
+          } else {
+            alert('Comentário atualizado com sucesso!');
+          }
+        });
+      }
+    }
+    
+    deleteComment(commentId) {
+      // Confirmar exclusão
+      if (confirm('Tem certeza que deseja excluir este comentário?')) {
+        // Encontrar índice do comentário
+        const commentIndex = this.comments.findIndex(c => c.id === commentId);
+        if (commentIndex === -1) return;
+        
+        // Remover comentário
+        this.comments.splice(commentIndex, 1);
+        
+        // Renderizar comentários
+        this.renderComments();
+        
+        // Mostrar notificação
+        if (window.animationsManager) {
+          window.animationsManager.animateNotification('Comentário excluído com sucesso!', 'success');
+        } else {
+          alert('Comentário excluído com sucesso!');
+        }
+      }
+    }
+    
+    formatDate(date) {
+      // Formatar data relativa (hoje, ontem, etc.)
+      const now = new Date();
+      const diffTime = Math.abs(now - new Date(date));
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 0) {
+        return 'Hoje';
+      } else if (diffDays === 1) {
+        return 'Ontem';
+      } else if (diffDays < 7) {
+        return `${diffDays} dias atrás`;
+      } else {
+        return new Date(date).toLocaleDateString('pt-BR');
+      }
+    }
+  }
+  
+  // Inicializar quando o script for carregado
+  function initCommentsSection(options = {}) {
+    new CommentsManager(options);
+  }
+</script>

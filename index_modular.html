@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FuseLabs - Página Principal</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-900" data-page="home">
+
+  <!-- Cabeçalho -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="font-bold text-xl text-primary">FuseLabs</span>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="index_modular.html" class="border-primary text-primary hover:text-primary inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-home mr-1"></i> Início
+            </a>
+            <a href="atividades.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-running mr-1"></i> Atividades
+            </a>
+            <a href="desafios.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-trophy mr-1"></i> Desafios
+            </a>
+            <a href="comunidade.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-users mr-1"></i> Comunidade
+            </a>
+            <a href="analytics.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-bar mr-1"></i> Análises
+            </a>
+            <a href="previsoes.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-chart-line mr-1"></i> Previsões
+            </a>
+            <a href="rotas.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-map-marked-alt mr-1"></i> Rotas
+            </a>
+            <a href="dispositivos.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-mobile-alt mr-1"></i> Dispositivos
+            </a>
+            <a href="perfil.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              <i class="fas fa-user mr-1"></i> Perfil
+            </a>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <a href="busca.html" class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none hidden sm:block mr-2">
+            <i class="fas fa-search text-lg"></i>
+          </a>
+          <div class="relative z-50 hidden sm:block">
+            <!-- Componente de Centro de Notificações -->
+            <div data-component="notification-center"></div>
+          </div>
+          <div class="ml-3 relative hidden sm:block z-50">
+            <div id="auth-buttons" class="flex space-x-2">
+              <a href="login.html" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+                Entrar
+              </a>
+              <a href="registro.html" class="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                Registrar
+              </a>
+            </div>
+            <div id="user-profile" class="hidden">
+              <button class="flex text-sm rounded-full focus:outline-none" id="user-menu-button">
+                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              </button>
+            </div>
+          </div>
+          <!-- Botão do menu mobile -->
+          <div class="flex items-center sm:hidden ml-3">
+            <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Abrir menu principal</span>
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Hero Section -->
+    <div class="bg-white shadow rounded-lg overflow-hidden mb-6 fade-in">
+      <div class="relative">
+        <div class="h-48 sm:h-64 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="text-center text-white p-4 sm:p-6">
+            <h1 class="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4 scroll-animate">Bem-vindo ao FuseLabs</h1>
+            <p class="text-base sm:text-xl mb-4 sm:mb-6 scroll-animate">Sua plataforma completa para monitoramento de atividades físicas</p>
+            <button class="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-md shadow-sm text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none scroll-animate">
+              <i class="fas fa-play-circle mr-2"></i> Começar agora
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white p-4 sm:p-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div class="text-center scroll-animate">
+            <div class="inline-flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mb-4">
+              <i class="fas fa-running text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Acompanhe suas atividades</h3>
+            <p class="text-gray-500">Monitore corridas, caminhadas, ciclismo e muito mais com precisão.</p>
+          </div>
+          <div class="text-center scroll-animate">
+            <div class="inline-flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mb-4">
+              <i class="fas fa-trophy text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Participe de desafios</h3>
+            <p class="text-gray-500">Desafie-se e ganhe recompensas ao completar objetivos.</p>
+          </div>
+          <div class="text-center sm:col-span-2 md:col-span-1 scroll-animate">
+            <div class="inline-flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mb-4">
+              <i class="fas fa-chart-line text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Análises avançadas</h3>
+            <p class="text-gray-500">Visualize seu progresso com gráficos e estatísticas detalhadas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Módulos Implementados -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">Módulos Implementados</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-primary-light p-6 rounded-lg">
+          <h3 class="text-xl font-bold text-primary mb-2">Perfil de Usuário</h3>
+          <p class="text-gray-700 mb-4">Visualize e edite suas informações pessoais, conquistas e estatísticas.</p>
+          <a href="perfil.html" class="inline-flex items-center text-primary hover:text-indigo-700">
+            Ver perfil <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+
+        <div class="bg-blue-50 p-6 rounded-lg">
+          <h3 class="text-xl font-bold text-blue-600 mb-2">Desafios</h3>
+          <p class="text-gray-700 mb-4">Participe de desafios individuais e em grupo para ganhar recompensas.</p>
+          <a href="desafios.html" class="inline-flex items-center text-blue-600 hover:text-blue-700">
+            Ver desafios <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+
+        <div class="bg-green-50 p-6 rounded-lg">
+          <h3 class="text-xl font-bold text-green-600 mb-2">Comunidade</h3>
+          <p class="text-gray-700 mb-4">Conecte-se com outros usuários, compartilhe atividades e conquistas.</p>
+          <a href="#" class="inline-flex items-center text-green-600 hover:text-green-700">
+            Ver comunidade <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atividades Recentes -->
+    <div class="bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-gray-900">Atividades Recentes</h2>
+        <a href="#" class="text-primary hover:text-indigo-700">Ver todas</a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Atividade 1 - Usando o componente ActivityCard -->
+        <div data-component="activity-card" data-prop-activity-id="123"></div>
+
+        <!-- Atividade 2 - Usando o componente ActivityCard -->
+        <div data-component="activity-card" data-prop-activity-id="456"></div>
+      </div>
+
+      <div class="mt-6 text-center">
+        <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          <i class="fas fa-plus mr-2"></i> Carregar mais
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Componentes Dinâmicos -->
+  <div id="notifications-container" class="relative z-50">
+    <!-- O componente de notificações será carregado aqui -->
+  </div>
+
+  <div id="share-container" class="z-50">
+    <!-- O componente de compartilhamento será carregado aqui -->
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/theme.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/lazy-loader.js"></script>
+  <script src="js/module-loader.js"></script>
+  <script src="js/component-system.js"></script>
+  <script src="js/accessibility.js"></script>
+  <script src="js/push-notifications.js"></script>
+  <script src="js/social-sharing.js"></script>
+  <script src="js/auth-ui.js"></script>
+
+  <script>
+    // Inicializar componentes
+    document.addEventListener('DOMContentLoaded', function() {
+      // Carregar scripts de componentes
+      const componentScripts = [
+        'js/components/activity-card.js',
+        'js/components/notification-center.js'
+      ];
+
+      // Função para carregar script
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = src;
+          script.async = true;
+
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error(`Falha ao carregar o script: ${src}`));
+
+          document.head.appendChild(script);
+        });
+      }
+
+      // Carregar todos os scripts de componentes
+      Promise.all(componentScripts.map(loadScript))
+        .then(() => {
+          console.log('Todos os componentes foram carregados');
+
+          // Inicializar componentes (o sistema de componentes fará isso automaticamente)
+          if (window.componentSystem) {
+            window.componentSystem.scanForComponents();
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao carregar componentes:', error);
+        });
+
+      // Configurar compartilhamento social
+      if (window.socialSharing) {
+        window.socialSharing.init({
+          appName: 'FuseLabs',
+          defaultTitle: 'Confira o FuseLabs - Sua plataforma de fitness',
+          defaultText: 'Estou usando o FuseLabs para monitorar minhas atividades físicas!',
+          defaultUrl: window.location.href
+        });
+      }
+    });
+  </script>
+</body>
+</html>

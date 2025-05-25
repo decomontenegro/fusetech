@@ -1,0 +1,349 @@
+<!-- Widget de Previsão do Tempo -->
+<div id="weather-widget" class="bg-white shadow rounded-lg overflow-hidden">
+  <div class="p-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-medium">Previsão do Tempo</h3>
+      <button id="refresh-weather" class="text-white hover:text-gray-200 focus:outline-none">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </div>
+    <div id="weather-location" class="text-sm mt-1">Carregando localização...</div>
+  </div>
+  
+  <div id="weather-loading" class="p-6 text-center">
+    <i class="fas fa-spinner fa-spin text-primary text-2xl mb-2"></i>
+    <p class="text-gray-500">Carregando previsão do tempo...</p>
+  </div>
+  
+  <div id="weather-content" class="hidden">
+    <!-- Condição Atual -->
+    <div class="p-4 border-b border-gray-200">
+      <div class="flex items-center">
+        <div id="weather-icon" class="w-16 h-16 flex items-center justify-center text-4xl text-primary">
+          <i class="fas fa-sun"></i>
+        </div>
+        <div class="ml-4">
+          <div id="weather-temp" class="text-3xl font-bold">--°C</div>
+          <div id="weather-desc" class="text-gray-500">--</div>
+        </div>
+        <div class="ml-auto text-right">
+          <div class="text-sm text-gray-500">Sensação</div>
+          <div id="weather-feels" class="font-medium">--°C</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 mt-4 text-center text-sm">
+        <div>
+          <div class="text-gray-500">Umidade</div>
+          <div id="weather-humidity" class="font-medium">--%</div>
+        </div>
+        <div>
+          <div class="text-gray-500">Vento</div>
+          <div id="weather-wind" class="font-medium">-- km/h</div>
+        </div>
+        <div>
+          <div class="text-gray-500">UV</div>
+          <div id="weather-uv" class="font-medium">--</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Previsão para os próximos dias -->
+    <div class="p-4">
+      <h4 class="text-sm font-medium text-gray-700 mb-3">Próximos Dias</h4>
+      <div id="weather-forecast" class="grid grid-cols-4 gap-2 text-center">
+        <!-- Previsões serão inseridas aqui via JavaScript -->
+      </div>
+    </div>
+    
+    <!-- Recomendações -->
+    <div class="p-4 bg-gray-50 border-t border-gray-200">
+      <h4 class="text-sm font-medium text-gray-700 mb-2">Recomendações</h4>
+      <div id="weather-recommendations" class="text-sm text-gray-600">
+        <!-- Recomendações serão inseridas aqui via JavaScript -->
+      </div>
+    </div>
+  </div>
+  
+  <div id="weather-error" class="p-6 text-center hidden">
+    <i class="fas fa-exclamation-circle text-red-500 text-2xl mb-2"></i>
+    <p class="text-gray-700 mb-2">Não foi possível carregar a previsão do tempo.</p>
+    <button id="retry-weather" class="text-primary hover:text-indigo-700 text-sm">
+      Tentar novamente
+    </button>
+  </div>
+</div>
+
+<script>
+  class WeatherWidget {
+    constructor() {
+      this.apiKey = '9d7cde1f6d07ec55650544be2fb1c71a'; // OpenWeatherMap API Key (demo)
+      this.location = { lat: null, lon: null };
+      this.weatherData = null;
+      
+      // Elementos do widget
+      this.widget = document.getElementById('weather-widget');
+      this.locationEl = document.getElementById('weather-location');
+      this.loadingEl = document.getElementById('weather-loading');
+      this.contentEl = document.getElementById('weather-content');
+      this.errorEl = document.getElementById('weather-error');
+      
+      // Elementos de dados
+      this.iconEl = document.getElementById('weather-icon');
+      this.tempEl = document.getElementById('weather-temp');
+      this.descEl = document.getElementById('weather-desc');
+      this.feelsEl = document.getElementById('weather-feels');
+      this.humidityEl = document.getElementById('weather-humidity');
+      this.windEl = document.getElementById('weather-wind');
+      this.uvEl = document.getElementById('weather-uv');
+      this.forecastEl = document.getElementById('weather-forecast');
+      this.recommendationsEl = document.getElementById('weather-recommendations');
+      
+      // Botões
+      this.refreshBtn = document.getElementById('refresh-weather');
+      this.retryBtn = document.getElementById('retry-weather');
+      
+      this.init();
+    }
+    
+    init() {
+      // Configurar eventos
+      if (this.refreshBtn) {
+        this.refreshBtn.addEventListener('click', () => this.loadWeather());
+      }
+      
+      if (this.retryBtn) {
+        this.retryBtn.addEventListener('click', () => this.loadWeather());
+      }
+      
+      // Carregar previsão do tempo
+      this.loadWeather();
+    }
+    
+    async loadWeather() {
+      this.showLoading();
+      
+      try {
+        // Obter localização
+        await this.getLocation();
+        
+        // Obter dados do tempo
+        await this.fetchWeatherData();
+        
+        // Renderizar dados
+        this.renderWeatherData();
+        
+        // Mostrar conteúdo
+        this.showContent();
+      } catch (error) {
+        console.error('Erro ao carregar previsão do tempo:', error);
+        this.showError();
+      }
+    }
+    
+    showLoading() {
+      this.loadingEl.classList.remove('hidden');
+      this.contentEl.classList.add('hidden');
+      this.errorEl.classList.add('hidden');
+    }
+    
+    showContent() {
+      this.loadingEl.classList.add('hidden');
+      this.contentEl.classList.remove('hidden');
+      this.errorEl.classList.add('hidden');
+    }
+    
+    showError() {
+      this.loadingEl.classList.add('hidden');
+      this.contentEl.classList.add('hidden');
+      this.errorEl.classList.remove('hidden');
+    }
+    
+    async getLocation() {
+      // Para fins de demonstração, usaremos uma localização fixa (São Paulo)
+      // Em um ambiente real, usaríamos a API de Geolocalização do navegador
+      this.location = { lat: -23.5505, lon: -46.6333 };
+      this.locationEl.textContent = 'São Paulo, SP';
+      
+      // Simulação de delay de rede
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    
+    async fetchWeatherData() {
+      // Em um ambiente real, faríamos uma chamada à API OpenWeatherMap
+      // Para fins de demonstração, usaremos dados simulados
+      
+      // Simulação de delay de rede
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Dados simulados
+      this.weatherData = {
+        current: {
+          temp: 23,
+          feels_like: 24,
+          humidity: 65,
+          wind_speed: 12,
+          uvi: 4,
+          weather: [{ id: 800, main: 'Clear', description: 'Céu limpo', icon: '01d' }]
+        },
+        daily: [
+          {
+            dt: Date.now() / 1000,
+            temp: { min: 18, max: 25 },
+            weather: [{ id: 800, main: 'Clear', description: 'Céu limpo', icon: '01d' }]
+          },
+          {
+            dt: Date.now() / 1000 + 86400,
+            temp: { min: 17, max: 24 },
+            weather: [{ id: 801, main: 'Clouds', description: 'Poucas nuvens', icon: '02d' }]
+          },
+          {
+            dt: Date.now() / 1000 + 172800,
+            temp: { min: 16, max: 22 },
+            weather: [{ id: 500, main: 'Rain', description: 'Chuva leve', icon: '10d' }]
+          },
+          {
+            dt: Date.now() / 1000 + 259200,
+            temp: { min: 15, max: 21 },
+            weather: [{ id: 501, main: 'Rain', description: 'Chuva moderada', icon: '10d' }]
+          }
+        ]
+      };
+    }
+    
+    renderWeatherData() {
+      if (!this.weatherData) return;
+      
+      const current = this.weatherData.current;
+      const weather = current.weather[0];
+      
+      // Atualizar dados atuais
+      this.tempEl.textContent = `${Math.round(current.temp)}°C`;
+      this.descEl.textContent = weather.description;
+      this.feelsEl.textContent = `${Math.round(current.feels_like)}°C`;
+      this.humidityEl.textContent = `${current.humidity}%`;
+      this.windEl.textContent = `${Math.round(current.wind_speed)} km/h`;
+      this.uvEl.textContent = current.uvi;
+      
+      // Atualizar ícone
+      this.iconEl.innerHTML = this.getWeatherIcon(weather.id);
+      
+      // Renderizar previsão
+      this.renderForecast();
+      
+      // Renderizar recomendações
+      this.renderRecommendations();
+    }
+    
+    renderForecast() {
+      if (!this.weatherData || !this.forecastEl) return;
+      
+      this.forecastEl.innerHTML = '';
+      
+      this.weatherData.daily.slice(0, 4).forEach(day => {
+        const date = new Date(day.dt * 1000);
+        const dayName = date.toLocaleDateString('pt-BR', { weekday: 'short' });
+        
+        const dayEl = document.createElement('div');
+        dayEl.className = 'text-xs';
+        dayEl.innerHTML = `
+          <div class="font-medium">${dayName}</div>
+          <div class="my-1">${this.getWeatherIcon(day.weather[0].id)}</div>
+          <div>${Math.round(day.temp.max)}° <span class="text-gray-500">${Math.round(day.temp.min)}°</span></div>
+        `;
+        
+        this.forecastEl.appendChild(dayEl);
+      });
+    }
+    
+    renderRecommendations() {
+      if (!this.weatherData || !this.recommendationsEl) return;
+      
+      const current = this.weatherData.current;
+      const weather = current.weather[0];
+      const temp = current.temp;
+      const uvi = current.uvi;
+      
+      let recommendations = [];
+      
+      // Recomendações baseadas na temperatura
+      if (temp > 30) {
+        recommendations.push('Evite atividades intensas durante as horas mais quentes do dia.');
+        recommendations.push('Mantenha-se hidratado, beba água antes, durante e após o exercício.');
+      } else if (temp > 25) {
+        recommendations.push('Use roupas leves e transpirantes para suas atividades.');
+        recommendations.push('Considere se exercitar nas primeiras horas da manhã ou no final da tarde.');
+      } else if (temp < 15) {
+        recommendations.push('Vista-se em camadas para se manter aquecido durante o exercício.');
+        recommendations.push('Faça um aquecimento adequado antes de iniciar atividades intensas.');
+      }
+      
+      // Recomendações baseadas no clima
+      if (weather.id >= 200 && weather.id < 300) { // Tempestade
+        recommendations.push('Evite atividades ao ar livre devido a tempestades.');
+      } else if (weather.id >= 300 && weather.id < 600) { // Chuva
+        recommendations.push('Use equipamento impermeável ou considere atividades indoor.');
+      } else if (weather.id >= 600 && weather.id < 700) { // Neve
+        recommendations.push('Tenha cuidado com superfícies escorregadias durante suas atividades.');
+      } else if (weather.id === 800) { // Céu limpo
+        recommendations.push('Condições ideais para atividades ao ar livre.');
+      }
+      
+      // Recomendações baseadas no índice UV
+      if (uvi >= 8) {
+        recommendations.push('Use protetor solar, chapéu e óculos de sol devido ao alto índice UV.');
+      } else if (uvi >= 5) {
+        recommendations.push('Aplique protetor solar antes de atividades ao ar livre.');
+      }
+      
+      // Renderizar recomendações
+      if (recommendations.length > 0) {
+        this.recommendationsEl.innerHTML = `
+          <ul class="list-disc pl-5 space-y-1">
+            ${recommendations.slice(0, 3).map(rec => `<li>${rec}</li>`).join('')}
+          </ul>
+        `;
+      } else {
+        this.recommendationsEl.innerHTML = '<p>Sem recomendações específicas para as condições atuais.</p>';
+      }
+    }
+    
+    getWeatherIcon(weatherId) {
+      // Mapear códigos de clima para ícones Font Awesome
+      let icon = 'fa-sun';
+      let color = 'text-yellow-500';
+      
+      if (weatherId >= 200 && weatherId < 300) { // Tempestade
+        icon = 'fa-bolt';
+        color = 'text-yellow-500';
+      } else if (weatherId >= 300 && weatherId < 500) { // Chuvisco
+        icon = 'fa-cloud-rain';
+        color = 'text-blue-400';
+      } else if (weatherId >= 500 && weatherId < 600) { // Chuva
+        icon = 'fa-cloud-showers-heavy';
+        color = 'text-blue-500';
+      } else if (weatherId >= 600 && weatherId < 700) { // Neve
+        icon = 'fa-snowflake';
+        color = 'text-blue-200';
+      } else if (weatherId >= 700 && weatherId < 800) { // Atmosfera (névoa, etc)
+        icon = 'fa-smog';
+        color = 'text-gray-400';
+      } else if (weatherId === 800) { // Céu limpo
+        icon = 'fa-sun';
+        color = 'text-yellow-500';
+      } else if (weatherId === 801) { // Poucas nuvens
+        icon = 'fa-cloud-sun';
+        color = 'text-gray-500';
+      } else if (weatherId >= 802 && weatherId < 900) { // Nuvens
+        icon = 'fa-cloud';
+        color = 'text-gray-500';
+      }
+      
+      return `<i class="fas ${icon} ${color}"></i>`;
+    }
+  }
+  
+  // Inicializar widget quando o DOM estiver pronto
+  document.addEventListener('DOMContentLoaded', function() {
+    new WeatherWidget();
+  });
+</script>

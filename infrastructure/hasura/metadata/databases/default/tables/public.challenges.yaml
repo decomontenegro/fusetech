@@ -1,0 +1,35 @@
+table:
+  name: challenges
+  schema: public
+array_relationships:
+  - name: user_challenges
+    using:
+      foreign_key_constraint_on:
+        column: challenge_id
+        table:
+          name: user_challenges
+          schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - title
+        - description
+        - type
+        - target
+        - reward
+        - start_date
+        - end_date
+        - is_active
+        - required_level
+        - metadata
+        - created_at
+        - updated_at
+      filter:
+        _or:
+          - is_active:
+              _eq: true
+          - user_challenges:
+              user_id:
+                _eq: X-Hasura-User-Id

@@ -1,0 +1,42 @@
+{
+  "name": "fuseapp",
+  "private": true,
+  "version": "0.1.0",
+  "description": "FuseLabs App - Plataforma de tokenização para atividades físicas e sociais",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev": "./scripts/dev.sh",
+    "dev:selective": "./scripts/dev-selective.sh",
+    "stop": "./scripts/stop.sh",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "docker:preview": "./scripts/docker-preview.sh"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/next": "^8.0.7",
+    "@types/node": "^22.15.18",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "eslint": "^8.38.0",
+    "tailwind-merge": "^3.3.0",
+    "turbo": "^1.10.0",
+    "typescript": "^5.0.4",
+    "zod": "^3.24.4",
+    "zod-validation-error": "^3.4.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

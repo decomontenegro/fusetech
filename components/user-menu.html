@@ -1,0 +1,19 @@
+<!-- Menu do usuário -->
+<div id="user-menu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+  <a href="perfil.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Seu Perfil</a>
+  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Configurações</a>
+  <button id="logout-button" class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sair</button>
+</div>
+
+<script>
+  // Configurar botão de logout
+  document.getElementById('logout-button').addEventListener('click', function() {
+    // Verificar se o gerenciador de autenticação está disponível
+    if (typeof authManager !== 'undefined') {
+      authManager.logout();
+      window.location.href = 'login.html';
+    } else {
+      console.error('Gerenciador de autenticação não encontrado');
+    }
+  });
+</script>

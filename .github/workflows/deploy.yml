@@ -1,0 +1,158 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    strategy:
+      matrix:
+        service: [web, token-service, strava-worker, social-listener, fraud-detection, gamification]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository }}/${{ matrix.service }}
+          tags: |
+            type=ref,event=branch
+            type=sha,format=short
+            latest
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ${{ matrix.service == 'web' && 'apps/web/Dockerfile' || format('services/{0}/Dockerfile', matrix.service) }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: staging
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.6
+          
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          
+      - name: Terraform Init
+        working-directory: ./infrastructure/terraform
+        run: terraform init
+        
+      - name: Terraform Plan
+        working-directory: ./infrastructure/terraform
+        run: terraform plan -var-file=staging.tfvars
+        
+      - name: Terraform Apply
+        working-directory: ./infrastructure/terraform
+        run: terraform apply -var-file=staging.tfvars -auto-approve
+        
+      - name: Update ECS Services
+        run: |
+          aws ecs update-service --cluster fuselabs-staging --service fuselabs-web --force-new-deployment
+          aws ecs update-service --cluster fuselabs-staging --service fuselabs-token-service --force-new-deployment
+          aws ecs update-service --cluster fuselabs-staging --service fuselabs-strava-worker --force-new-deployment
+          aws ecs update-service --cluster fuselabs-staging --service fuselabs-social-listener --force-new-deployment
+          aws ecs update-service --cluster fuselabs-staging --service fuselabs-fraud-detection --force-new-deployment
+          aws ecs update-service --cluster fuselabs-staging --service fuselabs-gamification --force-new-deployment
+          
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
+
+  deploy-production:
+    name: Deploy to Production
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: production
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.6
+          
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          
+      - name: Terraform Init
+        working-directory: ./infrastructure/terraform
+        run: terraform init
+        
+      - name: Terraform Plan
+        working-directory: ./infrastructure/terraform
+        run: terraform plan -var-file=production.tfvars
+        
+      - name: Terraform Apply
+        working-directory: ./infrastructure/terraform
+        run: terraform apply -var-file=production.tfvars -auto-approve
+        
+      - name: Update ECS Services
+        run: |
+          aws ecs update-service --cluster fuselabs-production --service fuselabs-web --force-new-deployment
+          aws ecs update-service --cluster fuselabs-production --service fuselabs-token-service --force-new-deployment
+          aws ecs update-service --cluster fuselabs-production --service fuselabs-strava-worker --force-new-deployment
+          aws ecs update-service --cluster fuselabs-production --service fuselabs-social-listener --force-new-deployment
+          aws ecs update-service --cluster fuselabs-production --service fuselabs-fraud-detection --force-new-deployment
+          aws ecs update-service --cluster fuselabs-production --service fuselabs-gamification --force-new-deployment
+          
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()

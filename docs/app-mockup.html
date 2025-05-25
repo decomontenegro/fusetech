@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuseLabs App - Mockup</title>
+    <style>
+        :root {
+            --primary: #3CDBC0;
+            --primary-dark: #2AB6A0;
+            --secondary: #1E90FF;
+            --accent: #FF3333;
+            --dark: #121212;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #2a2a2a;
+            --success: #3CDBC0;
+            --warning: #FFC107;
+            --danger: #FF3333;
+            --background: #121212;
+            --card-bg: #1E1E1E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--light);
+            background-color: var(--background);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 5px rgba(60, 219, 192, 0.3);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            color: var(--light);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.8;
+        }
+
+        .mockup-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .mockup {
+            width: 350px;
+            height: 600px;
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            background-color: var(--card-bg);
+            position: relative;
+        }
+
+        .mockup-header {
+            background-color: var(--primary);
+            color: var(--dark);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(60, 219, 192, 0.3);
+        }
+
+        .mockup-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .mockup-content {
+            padding: 1rem;
+            height: calc(100% - 60px);
+            overflow-y: auto;
+            background-color: var(--background);
+            color: var(--light);
+        }
+
+        .mockup-nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--dark);
+            border-top: 1px solid var(--border);
+            padding: 0.5rem 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .badge {
+            background-color: var(--primary);
+            color: var(--dark);
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(60, 219, 192, 0.3);
+        }
+
+        .badge-success {
+            background-color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: var(--danger);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .progress-bar {
+            height: 0.5rem;
+            background-color: var(--border);
+            border-radius: 9999px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-value {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 9999px;
+            box-shadow: 0 0 5px rgba(60, 219, 192, 0.5);
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
+            animation: progress-animation 1s linear infinite;
+        }
+
+        @keyframes progress-animation {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 1rem 0;
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 0 15px rgba(60, 219, 192, 0.5);
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background-color: #E62E2E;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+            box-shadow: 0 0 15px rgba(60, 219, 192, 0.5);
+        }
+
+        .btn-outline-accent {
+            background-color: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline-accent:hover {
+            background-color: var(--accent);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(255, 51, 51, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .token-balance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--primary-dark);
+            color: var(--dark);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(42, 182, 160, 0.4);
+            border: 1px solid rgba(60, 219, 192, 0.3);
+        }
+
+        .token-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .token-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .token-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 3px 8px rgba(255, 51, 51, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--primary);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FuseLabs App</h1>
+            <p class="description">Visualização das principais telas do aplicativo web</p>
+        </header>
+
+        <div class="mockup-container">
+            <!-- Dashboard -->
+            <div class="mockup">
+                <div class="mockup-header">
+                    <div class="mockup-title">Dashboard</div>
+                    <div class="avatar">JD</div>
+                </div>
+                <div class="mockup-content">
+                    <div class="token-balance">
+                        <div>
+                            <div class="token-label">Seu saldo</div>
+                            <div class="token-value">125 FUSE</div>
+                        </div>
+                        <div class="token-icon">F</div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Atividades</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">250</div>
+                            <div class="stat-label">Pontos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">2</div>
+                            <div class="stat-label">Desafios</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Nível</div>
+                        </div>
+                    </div>
+
+                    <h3>Desafios Ativos</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Desafio de Corrida Semanal</div>
+                                <div class="card-subtitle">Corra 15 km esta semana</div>
+                            </div>
+                            <div class="badge">Em progresso</div>
+                        </div>
+                        <div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 35%;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                                <span>5.2km / 15km</span>
+                                <span>Recompensa: 50 pontos</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-block" style="margin-top: 0.5rem;">Continuar Desafio</button>
+                    </div>
+
+                    <h3>Atividades Recentes</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Corrida Matinal</div>
+                                <div class="card-subtitle">5.2 km • 30 min</div>
+                            </div>
+                            <div class="badge badge-success">Verificado</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Strava • Ontem</span>
+                            <span>+25 pontos</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Pedalada no Parque</div>
+                                <div class="card-subtitle">15.4 km • 1h</div>
+                            </div>
+                            <div class="badge badge-success">Verificado</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Strava • 2 dias atrás</span>
+                            <span>+30 pontos</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Post no Instagram</div>
+                                <div class="card-subtitle">#FuseLabs • 124 curtidas</div>
+                            </div>
+                            <div class="badge badge-warning">Pendente</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Instagram • 12h atrás</span>
+                            <span>+20 pontos</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-nav">
+                    <div class="nav-item active">Dashboard</div>
+                    <div class="nav-item">Atividades</div>
+                    <div class="nav-item">Desafios</div>
+                    <div class="nav-item">Tokens</div>
+                    <div class="nav-item">Perfil</div>
+                </div>
+            </div>
+
+            <!-- Atividades -->
+            <div class="mockup">
+                <div class="mockup-header">
+                    <div class="mockup-title">Atividades</div>
+                    <div class="avatar">JD</div>
+                </div>
+                <div class="mockup-content">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <button class="btn">Todas</button>
+                        <button class="btn btn-outline">Corrida</button>
+                        <button class="btn btn-outline">Ciclismo</button>
+                        <button class="btn btn-outline">Social</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Corrida Matinal</div>
+                                <div class="card-subtitle">5.2 km • 30 min</div>
+                            </div>
+                            <div class="badge badge-success">Verificado</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Strava • Ontem</span>
+                            <span>+25 pontos</span>
+                        </div>
+                        <div style="margin-top: 0.5rem;">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Detalhes:</div>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.8rem;">
+                                <div>Ritmo: 5:46 min/km</div>
+                                <div>Calorias: 350</div>
+                                <div>Elevação: 50m</div>
+                                <div>FC Média: 140 bpm</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Pedalada no Parque</div>
+                                <div class="card-subtitle">15.4 km • 1h</div>
+                            </div>
+                            <div class="badge badge-success">Verificado</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Strava • 2 dias atrás</span>
+                            <span>+30 pontos</span>
+                        </div>
+                        <div style="margin-top: 0.5rem;">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Detalhes:</div>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.8rem;">
+                                <div>Velocidade: 15.4 km/h</div>
+                                <div>Calorias: 450</div>
+                                <div>Elevação: 120m</div>
+                                <div>FC Média: 135 bpm</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Post no Instagram</div>
+                                <div class="card-subtitle">#FuseLabs • 124 curtidas</div>
+                            </div>
+                            <div class="badge badge-warning">Pendente</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Instagram • 12h atrás</span>
+                            <span>+20 pontos</span>
+                        </div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                            "Começando minha jornada fitness com o app @FuseLabs! 💪 #FuseLabs #Fitness"
+                        </div>
+                    </div>
+
+                    <button class="btn btn-block" style="margin-top: 1rem;">Registrar Atividade Manual</button>
+                </div>
+                <div class="mockup-nav">
+                    <div class="nav-item">Dashboard</div>
+                    <div class="nav-item active">Atividades</div>
+                    <div class="nav-item">Desafios</div>
+                    <div class="nav-item">Tokens</div>
+                    <div class="nav-item">Perfil</div>
+                </div>
+            </div>
+
+            <!-- Tokens -->
+            <div class="mockup">
+                <div class="mockup-header">
+                    <div class="mockup-title">Tokens</div>
+                    <div class="avatar">JD</div>
+                </div>
+                <div class="mockup-content">
+                    <div class="token-balance" style="height: 120px; flex-direction: column; align-items: center; justify-content: center;">
+                        <div class="token-icon" style="width: 50px; height: 50px; margin-bottom: 0.5rem;">F</div>
+                        <div class="token-value" style="font-size: 2rem;">125 FUSE</div>
+                        <div class="token-label">Seu saldo atual</div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        <button class="btn" style="flex: 1;">Enviar</button>
+                        <button class="btn" style="flex: 1;">Receber</button>
+                        <button class="btn" style="flex: 1;">Resgatar</button>
+                    </div>
+
+                    <h3>Carteiras Conectadas</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Carteira Principal</div>
+                                <div class="card-subtitle" style="font-size: 0.7rem; word-break: break-all;">0x1234...5678</div>
+                            </div>
+                            <div class="badge">Primária</div>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
+                            <button class="btn btn-outline" style="font-size: 0.8rem;">Ver na Base</button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-outline btn-block" style="margin: 1rem 0;">Adicionar Carteira</button>
+
+                    <h3>Histórico de Transações</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Earn - Corrida</div>
+                                <div class="card-subtitle">Ontem às 08:35</div>
+                            </div>
+                            <div style="font-weight: 600; color: var(--success);">+25 FUSE</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Tx: 0xabc...def</span>
+                            <span>Confirmada</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Earn - Ciclismo</div>
+                                <div class="card-subtitle">2 dias atrás às 15:20</div>
+                            </div>
+                            <div style="font-weight: 600; color: var(--success);">+30 FUSE</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Tx: 0xdef...123</span>
+                            <span>Confirmada</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">Burn - Resgate</div>
+                                <div class="card-subtitle">5 dias atrás às 10:15</div>
+                            </div>
+                            <div style="font-weight: 600; color: var(--danger);">-50 FUSE</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <span>Tx: 0x789...abc</span>
+                            <span>Confirmada</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mockup-nav">
+                    <div class="nav-item">Dashboard</div>
+                    <div class="nav-item">Atividades</div>
+                    <div class="nav-item">Desafios</div>
+                    <div class="nav-item active">Tokens</div>
+                    <div class="nav-item">Perfil</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>FuseLabs App &copy; 2023 - Tokenize suas atividades físicas e sociais</p>
+        </footer>
+    </div>
+</body>
+</html>

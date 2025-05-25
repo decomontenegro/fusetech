@@ -1,0 +1,165 @@
+# Planejamento Detalhado para Equipe de Programadores – Fuselabs App
+
+## 1. Contexto & Objetivos
+
+Este documento reúne tudo o que foi concebido até agora (arquitetura, tokenomics, UX, integrações sociais, AI/antifraude) e detalha um planejamento para uma equipe mista de *seniors* e *juniors*. O objetivo é:
+
+* Alinhar visão técnica e de produto.
+* Explicar fluxos-chave e decisões.
+* Criar base para debate, refinamento e levantamento de insights.
+
+## 2. Composição da Squad
+
+| Papel                           | Quantidade | Principais Responsabilidades                                 |
+| ------------------------------- | ---------- | ------------------------------------------------------------ |
+| Product Manager                 | 1          | Backlog, priorização, interface com negócios e stakeholders. |
+| Tech Lead (Senior)              | 1          | Arquitetura geral, revisão de código, padrões e mentoring.   |
+| Desenvolvedor Frontend (Senior) | 1          | Componentes UI, performance, integrações, guia de estilo.    |
+| Desenvolvedor Frontend (Junior) | 1          | Implementação de telas, testes e correções guiadas.          |
+| Desenvolvedor Backend (Senior)  | 1          | APIs REST/GraphQL, token mint/burn, integração Base L2.      |
+| Desenvolvedor Backend (Junior)  | 1          | CRUD básicos, workers Redis, testes unitários.               |
+| QA                              | 1          | Plano de testes, automação (Jest/Pytest), pipelines CI.      |
+| DevOps (0.5 FTE)                | 0.5        | Docker, CI/CD, infraestrutura Supabase/Base e monitoramento. |
+| Designer (parceiro)             | 1          | UI kit, mockups hi‑fi, protótipo Figma ou semelhante.        |
+
+## 3. Recapitulando Arquitetura & Fluxo
+
+```text
+[ PWA (React/Next + Tailwind) ]
+      ↕ Auth (Supabase Auth)
+      ↕ GraphQL / REST (Hasura + Fastify)
+      ↕ Events Redis Streams / Kafka
+      ↕ Database Postgres (Supabase)
+      ↕ Workers: Strava/Apple, Social Listener, IA (LangChain), Antifraude, Mint/Burn
+      ↕ Blockchain Base L2 (ERC-20 FUSE) via Sequence SDK
+```
+
+* **Fluxo Earn "Corrida"**: Strava → Webhook → Worker → Redis → Postgres → UX Dashboard.
+* **Fluxo Earn "Social"**: OAuth IG/TikTok → Listener → Worker valida → Redis → Postgres.
+* **Fluxo Burn**: UI "Resgate" → API → Worker on-chain (mint/burn) → Evento → Dashboard.
+
+## 4. Módulos & Responsabilidades Técnicas
+
+| Módulo                   | Senior Lead                  | Junior Apoio            | Notas                             |
+| ------------------------ | ---------------------------- | ----------------------- | --------------------------------- |
+| Auth & Profiles          | Setup Supabase Auth          | Fluxo login e social    | RLS, row-level-security           |
+| API & Schema             | Design GraphQL REST          | Implementação resolvers | Persisted queries, caching        |
+| Dashboard & UX           | Performance e acessibilidade | Componentização         | SSR/SSG, lazy-loading             |
+| Gamificação & Earn Logic | Regras de earn/burn          | Workers Redis           | Event-versioning                  |
+| Social Listener          | API integrations             | Listener cron/basic     | Quotas, backoff, caching          |
+| Wallet & Blockchain      | Smart contract Base deploy   | SDK integration         | Testnet POC                       |
+| Antifraude & Compliance  | Modelagem heurística/ML      | Pipeline Vector DB      | Override humano, logs auditáveis  |
+| CI/CD & Infra            | Docker, IaC, observabilidade | Pipelines automação     | Terraform minimal, Docker Compose |
+| QA & Testes              | Estratégia E2E               | Unit tests              | Jest, Pytest, coverage ≥ 80 %     |
+
+## 5. Cronograma & Sprints
+
+### Sprint 0 (2 semanas)
+
+* Kick‑off e workshops tokenomics.
+* Setup repositório mono‑repo e CI básico.
+* POC Base L2 testnet + Sequence SDK.
+
+### Sprint 1 (4 semanas)
+
+* Auth & Profiles.
+* CRUD de influenciadores / usuários.
+* Dashboard Core (pontos, saldo).
+* Testes unitários básicas.
+
+### Sprint 2 (4 semanas)
+
+* Earn "Corrida": Strava Worker.
+* Earn "Compra": API e front-end.
+* Gamificação básica: desafios agendados.
+* QA E2E inicial.
+
+### Sprint 3 (4 semanas)
+
+* Social Listener (IG/TikTok) módulo.
+* Antifraude heurístico.
+* Ajustes tokenomics no back-end.
+* Mockups hi‑fi importados em front.
+
+### Sprint 4 (4 semanas)
+
+* On‑chain Token (mint/burn) e Wallet.
+* Compliance AI & Claim Checker.
+* Ligas e UX avançado (liga Bronze/Prata/Ouro).
+* Pipeline observabilidade + alertas.
+
+### Sprint 5 (2 semanas)
+
+* App wrap‑up (Capacitor/Expo).
+* Testes de performance e segurança.
+* Deploy Prod PWA e testes smoke.
+
+## 6. Pontos de Debate & Insights
+
+1. **Token Sink**: opções extra de queima para controlar inflação.
+2. **Account Abstraction**: UX sem wallet explícita vs. custo de gas.
+3. **Kafka vs. Redis**: tradeoffs de complexidade vs. escala.
+4. **Balanceamento de carga**: serverless vs. containers.
+5. **GDPR/Lei Geral**: armazenar apenas agregados vs. dados brutos.
+6. **UX de tutorial**: gamificação vs. onboarding minimalista.
+
+## 7. Próximos Passos para a Squad
+
+1. **Reunião de Kick‑off (1h)**
+   - Apresentação da Visão (15 min)
+     ├── Objetivos do FuseLabs App
+     └── Principais diferenciais (tokenomics, gamificação)
+   - Arquitetura Técnica (15 min)
+     ├── Apresentação dos módulos principais
+     └── Fluxos-chave (Earn, Burn, Social)
+   - Metodologia de Trabalho (15 min)
+     ├── Estrutura da equipe Senior/Junior
+     └── Rituais ágeis e ferramentas
+   - Perguntas e Feedback (15 min)
+     ├── Dúvidas técnicas
+     └── Sugestões de implementação
+2. **Refinar user‑stories** – detalhar critérios de aceite para cada story.
+3. **Alocar tarefas** – distribuir tickets entre seniors e juniors.
+4. **Definir Rituais Ágeis** – daily, grooming, reviews, retros.
+
+---
+
+Pronto para discutir e iterar! 🚀
+
+- Módulo Auth & Profiles
+  ├── Senior: Setup Supabase Auth + RLS (segurança)
+  └── Junior: Implementação das telas de login/cadastro
+
+- Módulo Dashboard & UX
+  ├── Senior: Arquitetura de componentes e performance
+  └── Junior: Implementação de componentes UI individuais
+
+- Módulo Earn "Corrida"
+  ├── Senior: Arquitetura do worker Strava e regras de negócio
+  └── Junior: Testes unitários e implementação de endpoints básicos
+
+- Módulo Earn "Social"
+  ├── Senior: Arquitetura da integração OAuth e webhooks
+  └── Junior: Implementação do listener cron básico
+
+- Módulo Token & Blockchain
+  ├── Senior: Smart contract e integração Base L2
+  └── Junior: Testes e implementação de SDK na aplicação
+
+- Rituais Diários
+  ├── Daily Standup (15 min): O que fiz, o que farei, impedimentos
+  └── Code Review em pares Senior/Junior (30 min flexível)
+
+- Rituais Semanais
+  ├── Refinamento de Backlog (1h)
+  ├── Planning da Sprint (2h)
+  └── Sessões de Mentoria Senior → Junior (1h)
+
+- Rituais Bi-semanais
+  ├── Demo dos módulos (1h)
+  └── Retrospectiva (1h)
+
+- Rituais Mensais
+  ├── Tech Review da arquitetura (1h)
+  ├── Análise de débito técnico (1h)
+  └── Alinhamento com stakeholders (1h)

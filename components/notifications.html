@@ -1,0 +1,571 @@
+<!-- Componente de Notificações -->
+<div id="notifications-dropdown" class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-50" role="menu" aria-orientation="vertical" aria-labelledby="notifications-button" tabindex="-1">
+  <div class="px-4 py-2 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <h3 class="text-sm font-medium text-gray-900">Notificações</h3>
+      <div class="flex space-x-2">
+        <button id="mark-all-read-btn" class="text-xs text-primary hover:text-indigo-700">
+          Marcar todas como lidas
+        </button>
+        <button id="notifications-settings-btn" class="text-gray-400 hover:text-gray-500">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="notifications-list" class="max-h-96 overflow-y-auto">
+    <!-- As notificações serão inseridas aqui via JavaScript -->
+    <div class="py-4 px-4 text-center text-gray-500">
+      <p>Nenhuma notificação no momento.</p>
+    </div>
+  </div>
+
+  <div class="px-4 py-2 border-t border-gray-200 text-center">
+    <a href="#" id="view-all-notifications" class="text-sm text-primary hover:text-indigo-700">
+      Ver todas as notificações
+    </a>
+  </div>
+</div>
+
+<script>
+  class NotificationsManager {
+    constructor() {
+      // Elementos do DOM
+      this.notificationsButton = document.getElementById('notifications-button');
+      this.notificationsDropdown = document.getElementById('notifications-dropdown');
+      this.notificationsList = document.getElementById('notifications-list');
+      this.markAllReadBtn = document.getElementById('mark-all-read-btn');
+      this.notificationsSettingsBtn = document.getElementById('notifications-settings-btn');
+      this.viewAllNotificationsLink = document.getElementById('view-all-notifications');
+      this.notificationBadge = document.querySelector('#notifications-button .absolute');
+
+      // Estado
+      this.notifications = [];
+      this.unreadCount = 0;
+      this.isOpen = false;
+      this.pollingInterval = null;
+
+      // Inicializar
+      this.init();
+    }
+
+    init() {
+      // Carregar notificações
+      this.loadNotifications();
+
+      // Configurar eventos
+      this.setupEventListeners();
+
+      // Iniciar polling para novas notificações
+      this.startPolling();
+    }
+
+    loadNotifications() {
+      // Em um ambiente real, isso seria uma chamada de API
+      // Para fins de demonstração, usaremos dados simulados
+
+      // Simular delay de rede
+      setTimeout(() => {
+        this.notifications = this.generateSampleNotifications();
+        this.updateUnreadCount();
+        this.renderNotifications();
+      }, 500);
+    }
+
+    generateSampleNotifications() {
+      // Gerar notificações de exemplo
+      const sampleNotifications = [];
+
+      // Tipos de notificações
+      const notificationTypes = [
+        {
+          type: 'like',
+          icon: 'fa-thumbs-up',
+          iconColor: 'text-blue-500',
+          bgColor: 'bg-blue-100',
+          getMessage: (data) => `${data.user} curtiu sua atividade "${data.activity}".`
+        },
+        {
+          type: 'comment',
+          icon: 'fa-comment',
+          iconColor: 'text-green-500',
+          bgColor: 'bg-green-100',
+          getMessage: (data) => `${data.user} comentou em sua atividade "${data.activity}".`
+        },
+        {
+          type: 'follow',
+          icon: 'fa-user-plus',
+          iconColor: 'text-purple-500',
+          bgColor: 'bg-purple-100',
+          getMessage: (data) => `${data.user} começou a seguir você.`
+        },
+        {
+          type: 'challenge',
+          icon: 'fa-trophy',
+          iconColor: 'text-yellow-500',
+          bgColor: 'bg-yellow-100',
+          getMessage: (data) => `Novo desafio disponível: "${data.challenge}".`
+        },
+        {
+          type: 'achievement',
+          icon: 'fa-medal',
+          iconColor: 'text-red-500',
+          bgColor: 'bg-red-100',
+          getMessage: (data) => `Você conquistou a conquista "${data.achievement}"!`
+        }
+      ];
+
+      // Usuários
+      const users = ['João Silva', 'Maria Oliveira', 'Carlos Santos', 'Ana Souza', 'Pedro Lima'];
+
+      // Atividades
+      const activities = ['Corrida Matinal', 'Ciclismo no Parque', 'Caminhada na Praia', 'Natação', 'Treino de Força'];
+
+      // Desafios
+      const challenges = ['Desafio 5K', 'Desafio de Ciclismo', 'Caminhada Diária', 'Maratona Virtual', 'Desafio de Natação'];
+
+      // Conquistas
+      const achievements = ['Maratonista', 'Ciclista de Elite', 'Caminhante Dedicado', 'Nadador Profissional', 'Atleta Completo'];
+
+      // Gerar entre 0 e 10 notificações
+      const numNotifications = Math.floor(Math.random() * 11);
+
+      for (let i = 0; i < numNotifications; i++) {
+        const date = new Date();
+        date.setMinutes(date.getMinutes() - Math.floor(Math.random() * 60 * 24)); // Até 24 horas atrás
+
+        const notificationType = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
+        const user = users[Math.floor(Math.random() * users.length)];
+        const activity = activities[Math.floor(Math.random() * activities.length)];
+        const challenge = challenges[Math.floor(Math.random() * challenges.length)];
+        const achievement = achievements[Math.floor(Math.random() * achievements.length)];
+
+        sampleNotifications.push({
+          id: i + 1,
+          type: notificationType.type,
+          icon: notificationType.icon,
+          iconColor: notificationType.iconColor,
+          bgColor: notificationType.bgColor,
+          message: notificationType.getMessage({ user, activity, challenge, achievement }),
+          date: date,
+          read: Math.random() > 0.3, // 30% de chance de ser não lida
+          data: {
+            user,
+            activity,
+            challenge,
+            achievement
+          }
+        });
+      }
+
+      // Ordenar por data (mais recentes primeiro)
+      return sampleNotifications.sort((a, b) => b.date - a.date);
+    }
+
+    updateUnreadCount() {
+      this.unreadCount = this.notifications.filter(notification => !notification.read).length;
+
+      // Atualizar badge
+      if (this.notificationBadge) {
+        if (this.unreadCount > 0) {
+          this.notificationBadge.classList.remove('hidden');
+        } else {
+          this.notificationBadge.classList.add('hidden');
+        }
+      }
+    }
+
+    renderNotifications() {
+      if (!this.notificationsList) return;
+
+      // Limpar lista
+      this.notificationsList.innerHTML = '';
+
+      // Se não houver notificações, mostrar mensagem
+      if (this.notifications.length === 0) {
+        this.notificationsList.innerHTML = `
+          <div class="py-4 px-4 text-center text-gray-500">
+            <p>Nenhuma notificação no momento.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Renderizar notificações
+      this.notifications.forEach(notification => {
+        const notificationElement = this.createNotificationElement(notification);
+        this.notificationsList.appendChild(notificationElement);
+      });
+    }
+
+    createNotificationElement(notification) {
+      const notificationElement = document.createElement('div');
+      notificationElement.className = `p-4 hover:bg-gray-50 ${notification.read ? '' : 'bg-blue-50'}`;
+      notificationElement.dataset.notificationId = notification.id;
+
+      // Formatar data
+      const formattedDate = this.formatDate(notification.date);
+
+      // Criar HTML da notificação
+      notificationElement.innerHTML = `
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <div class="w-8 h-8 rounded-full ${notification.bgColor} flex items-center justify-center">
+              <i class="fas ${notification.icon} ${notification.iconColor}"></i>
+            </div>
+          </div>
+          <div class="ml-3 flex-1">
+            <p class="text-sm text-gray-900">
+              ${notification.message}
+            </p>
+            <p class="mt-1 text-xs text-gray-500">
+              ${formattedDate}
+            </p>
+          </div>
+          <div class="ml-2">
+            ${notification.read ? '' : `
+              <button class="mark-read-btn text-xs text-primary hover:text-indigo-700">
+                Marcar como lida
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+
+      // Configurar eventos
+      const markReadBtn = notificationElement.querySelector('.mark-read-btn');
+      if (markReadBtn) {
+        markReadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.markAsRead(notification.id);
+        });
+      }
+
+      // Clicar na notificação também marca como lida
+      notificationElement.addEventListener('click', () => {
+        if (!notification.read) {
+          this.markAsRead(notification.id);
+        }
+
+        // Navegar para o destino da notificação
+        this.navigateToNotification(notification);
+      });
+
+      return notificationElement;
+    }
+
+    setupEventListeners() {
+      // Botão de notificações
+      if (this.notificationsButton) {
+        this.notificationsButton.addEventListener('click', () => {
+          this.toggleDropdown();
+        });
+      }
+
+      // Fechar ao clicar fora
+      document.addEventListener('click', (event) => {
+        if (this.isOpen &&
+            this.notificationsDropdown &&
+            this.notificationsButton &&
+            !this.notificationsDropdown.contains(event.target) &&
+            !this.notificationsButton.contains(event.target)) {
+          this.closeDropdown();
+        }
+      });
+
+      // Botão de marcar todas como lidas
+      if (this.markAllReadBtn) {
+        this.markAllReadBtn.addEventListener('click', () => {
+          this.markAllAsRead();
+        });
+      }
+
+      // Botão de configurações
+      if (this.notificationsSettingsBtn) {
+        this.notificationsSettingsBtn.addEventListener('click', () => {
+          alert('Configurações de notificações serão implementadas em breve!');
+        });
+      }
+
+      // Link para ver todas as notificações
+      if (this.viewAllNotificationsLink) {
+        this.viewAllNotificationsLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          alert('Página de notificações será implementada em breve!');
+        });
+      }
+    }
+
+    toggleDropdown() {
+      if (this.isOpen) {
+        this.closeDropdown();
+      } else {
+        this.openDropdown();
+      }
+    }
+
+    openDropdown() {
+      if (!this.notificationsDropdown) return;
+
+      this.notificationsDropdown.classList.remove('hidden');
+      this.isOpen = true;
+    }
+
+    closeDropdown() {
+      if (!this.notificationsDropdown) return;
+
+      this.notificationsDropdown.classList.add('hidden');
+      this.isOpen = false;
+    }
+
+    markAsRead(notificationId) {
+      // Encontrar notificação
+      const notification = this.notifications.find(n => n.id === notificationId);
+      if (!notification) return;
+
+      // Marcar como lida
+      notification.read = true;
+
+      // Atualizar UI
+      const notificationElement = this.notificationsList.querySelector(`[data-notification-id="${notificationId}"]`);
+      if (notificationElement) {
+        notificationElement.classList.remove('bg-blue-50');
+
+        const markReadBtn = notificationElement.querySelector('.mark-read-btn');
+        if (markReadBtn) {
+          markReadBtn.remove();
+        }
+      }
+
+      // Atualizar contagem de não lidas
+      this.updateUnreadCount();
+    }
+
+    markAllAsRead() {
+      // Marcar todas as notificações como lidas
+      this.notifications.forEach(notification => {
+        notification.read = true;
+      });
+
+      // Atualizar UI
+      const notificationElements = this.notificationsList.querySelectorAll('[data-notification-id]');
+      notificationElements.forEach(element => {
+        element.classList.remove('bg-blue-50');
+
+        const markReadBtn = element.querySelector('.mark-read-btn');
+        if (markReadBtn) {
+          markReadBtn.remove();
+        }
+      });
+
+      // Atualizar contagem de não lidas
+      this.updateUnreadCount();
+    }
+
+    navigateToNotification(notification) {
+      // Em um ambiente real, isso navegaria para a página relevante
+      // Para fins de demonstração, apenas mostraremos um alerta
+
+      let destination = '';
+
+      switch (notification.type) {
+        case 'like':
+        case 'comment':
+          destination = `atividades.html?id=${notification.data.activity}`;
+          break;
+        case 'follow':
+          destination = `perfil.html?user=${notification.data.user}`;
+          break;
+        case 'challenge':
+          destination = `desafios.html?id=${notification.data.challenge}`;
+          break;
+        case 'achievement':
+          destination = `perfil.html?tab=achievements`;
+          break;
+        default:
+          destination = '';
+      }
+
+      if (destination) {
+        alert(`Navegando para: ${destination}`);
+      }
+    }
+
+    startPolling() {
+      // Em um ambiente real, isso usaria WebSockets ou Server-Sent Events
+      // Para fins de demonstração, usaremos polling simples
+
+      this.pollingInterval = setInterval(() => {
+        this.checkForNewNotifications();
+      }, 30000); // Verificar a cada 30 segundos
+    }
+
+    stopPolling() {
+      if (this.pollingInterval) {
+        clearInterval(this.pollingInterval);
+        this.pollingInterval = null;
+      }
+    }
+
+    checkForNewNotifications() {
+      // Em um ambiente real, isso faria uma chamada de API
+      // Para fins de demonstração, ocasionalmente adicionaremos uma nova notificação
+
+      if (Math.random() < 0.3) { // 30% de chance de nova notificação
+        this.addNewNotification();
+      }
+    }
+
+    addNewNotification() {
+      // Tipos de notificações
+      const notificationTypes = [
+        {
+          type: 'like',
+          icon: 'fa-thumbs-up',
+          iconColor: 'text-blue-500',
+          bgColor: 'bg-blue-100',
+          getMessage: (data) => `${data.user} curtiu sua atividade "${data.activity}".`
+        },
+        {
+          type: 'comment',
+          icon: 'fa-comment',
+          iconColor: 'text-green-500',
+          bgColor: 'bg-green-100',
+          getMessage: (data) => `${data.user} comentou em sua atividade "${data.activity}".`
+        },
+        {
+          type: 'follow',
+          icon: 'fa-user-plus',
+          iconColor: 'text-purple-500',
+          bgColor: 'bg-purple-100',
+          getMessage: (data) => `${data.user} começou a seguir você.`
+        }
+      ];
+
+      // Usuários
+      const users = ['João Silva', 'Maria Oliveira', 'Carlos Santos', 'Ana Souza', 'Pedro Lima'];
+
+      // Atividades
+      const activities = ['Corrida Matinal', 'Ciclismo no Parque', 'Caminhada na Praia', 'Natação', 'Treino de Força'];
+
+      // Selecionar tipo aleatório
+      const notificationType = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
+      const user = users[Math.floor(Math.random() * users.length)];
+      const activity = activities[Math.floor(Math.random() * activities.length)];
+
+      // Criar nova notificação
+      const newNotification = {
+        id: this.notifications.length + 1,
+        type: notificationType.type,
+        icon: notificationType.icon,
+        iconColor: notificationType.iconColor,
+        bgColor: notificationType.bgColor,
+        message: notificationType.getMessage({ user, activity }),
+        date: new Date(),
+        read: false,
+        data: {
+          user,
+          activity
+        }
+      };
+
+      // Adicionar ao início da lista
+      this.notifications.unshift(newNotification);
+
+      // Atualizar UI
+      this.updateUnreadCount();
+      this.renderNotifications();
+
+      // Mostrar notificação push
+      this.showPushNotification(newNotification);
+    }
+
+    showPushNotification(notification) {
+      // Verificar se o gerenciador de animações está disponível
+      if (window.animationsManager) {
+        window.animationsManager.animateNotification(notification.message, 'info');
+      } else {
+        // Criar notificação personalizada
+        const pushNotification = document.createElement('div');
+        pushNotification.className = 'fixed top-4 right-4 bg-white shadow-lg rounded-lg p-4 max-w-xs z-50 transform transition-transform duration-300 translate-y-[-100%]';
+        pushNotification.innerHTML = `
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <div class="w-8 h-8 rounded-full ${notification.bgColor} flex items-center justify-center">
+                <i class="fas ${notification.icon} ${notification.iconColor}"></i>
+              </div>
+            </div>
+            <div class="ml-3 flex-1">
+              <p class="text-sm font-medium text-gray-900">Nova notificação</p>
+              <p class="text-sm text-gray-500">${notification.message}</p>
+            </div>
+            <button class="ml-2 text-gray-400 hover:text-gray-500">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+
+        // Adicionar ao DOM
+        document.body.appendChild(pushNotification);
+
+        // Animar entrada
+        setTimeout(() => {
+          pushNotification.style.transform = 'translateY(0)';
+        }, 100);
+
+        // Configurar botão de fechar
+        const closeButton = pushNotification.querySelector('button');
+        if (closeButton) {
+          closeButton.addEventListener('click', () => {
+            pushNotification.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+              pushNotification.remove();
+            }, 300);
+          });
+        }
+
+        // Auto-fechar após 5 segundos
+        setTimeout(() => {
+          if (document.body.contains(pushNotification)) {
+            pushNotification.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+              pushNotification.remove();
+            }, 300);
+          }
+        }, 5000);
+      }
+    }
+
+    formatDate(date) {
+      // Formatar data relativa (agora, há 5 minutos, etc.)
+      const now = new Date();
+      const diffTime = Math.abs(now - new Date(date));
+      const diffMinutes = Math.floor(diffTime / (1000 * 60));
+
+      if (diffMinutes < 1) {
+        return 'Agora mesmo';
+      } else if (diffMinutes < 60) {
+        return `Há ${diffMinutes} ${diffMinutes === 1 ? 'minuto' : 'minutos'}`;
+      } else {
+        const diffHours = Math.floor(diffMinutes / 60);
+        if (diffHours < 24) {
+          return `Há ${diffHours} ${diffHours === 1 ? 'hora' : 'horas'}`;
+        } else {
+          const diffDays = Math.floor(diffHours / 24);
+          if (diffDays < 7) {
+            return `Há ${diffDays} ${diffDays === 1 ? 'dia' : 'dias'}`;
+          } else {
+            return new Date(date).toLocaleDateString('pt-BR');
+          }
+        }
+      }
+    }
+  }
+
+  // Inicializar quando o script for carregado
+  const notificationsManager = new NotificationsManager();
+
+  // Expor globalmente para uso em outros scripts
+  window.notificationsManager = notificationsManager;
+</script>

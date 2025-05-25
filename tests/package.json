@@ -1,0 +1,18 @@
+{
+  "name": "fuselabs-tests",
+  "version": "1.0.0",
+  "description": "Testes automatizados para FuseLabs",
+  "main": "run-all-tests.js",
+  "scripts": {
+    "test": "node run-all-tests.js",
+    "test:performance": "node performance-tests.js",
+    "test:accessibility": "node accessibility-tests.js",
+    "test:compatibility": "node compatibility-tests.js"
+  },
+  "dependencies": {
+    "puppeteer": "^19.7.2",
+    "lighthouse": "^9.6.8",
+    "axe-core": "^4.6.3",
+    "http-server": "^14.1.1"
+  }
+}

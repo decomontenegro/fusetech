@@ -1,0 +1,173 @@
+version: '3'
+
+services:
+  # Banco de dados principal
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fuseapp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis para filas e cache
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Aplicação Web
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fuseapp
+      - REDIS_URL=redis://redis:6379
+      - NEXTAUTH_SECRET=desenvolvimento_secreto
+      - NEXTAUTH_URL=http://localhost:3000
+    volumes:
+      - ./apps/web:/app/apps/web
+      - /app/apps/web/node_modules
+      - /app/apps/web/.next
+    depends_on:
+      - postgres
+      - redis
+      - token-service
+      - strava-worker
+      - social-listener
+      - fraud-detection
+      - gamification
+
+  # Serviço de Tokens
+  token-service:
+    build:
+      context: .
+      dockerfile: services/token-service/Dockerfile
+    ports:
+      - '3003:3003'
+    environment:
+      - NODE_ENV=development
+      - PORT=3003
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fuseapp
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=debug
+      - BASE_L2_URL=https://goerli.base.org
+      - FUSE_TOKEN_ADDRESS=${FUSE_TOKEN_ADDRESS:-0x1234567890abcdef1234567890abcdef12345678}
+      - MINTER_PRIVATE_KEY=${MINTER_PRIVATE_KEY:-0x0000000000000000000000000000000000000000000000000000000000000000}
+    volumes:
+      - ./services/token-service:/app/services/token-service
+      - /app/services/token-service/node_modules
+    depends_on:
+      - postgres
+      - redis
+
+  # Worker Strava
+  strava-worker:
+    build:
+      context: .
+      dockerfile: services/strava-worker/Dockerfile
+    ports:
+      - '3001:3001'
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fuseapp
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=debug
+      - STRAVA_CLIENT_ID=12345
+      - STRAVA_CLIENT_SECRET=strava_client_secret
+      - STRAVA_VERIFY_TOKEN=strava_verify_token
+      - STRAVA_POLLING_INTERVAL=5000
+    volumes:
+      - ./services/strava-worker:/app/services/strava-worker
+      - /app/services/strava-worker/node_modules
+    depends_on:
+      - postgres
+      - redis
+
+  # Listener Redes Sociais
+  social-listener:
+    build:
+      context: .
+      dockerfile: services/social-listener/Dockerfile
+    ports:
+      - '3002:3002'
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fuseapp
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=debug
+      - INSTAGRAM_CLIENT_ID=12345
+      - INSTAGRAM_CLIENT_SECRET=instagram_secret
+      - TIKTOK_CLIENT_KEY=tiktok_key
+      - TIKTOK_CLIENT_SECRET=tiktok_secret
+    volumes:
+      - ./services/social-listener:/app/services/social-listener
+      - /app/services/social-listener/node_modules
+    depends_on:
+      - postgres
+      - redis
+
+  # Sistema Antifraude
+  fraud-detection:
+    build:
+      context: .
+      dockerfile: services/fraud-detection/Dockerfile
+    ports:
+      - '3004:3004'
+    environment:
+      - NODE_ENV=development
+      - PORT=3004
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fuseapp
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=debug
+    volumes:
+      - ./services/fraud-detection:/app/services/fraud-detection
+      - /app/services/fraud-detection/node_modules
+    depends_on:
+      - postgres
+      - redis
+
+  # Sistema de Gamificação
+  gamification:
+    build:
+      context: .
+      dockerfile: services/gamification/Dockerfile
+    ports:
+      - '3005:3005'
+    environment:
+      - NODE_ENV=development
+      - PORT=3005
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/fuseapp
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=debug
+    volumes:
+      - ./services/gamification:/app/services/gamification
+      - /app/services/gamification/node_modules
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:

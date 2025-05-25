@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuseLabs Theme Demo</title>
+    <link rel="stylesheet" href="../css/fuseapp-theme.css">
+    <style>
+        .demo-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background-color: var(--card-bg);
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .color-swatch {
+            height: 80px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: flex-end;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .progress-container {
+            max-width: 500px;
+            margin: 1rem 0;
+        }
+        
+        .avatar-container {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 3px 8px rgba(255, 51, 51, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">F</div>
+                <div class="logo-text">FuseLabs</div>
+            </div>
+            <h1>FuseLabs Theme Demo</h1>
+            <p class="description">Demonstração dos elementos de design e cores do FuseLabs App</p>
+        </header>
+        
+        <div class="demo-section">
+            <h2>Paleta de Cores</h2>
+            <div class="color-palette">
+                <div class="color-swatch" style="background-color: var(--primary); color: var(--dark);">
+                    Primary<br>#3CDBC0
+                </div>
+                <div class="color-swatch" style="background-color: var(--primary-dark); color: var(--dark);">
+                    Primary Dark<br>#2AB6A0
+                </div>
+                <div class="color-swatch" style="background-color: var(--secondary); color: white;">
+                    Secondary<br>#1E90FF
+                </div>
+                <div class="color-swatch" style="background-color: var(--accent); color: white;">
+                    Accent<br>#FF3333
+                </div>
+                <div class="color-swatch" style="background-color: var(--dark); color: var(--light);">
+                    Dark<br>#121212
+                </div>
+                <div class="color-swatch" style="background-color: var(--light); color: var(--dark);">
+                    Light<br>#F9FAFB
+                </div>
+                <div class="color-swatch" style="background-color: var(--card-bg); color: var(--light);">
+                    Card BG<br>#1E1E1E
+                </div>
+                <div class="color-swatch" style="background-color: var(--success); color: var(--dark);">
+                    Success<br>#3CDBC0
+                </div>
+                <div class="color-swatch" style="background-color: var(--warning); color: var(--dark);">
+                    Warning<br>#FFC107
+                </div>
+                <div class="color-swatch" style="background-color: var(--danger); color: white;">
+                    Danger<br>#FF3333
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Tipografia</h2>
+            <h1>Título H1</h1>
+            <h2>Título H2</h2>
+            <h3>Título H3</h3>
+            <p>Texto de parágrafo normal. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Botões</h2>
+            <div class="button-grid">
+                <button class="btn">Botão Primário</button>
+                <button class="btn btn-accent">Botão Accent</button>
+                <button class="btn btn-outline">Botão Outline</button>
+                <button class="btn btn-outline-accent">Botão Outline Accent</button>
+            </div>
+            <div style="margin-top: 1rem;">
+                <button class="btn btn-block">Botão Block</button>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Cards</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Título do Card</div>
+                            <div class="card-subtitle">Subtítulo do card</div>
+                        </div>
+                        <div class="badge">Status</div>
+                    </div>
+                    <p>Conteúdo do card. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Atividade Física</div>
+                            <div class="card-subtitle">5.2 km • 30 min</div>
+                        </div>
+                        <div class="badge badge-success">Verificado</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                        <span>Strava • Ontem</span>
+                        <span>+25 pontos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Badges</h2>
+            <div class="badge-container">
+                <div class="badge">Default</div>
+                <div class="badge badge-success">Success</div>
+                <div class="badge badge-warning">Warning</div>
+                <div class="badge badge-danger">Danger</div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Barras de Progresso</h2>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-value" style="width: 75%;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                    <span>75% Completo</span>
+                    <span>75/100</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Avatares</h2>
+            <div class="avatar-container">
+                <div class="avatar">JD</div>
+                <div class="avatar">AB</div>
+                <div class="avatar">CK</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>FuseLabs App &copy; 2023 - Tokenize suas atividades físicas e sociais</p>
+        </footer>
+    </div>
+</body>
+</html>

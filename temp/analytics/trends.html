@@ -1,0 +1,388 @@
+<!-- Trends Content -->
+<div class="space-y-6">
+  <!-- Trend Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Tendência de Distância</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-route text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">+12%</p>
+          <p class="text-sm text-gray-500">vs. mês anterior</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-up mr-1"></i>
+          Crescente
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Progresso</span>
+          <span>Bom</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-green-500 rounded-full progress-bar" style="width: 75%"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Tendência de Ritmo</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-tachometer-alt text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">-8%</p>
+          <p class="text-sm text-gray-500">vs. mês anterior</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-down mr-1"></i>
+          Melhorando
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Progresso</span>
+          <span>Excelente</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-green-500 rounded-full progress-bar" style="width: 85%"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Tendência de Consistência</h3>
+        <div class="h-10 w-10 rounded-full bg-primary-light flex items-center justify-center">
+          <i class="fas fa-calendar-check text-primary"></i>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-3xl font-bold text-gray-900">+5%</p>
+          <p class="text-sm text-gray-500">vs. mês anterior</p>
+        </div>
+        <div class="text-green-500 text-sm font-medium flex items-center">
+          <i class="fas fa-arrow-up mr-1"></i>
+          Crescente
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span>Progresso</span>
+          <span>Bom</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full progress-bar">
+          <div class="bg-green-500 rounded-full progress-bar" style="width: 70%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Long-term Trends -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-medium text-gray-900">Tendências de Longo Prazo</h2>
+      <div class="flex space-x-2">
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          3 meses
+        </button>
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+          6 meses
+        </button>
+        <button class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+          1 ano
+        </button>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="longTermTrendsChart"></canvas>
+    </div>
+  </div>
+  
+  <!-- Seasonal Analysis -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Análise Sazonal</h2>
+      <div class="chart-container">
+        <canvas id="seasonalAnalysisChart"></canvas>
+      </div>
+    </div>
+    
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Desempenho por Clima</h2>
+      <div class="chart-container">
+        <canvas id="weatherPerformanceChart"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Prediction Models -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Previsões de Desempenho</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="border rounded-lg p-4">
+        <div class="flex items-center mb-2">
+          <i class="fas fa-stopwatch text-primary mr-2"></i>
+          <h3 class="font-medium">Tempo 5K Previsto</h3>
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="text-2xl font-bold">24:15</p>
+          <div class="text-green-500 text-sm font-medium flex items-center">
+            <i class="fas fa-arrow-down mr-1"></i>
+            5%
+          </div>
+        </div>
+        <p class="text-sm text-gray-500 mt-1">Baseado nas últimas 8 corridas</p>
+        <div class="mt-2 text-xs bg-primary-light text-primary p-2 rounded-lg">
+          Confiança: 85%
+        </div>
+      </div>
+      
+      <div class="border rounded-lg p-4">
+        <div class="flex items-center mb-2">
+          <i class="fas fa-route text-primary mr-2"></i>
+          <h3 class="font-medium">Distância Semanal Prevista</h3>
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="text-2xl font-bold">32.5 km</p>
+          <div class="text-green-500 text-sm font-medium flex items-center">
+            <i class="fas fa-arrow-up mr-1"></i>
+            10%
+          </div>
+        </div>
+        <p class="text-sm text-gray-500 mt-1">Baseado nos últimos 2 meses</p>
+        <div class="mt-2 text-xs bg-primary-light text-primary p-2 rounded-lg">
+          Confiança: 78%
+        </div>
+      </div>
+      
+      <div class="border rounded-lg p-4">
+        <div class="flex items-center mb-2">
+          <i class="fas fa-heartbeat text-primary mr-2"></i>
+          <h3 class="font-medium">VO2 Max Previsto</h3>
+        </div>
+        <div class="flex items-center justify-between">
+          <p class="text-2xl font-bold">44.2</p>
+          <div class="text-green-500 text-sm font-medium flex items-center">
+            <i class="fas fa-arrow-up mr-1"></i>
+            4%
+          </div>
+        </div>
+        <p class="text-sm text-gray-500 mt-1">Baseado no progresso atual</p>
+        <div class="mt-2 text-xs bg-primary-light text-primary p-2 rounded-lg">
+          Confiança: 72%
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Improvement Areas -->
+  <div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Áreas de Melhoria</h2>
+    <div class="space-y-4">
+      <div class="border rounded-lg p-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+              <i class="fas fa-mountain text-orange-500"></i>
+            </div>
+            <div>
+              <h3 class="font-medium">Treinamento em Subidas</h3>
+              <p class="text-sm text-gray-500">Seu desempenho em terrenos inclinados está abaixo da média</p>
+            </div>
+          </div>
+          <div class="text-orange-500 text-sm font-medium">
+            Prioridade Alta
+          </div>
+        </div>
+        <div class="mt-3">
+          <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+            Ver Recomendações
+          </button>
+        </div>
+      </div>
+      
+      <div class="border rounded-lg p-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+              <i class="fas fa-bolt text-blue-500"></i>
+            </div>
+            <div>
+              <h3 class="font-medium">Treinos de Velocidade</h3>
+              <p class="text-sm text-gray-500">Adicione mais treinos intervalados para melhorar sua velocidade</p>
+            </div>
+          </div>
+          <div class="text-blue-500 text-sm font-medium">
+            Prioridade Média
+          </div>
+        </div>
+        <div class="mt-3">
+          <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+            Ver Recomendações
+          </button>
+        </div>
+      </div>
+      
+      <div class="border rounded-lg p-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+              <i class="fas fa-bed text-green-500"></i>
+            </div>
+            <div>
+              <h3 class="font-medium">Recuperação</h3>
+              <p class="text-sm text-gray-500">Melhore seu tempo de recuperação entre treinos intensos</p>
+            </div>
+          </div>
+          <div class="text-green-500 text-sm font-medium">
+            Prioridade Baixa
+          </div>
+        </div>
+        <div class="mt-3">
+          <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-primary hover:bg-indigo-700 focus:outline-none">
+            Ver Recomendações
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Long-term Trends Chart
+    const longTermTrendsCtx = document.getElementById('longTermTrendsChart').getContext('2d');
+    new Chart(longTermTrendsCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+        datasets: [
+          {
+            label: 'Distância Mensal (km)',
+            data: [120, 135, 125, 145, 160, 180],
+            borderColor: 'rgba(99, 102, 241, 1)',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            fill: true,
+            tension: 0.4,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Ritmo Médio (min/km)',
+            data: [6.2, 6.0, 5.9, 5.8, 5.6, 5.45],
+            borderColor: 'rgba(239, 68, 68, 1)',
+            backgroundColor: 'rgba(239, 68, 68, 0.0)',
+            fill: false,
+            tension: 0.4,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Distância (km)'
+            }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            reverse: true,
+            grid: {
+              drawOnChartArea: false
+            },
+            title: {
+              display: true,
+              text: 'Ritmo (min/km)'
+            }
+          }
+        }
+      }
+    });
+    
+    // Seasonal Analysis Chart
+    const seasonalAnalysisCtx = document.getElementById('seasonalAnalysisChart').getContext('2d');
+    new Chart(seasonalAnalysisCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Inverno', 'Primavera', 'Verão', 'Outono'],
+        datasets: [
+          {
+            label: 'Distância Média (km)',
+            data: [120, 150, 180, 140],
+            backgroundColor: 'rgba(99, 102, 241, 0.8)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Frequência (dias/mês)',
+            data: [8, 12, 15, 10],
+            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    
+    // Weather Performance Chart
+    const weatherPerformanceCtx = document.getElementById('weatherPerformanceChart').getContext('2d');
+    new Chart(weatherPerformanceCtx, {
+      type: 'radar',
+      data: {
+        labels: ['Ensolarado', 'Nublado', 'Chuvoso', 'Ventoso', 'Quente', 'Frio'],
+        datasets: [
+          {
+            label: 'Desempenho Relativo (%)',
+            data: [100, 95, 85, 90, 80, 92],
+            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(99, 102, 241, 1)'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            angleLines: {
+              display: true
+            },
+            suggestedMin: 70,
+            suggestedMax: 100
+          }
+        }
+      }
+    });
+  });
+</script>
