@@ -146,7 +146,9 @@ export default function WalletPage() {
 
   // Funções utilitárias
   const formatTokenAmount = (amount: number) => {
-    return `${amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} FUSE`;
+    const formattedAmount = amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const unit = mockWalletData.isPhase1 ? 'FUSE Points' : 'FUSE';
+    return `${formattedAmount} ${unit}`;
   };
 
   const truncateAddress = (address: string) => {
@@ -224,8 +226,23 @@ export default function WalletPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Carteira FUSE</h1>
-          <p className="text-gray-600 mt-1">Gerencie seus tokens e acompanhe suas transações</p>
+          <div className="flex items-center gap-2">
+            <h1 className="text-3xl font-bold text-gray-900">
+              {mockWalletData.isPhase1 ? 'Carteira FUSE Points' : 'Carteira FUSE'}
+            </h1>
+            {mockWalletData.isPhase1 && (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                <span className="w-2 h-2 bg-yellow-400 rounded-full mr-1 animate-pulse"></span>
+                BETA
+              </span>
+            )}
+          </div>
+          <p className="text-gray-600 mt-1">
+            {mockWalletData.isPhase1
+              ? 'Acumule pontos que serão convertidos em tokens FUSE reais em julho'
+              : 'Gerencie seus tokens e acompanhe suas transações'
+            }
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <button
