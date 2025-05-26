@@ -25,8 +25,8 @@ export default function HomePage() {
   }
 
   const handleGetStarted = () => {
-    // Redirect to dashboard for now
-    window.location.href = '/dashboard';
+    // Redirect to login - users must authenticate first
+    window.location.href = '/login';
   };
 
   return (
@@ -189,29 +189,29 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <a href="/dashboard" className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group">
+            <button onClick={handleGetStarted} className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group w-full text-left">
               <Activity className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-lg mb-2">Dashboard</h3>
               <p className="text-blue-100">Veja seu progresso e estatísticas</p>
-            </a>
+            </button>
 
-            <a href="/dashboard/activities" className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group">
+            <button onClick={handleGetStarted} className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group w-full text-left">
               <Activity className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-lg mb-2">Atividades</h3>
               <p className="text-green-100">Registre e acompanhe suas atividades</p>
-            </a>
+            </button>
 
-            <a href="/profile" className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group">
+            <button onClick={handleGetStarted} className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group w-full text-left">
               <Trophy className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-lg mb-2">Perfil</h3>
               <p className="text-purple-100">Gerencie seu perfil e conquistas</p>
-            </a>
+            </button>
 
-            <a href="/dashboard/rewards" className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group">
+            <button onClick={handleGetStarted} className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-6 rounded-2xl hover:shadow-lg transition-all block group w-full text-left">
               <Zap className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-lg mb-2">Recompensas</h3>
               <p className="text-pink-100">Troque FUSE por recompensas</p>
-            </a>
+            </button>
           </div>
         </div>
       </section>

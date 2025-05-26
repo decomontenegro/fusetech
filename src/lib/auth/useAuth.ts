@@ -53,9 +53,7 @@ export function useAuthLogic() {
         }
       }
 
-      // Não criar usuário mock automaticamente - usuários devem fazer login real
-      // Para testes de desenvolvimento, use o botão de "Login de Desenvolvimento" na página de login
-
+      // SEMPRE exigir login - nunca criar usuário automático
       setAuth({ status: 'unauthenticated' });
     } catch (error) {
       console.error('Erro ao verificar sessão:', error);

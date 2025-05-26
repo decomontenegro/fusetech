@@ -37,6 +37,14 @@ export function useAuth(): AuthContextType {
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { auth } = useAuth();
 
+  // Redirecionar para login se não estiver autenticado
+  React.useEffect(() => {
+    if (auth.status === 'unauthenticated') {
+      // Redirecionar para login
+      window.location.href = '/login';
+    }
+  }, [auth.status]);
+
   if (auth.status === 'loading') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
