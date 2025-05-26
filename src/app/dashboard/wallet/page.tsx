@@ -36,7 +36,7 @@ interface Transaction {
   description: string;
 }
 
-// Dados simulados para demonstração
+// Dados simulados para demonstração - FASE 1: SISTEMA DE PONTOS
 const mockWalletData = {
   address: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
   balance: 1250.75,
@@ -45,6 +45,9 @@ const mockWalletData = {
   totalSpent: 1639.75,
   stakingBalance: 500.00,
   stakingRewards: 12.50,
+  // Configurações da Fase 1
+  isPhase1: true,
+  tokenLaunchDate: '2024-07-01',
   transactions: [
     {
       id: 'tx1',
