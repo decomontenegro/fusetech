@@ -27,7 +27,8 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-50 flex">
         {/* Sidebar para desktop */}
         <aside className="hidden md:flex flex-col w-64 bg-white border-r p-6 shadow-sm">
           <div className="mb-8">
@@ -115,5 +116,6 @@ export default function DashboardLayout({
           </div>
         </main>
       </div>
+    </ProtectedRoute>
   );
 }
