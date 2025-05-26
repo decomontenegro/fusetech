@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
+import { ProtectedRoute, UserInfo } from '@/components/auth/AuthProvider';
 
 const navigationItems = [
   { name: 'Visão Geral', path: '/dashboard' },
@@ -20,11 +21,6 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleLogout = async () => {
-    // Implementar logout depois
-    console.log('Logout');
-  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -60,12 +56,7 @@ export default function DashboardLayout({
           </nav>
 
           <div className="mt-auto pt-6">
-            <button
-              className="w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md transition-colors"
-              onClick={handleLogout}
-            >
-              Sair
-            </button>
+            <UserInfo />
           </div>
         </aside>
 
@@ -77,12 +68,17 @@ export default function DashboardLayout({
               FUSEtech
             </Link>
 
-            <button
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              onClick={toggleMobileMenu}
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:block">
+                <UserInfo />
+              </div>
+              <button
+                className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                onClick={toggleMobileMenu}
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </header>
 
           {/* Mobile Navigation Menu */}
@@ -106,12 +102,9 @@ export default function DashboardLayout({
                     </Link>
                   );
                 })}
-                <button
-                  className="block w-full text-left px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md transition-colors"
-                  onClick={handleLogout}
-                >
-                  Sair
-                </button>
+                <div className="px-4 py-3">
+                  <UserInfo />
+                </div>
               </nav>
             </div>
           )}

@@ -3,11 +3,11 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import SocialLogin from '@/components/auth/SocialLogin';
-import { useAuthLogic } from '@/lib/auth/useAuth';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { auth, login, sendMagicLink } = useAuthLogic();
+  const { auth, login, sendMagicLink } = useAuth();
 
   // Redirecionar se já estiver autenticado
   React.useEffect(() => {
