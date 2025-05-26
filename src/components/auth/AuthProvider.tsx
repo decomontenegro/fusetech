@@ -117,28 +117,49 @@ export function UserInfo() {
 
   const { user } = auth;
 
+  // Verificações de segurança para evitar erros
+  if (!user || !user.user) {
+    return (
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+          <span className="text-gray-600 text-sm">?</span>
+        </div>
+        <button
+          onClick={logout}
+          className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          Sair
+        </button>
+      </div>
+    );
+  }
+
+  const userName = user.user.name || 'Usuário';
+  const userAvatar = user.user.avatar;
+  const pointsBalance = user.pointsBalance || 0;
+
   return (
     <div className="flex items-center gap-3">
       {/* Avatar */}
       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-        {user.user.avatar ? (
+        {userAvatar ? (
           <img
-            src={user.user.avatar}
-            alt={user.user.name}
+            src={userAvatar}
+            alt={userName}
             className="w-8 h-8 rounded-full object-cover"
           />
         ) : (
           <span className="text-white text-sm font-semibold">
-            {user.user.name.charAt(0).toUpperCase()}
+            {userName.charAt(0).toUpperCase()}
           </span>
         )}
       </div>
 
       {/* User Info */}
       <div className="hidden md:block">
-        <p className="text-sm font-medium text-gray-900">{user.user.name}</p>
+        <p className="text-sm font-medium text-gray-900">{userName}</p>
         <p className="text-xs text-gray-500">
-          {user.pointsBalance.toLocaleString('pt-BR')} FUSE Points
+          {pointsBalance.toLocaleString('pt-BR')} FUSE Points
         </p>
       </div>
 
@@ -161,7 +182,21 @@ export function WalletStatus() {
     return null;
   }
 
-  const { wallet } = auth.user;
+  const { user } = auth;
+
+  // Verificações de segurança
+  if (!user || !user.wallet) {
+    return (
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-gray-600">⏳</span>
+          <span className="text-sm font-medium text-gray-900">Carregando Wallet...</span>
+        </div>
+      </div>
+    );
+  }
+
+  const { wallet } = user;
 
   return (
     <div className="bg-green-50 border border-green-200 rounded-lg p-3">
@@ -173,7 +208,7 @@ export function WalletStatus() {
         <div className="flex items-center justify-between text-xs">
           <span className="text-green-700">Endereço:</span>
           <code className="bg-green-100 px-2 py-1 rounded text-green-800">
-            {wallet.address.slice(0, 6)}...{wallet.address.slice(-4)}
+            {wallet.address ? `${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}` : 'Carregando...'}
           </code>
         </div>
         <div className="flex items-center justify-between text-xs">
