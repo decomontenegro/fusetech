@@ -474,12 +474,52 @@ export default function WalletPage() {
           <div className="bg-white rounded-2xl p-6 shadow-sm border">
             <div className="flex items-center gap-3 mb-4">
               <CreditCard className="w-6 h-6 text-green-500" />
-              <h3 className="text-lg font-semibold text-gray-900">Conectar Carteira</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Wallet Abstraída</h3>
             </div>
-            <p className="text-gray-600 mb-4">Conecte sua carteira externa para mais funcionalidades</p>
-            <button className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">
-              Conectar MetaMask
-            </button>
+            <div className="space-y-3">
+              <div className="bg-green-50 rounded-lg p-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-green-600">✅</span>
+                  <span className="text-sm font-medium text-green-900">Wallet Ativa</span>
+                </div>
+                <p className="text-xs text-green-700">
+                  Sua wallet foi criada automaticamente quando você fez login.
+                  Totalmente segura e gerenciada para você.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600">Endereço:</span>
+                <div className="flex items-center gap-2">
+                  <code className="text-xs bg-gray-100 px-2 py-1 rounded">
+                    {truncateAddress(mockWalletData.address)}
+                  </code>
+                  <button
+                    onClick={() => copyToClipboard(mockWalletData.address)}
+                    className="text-blue-500 hover:text-blue-600"
+                  >
+                    <Copy className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600">Rede:</span>
+                <span className="text-gray-900 font-medium">Base L2</span>
+              </div>
+
+              {mockWalletData.isPhase1 && (
+                <div className="bg-yellow-50 rounded-lg p-3 mt-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-yellow-600">⏳</span>
+                    <span className="text-xs font-medium text-yellow-900">Fase 1 - Sistema de Pontos</span>
+                  </div>
+                  <p className="text-xs text-yellow-700">
+                    Funcionalidades blockchain completas serão ativadas em julho 2024
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
