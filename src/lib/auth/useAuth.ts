@@ -36,25 +36,13 @@ export function useAuthLogic() {
    */
   const checkExistingSession = async () => {
     try {
-      const savedSession = localStorage.getItem('fusetech_session');
-      if (savedSession) {
-        const session = JSON.parse(savedSession);
+      // FORÇAR LIMPEZA - Para garantir que não há sessão automática
+      localStorage.removeItem('fusetech_session');
 
-        // Verificar se sessão não expirou
-        if (new Date(session.expiresAt) > new Date()) {
-          setAuth({
-            status: 'authenticated',
-            user: session.user
-          });
-          return;
-        } else {
-          // Sessão expirada
-          localStorage.removeItem('fusetech_session');
-        }
-      }
-
-      // SEMPRE exigir login - nunca criar usuário automático
+      // SEMPRE exigir login - nunca permitir acesso automático
       setAuth({ status: 'unauthenticated' });
+
+      console.log('🔐 Sessão limpa - Login obrigatório');
     } catch (error) {
       console.error('Erro ao verificar sessão:', error);
       setAuth({ status: 'unauthenticated' });
