@@ -7,7 +7,7 @@ import { useAuth } from '@/components/auth/AuthProvider';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { auth, login, sendMagicLink } = useAuth();
+  const { auth, login, sendMagicLink, loginAsDevelopmentUser } = useAuth();
 
   // Redirecionar se já estiver autenticado
   React.useEffect(() => {
@@ -130,6 +130,29 @@ export default function LoginPage() {
               <p className="text-sm text-red-700 mt-1">
                 {auth.error.message}
               </p>
+            </div>
+          )}
+
+          {/* Development Login - Only in development mode */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="mt-8 border-t border-gray-200 pt-6">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-yellow-600">🧪</span>
+                  <span className="text-sm font-medium text-yellow-900">Modo Desenvolvimento</span>
+                </div>
+                <p className="text-xs text-yellow-700">
+                  Use este botão apenas para testes. Em produção, os usuários devem usar login social real.
+                </p>
+              </div>
+
+              <button
+                onClick={loginAsDevelopmentUser}
+                disabled={auth.status === 'loading'}
+                className="w-full px-4 py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              >
+                {auth.status === 'loading' ? 'Entrando...' : '🧪 Login de Desenvolvimento'}
+              </button>
             </div>
           )}
         </div>

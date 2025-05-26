@@ -15,27 +15,46 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
   const [emailSent, setEmailSent] = useState(false);
 
   const handleStravaLogin = () => {
-    // Mock do fluxo OAuth do Strava
-    const mockCode = 'strava_auth_code_' + Date.now();
-    onLogin('strava', mockCode);
+    // Em produção, redirecionaria para OAuth real do Strava
+    // Para demonstração, simula o fluxo
+    if (process.env.NODE_ENV === 'production') {
+      // Redirecionar para Strava OAuth real
+      window.location.href = 'https://www.strava.com/oauth/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=YOUR_REDIRECT_URI&scope=read,activity:read';
+    } else {
+      // Mock para desenvolvimento
+      const mockCode = 'strava_auth_code_' + Date.now();
+      onLogin('strava', mockCode);
+    }
   };
 
   const handleGoogleLogin = () => {
-    // Mock do fluxo OAuth do Google
-    const mockToken = 'google_auth_token_' + Date.now();
-    onLogin('google', mockToken);
+    // Em produção, usaria Google OAuth real
+    if (process.env.NODE_ENV === 'production') {
+      // Implementar Google OAuth real
+      console.log('Google OAuth seria implementado aqui');
+    } else {
+      // Mock para desenvolvimento
+      const mockToken = 'google_auth_token_' + Date.now();
+      onLogin('google', mockToken);
+    }
   };
 
   const handleAppleLogin = () => {
-    // Mock do fluxo OAuth da Apple
-    const mockToken = 'apple_auth_token_' + Date.now();
-    onLogin('apple', mockToken);
+    // Em produção, usaria Apple Sign In real
+    if (process.env.NODE_ENV === 'production') {
+      // Implementar Apple Sign In real
+      console.log('Apple Sign In seria implementado aqui');
+    } else {
+      // Mock para desenvolvimento
+      const mockToken = 'apple_auth_token_' + Date.now();
+      onLogin('apple', mockToken);
+    }
   };
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    
+
     try {
       await onSendMagicLink(email);
       setEmailSent(true);
@@ -55,7 +74,7 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
             Email Enviado!
           </h3>
           <p className="text-green-700 text-sm mb-4">
-            Enviamos um link de acesso para <strong>{email}</strong>. 
+            Enviamos um link de acesso para <strong>{email}</strong>.
             Clique no link para fazer login automaticamente.
           </p>
           <button
@@ -172,7 +191,7 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
         </form>
       )}
 
-      {/* Wallet Abstraction Info */}
+      {/* Authentication Status Info */}
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-6">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -180,15 +199,32 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
           </div>
           <div>
             <h4 className="text-sm font-semibold text-blue-900 mb-1">
-              Wallet Automática
+              Login Seguro e Simples
             </h4>
-            <p className="text-xs text-blue-700">
-              Criamos automaticamente uma carteira segura para você. 
-              Não precisa se preocupar com chaves privadas ou configurações complexas.
+            <p className="text-xs text-blue-700 mb-2">
+              Use suas contas existentes para fazer login. Criamos automaticamente uma carteira segura para você.
             </p>
+            <div className="text-xs text-blue-600">
+              ✓ Sem senhas para lembrar<br/>
+              ✓ Wallet automática criada<br/>
+              ✓ Dados protegidos e criptografados
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Development Mode Indicator */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mt-4">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-yellow-600">🧪</span>
+            <span className="text-sm font-medium text-yellow-900">Modo Desenvolvimento</span>
+          </div>
+          <p className="text-xs text-yellow-700">
+            Os logins sociais acima são simulações para teste. Use o botão de desenvolvimento abaixo para testar o fluxo completo.
+          </p>
+        </div>
+      )}
 
       {/* Terms */}
       <p className="text-xs text-gray-500 text-center mt-6">

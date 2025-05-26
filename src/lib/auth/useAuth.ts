@@ -53,24 +53,8 @@ export function useAuthLogic() {
         }
       }
 
-      // Para desenvolvimento, criar usuário mock automaticamente
-      if (process.env.NODE_ENV === 'development') {
-        const mockUser = await createMockUser();
-        const session = {
-          user: mockUser,
-          accessToken: generateAccessToken(),
-          refreshToken: generateRefreshToken(),
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-        };
-
-        localStorage.setItem('fusetech_session', JSON.stringify(session));
-
-        setAuth({
-          status: 'authenticated',
-          user: mockUser
-        });
-        return;
-      }
+      // Não criar usuário mock automaticamente - usuários devem fazer login real
+      // Para testes de desenvolvimento, use o botão de "Login de Desenvolvimento" na página de login
 
       setAuth({ status: 'unauthenticated' });
     } catch (error) {
@@ -210,6 +194,42 @@ export function useAuthLogic() {
   };
 
   /**
+   * Login de desenvolvimento (apenas para testes)
+   */
+  const loginAsDevelopmentUser = async () => {
+    try {
+      setAuth({ status: 'loading' });
+
+      const mockUser = await createMockUser();
+      const session = {
+        user: mockUser,
+        accessToken: generateAccessToken(),
+        refreshToken: generateRefreshToken(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      };
+
+      localStorage.setItem('fusetech_session', JSON.stringify(session));
+
+      setAuth({
+        status: 'authenticated',
+        user: mockUser
+      });
+
+      console.log('🧪 Login de desenvolvimento realizado');
+
+    } catch (error) {
+      console.error('Erro no login de desenvolvimento:', error);
+      setAuth({
+        status: 'error',
+        error: {
+          code: 'DEV_LOGIN_FAILED',
+          message: 'Erro no login de desenvolvimento'
+        }
+      });
+    }
+  };
+
+  /**
    * Logout
    */
   const logout = async () => {
@@ -237,7 +257,8 @@ export function useAuthLogic() {
     login,
     logout,
     sendMagicLink,
-    verifyMagicLink
+    verifyMagicLink,
+    loginAsDevelopmentUser
   };
 }
 
