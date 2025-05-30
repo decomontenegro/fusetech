@@ -53,3 +53,4 @@ tmp
 
 # Redis
 dump.rdb 
+.vercel

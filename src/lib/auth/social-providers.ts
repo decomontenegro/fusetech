@@ -12,22 +12,34 @@ export class SocialAuthProviders {
     try {
       // Mock da resposta do Strava OAuth
       const stravaUser = await this.mockStravaAuth(code);
-      
+
       // Criar ou buscar usuário
       const user = await this.createOrUpdateUser(stravaUser, 'strava');
-      
+
       // Gerar wallet se não existir
       const wallet = await this.ensureUserWallet(user.id);
-      
+
       return {
-        ...user,
+        id: user.id,
+        user,
         wallet,
         fitnessProfile: {
           stravaConnected: true,
           stravaUserId: stravaUser.providerId,
           preferredActivities: ['running', 'cycling'],
           goals: ['fitness', 'tokens']
-        }
+        },
+        privacy: {
+          shareActivity: true,
+          shareProgress: true,
+          allowNotifications: true
+        },
+        pointsBalance: 0,
+        totalEarned: 0,
+        totalSpent: 0,
+        stakingBalance: 0,
+        isVerified: false,
+        kycCompleted: false
       };
     } catch (error) {
       throw new Error(`Erro na autenticação Strava: ${error}`);
@@ -41,21 +53,33 @@ export class SocialAuthProviders {
     try {
       // Mock da resposta do Google OAuth
       const googleUser = await this.mockGoogleAuth(token);
-      
+
       // Criar ou buscar usuário
       const user = await this.createOrUpdateUser(googleUser, 'google');
-      
+
       // Gerar wallet se não existir
       const wallet = await this.ensureUserWallet(user.id);
-      
+
       return {
-        ...user,
+        id: user.id,
+        user,
         wallet,
         fitnessProfile: {
           stravaConnected: false,
           preferredActivities: [],
           goals: []
-        }
+        },
+        privacy: {
+          shareActivity: true,
+          shareProgress: true,
+          allowNotifications: true
+        },
+        pointsBalance: 0,
+        totalEarned: 0,
+        totalSpent: 0,
+        stakingBalance: 0,
+        isVerified: false,
+        kycCompleted: false
       };
     } catch (error) {
       throw new Error(`Erro na autenticação Google: ${error}`);
@@ -69,21 +93,33 @@ export class SocialAuthProviders {
     try {
       // Mock da resposta do Apple OAuth
       const appleUser = await this.mockAppleAuth(token);
-      
+
       // Criar ou buscar usuário
       const user = await this.createOrUpdateUser(appleUser, 'apple');
-      
+
       // Gerar wallet se não existir
       const wallet = await this.ensureUserWallet(user.id);
-      
+
       return {
-        ...user,
+        id: user.id,
+        user,
         wallet,
         fitnessProfile: {
           stravaConnected: false,
           preferredActivities: [],
           goals: []
-        }
+        },
+        privacy: {
+          shareActivity: true,
+          shareProgress: true,
+          allowNotifications: true
+        },
+        pointsBalance: 0,
+        totalEarned: 0,
+        totalSpent: 0,
+        stakingBalance: 0,
+        isVerified: false,
+        kycCompleted: false
       };
     } catch (error) {
       throw new Error(`Erro na autenticação Apple: ${error}`);
@@ -97,10 +133,10 @@ export class SocialAuthProviders {
     try {
       // Gerar magic link
       const magicToken = this.generateMagicToken();
-      
+
       // Enviar email (mock)
       await this.sendMagicLink(email, magicToken);
-      
+
       return {
         success: true,
         message: 'Link de acesso enviado para seu email!'
@@ -117,7 +153,7 @@ export class SocialAuthProviders {
     try {
       // Verificar token (mock)
       const emailData = await this.verifyMagicToken(token);
-      
+
       // Criar usuário
       const emailUser: SocialAuthUser = {
         id: `user_${Date.now()}`,
@@ -128,21 +164,33 @@ export class SocialAuthProviders {
         createdAt: new Date(),
         lastLoginAt: new Date()
       };
-      
+
       // Criar ou buscar usuário
       const user = await this.createOrUpdateUser(emailUser, 'email');
-      
+
       // Gerar wallet
       const wallet = await this.ensureUserWallet(user.id);
-      
+
       return {
-        ...user,
+        id: user.id,
+        user,
         wallet,
         fitnessProfile: {
           stravaConnected: false,
           preferredActivities: [],
           goals: []
-        }
+        },
+        privacy: {
+          shareActivity: true,
+          shareProgress: true,
+          allowNotifications: true
+        },
+        pointsBalance: 0,
+        totalEarned: 0,
+        totalSpent: 0,
+        stakingBalance: 0,
+        isVerified: false,
+        kycCompleted: false
       };
     } catch (error) {
       throw new Error(`Token inválido ou expirado`);
@@ -155,7 +203,7 @@ export class SocialAuthProviders {
   private static async mockStravaAuth(code: string): Promise<SocialAuthUser> {
     // Simula chamada para API do Strava
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     return {
       id: `user_strava_${Date.now()}`,
       email: 'athlete@strava.com',
@@ -174,7 +222,7 @@ export class SocialAuthProviders {
   private static async mockGoogleAuth(token: string): Promise<SocialAuthUser> {
     // Simula chamada para API do Google
     await new Promise(resolve => setTimeout(resolve, 800));
-    
+
     return {
       id: `user_google_${Date.now()}`,
       email: 'usuario@gmail.com',
@@ -193,7 +241,7 @@ export class SocialAuthProviders {
   private static async mockAppleAuth(token: string): Promise<SocialAuthUser> {
     // Simula chamada para API da Apple
     await new Promise(resolve => setTimeout(resolve, 900));
-    
+
     return {
       id: `user_apple_${Date.now()}`,
       email: 'usuario@icloud.com',
@@ -209,7 +257,7 @@ export class SocialAuthProviders {
    * Criar ou atualizar usuário
    */
   private static async createOrUpdateUser(
-    socialUser: SocialAuthUser, 
+    socialUser: SocialAuthUser,
     provider: AuthProvider
   ): Promise<SocialAuthUser> {
     // Mock - em produção salvaria no banco
@@ -218,7 +266,7 @@ export class SocialAuthProviders {
       email: socialUser.email,
       provider
     });
-    
+
     return {
       ...socialUser,
       lastLoginAt: new Date()
@@ -230,12 +278,12 @@ export class SocialAuthProviders {
    */
   private static async ensureUserWallet(userId: string) {
     let wallet = await WalletAbstractionService.getUserWallet(userId);
-    
+
     if (!wallet) {
       wallet = await WalletAbstractionService.generateWallet(userId);
       console.log('🔐 Nova wallet criada para usuário:', userId);
     }
-    
+
     return wallet;
   }
 
@@ -265,7 +313,7 @@ export class SocialAuthProviders {
     if (!token.startsWith('magic_')) {
       throw new Error('Token inválido');
     }
-    
+
     return {
       email: 'usuario@email.com' // Mock
     };
@@ -284,7 +332,7 @@ export class SocialAuthProviders {
    */
   static getAuthUrls() {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3002';
-    
+
     return {
       strava: `https://www.strava.com/oauth/authorize?client_id=YOUR_STRAVA_CLIENT_ID&response_type=code&redirect_uri=${baseUrl}/auth/strava/callback&scope=read,activity:read`,
       google: `https://accounts.google.com/oauth2/auth?client_id=YOUR_GOOGLE_CLIENT_ID&redirect_uri=${baseUrl}/auth/google/callback&scope=openid%20email%20profile&response_type=code`,

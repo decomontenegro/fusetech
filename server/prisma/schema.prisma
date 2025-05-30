@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(BRAND)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  products    Product[]
+  validations Validation[]
+
+  @@map("users")
+}
+
+model Laboratory {
+  id            String   @id @default(uuid())
+  name          String
+  accreditation String
+  email         String   @unique
+  phone         String?
+  address       String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relacionamentos
+  reports Report[]
+
+  @@map("laboratories")
+}
+
+model Product {
+  id              String      @id @default(uuid())
+  name            String
+  brand           String
+  category        String
+  description     String?
+  sku             String      @unique
+  batchNumber     String?
+  nutritionalInfo Json?
+  claims          String[]
+  imageUrl        String?
+  qrCode          String?     @unique
+  status          ProductStatus @default(PENDING)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relacionamentos
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  validations Validation[]
+  reports     Report[]
+
+  @@map("products")
+}
+
+model Report {
+  id              String     @id @default(uuid())
+  fileName        String
+  originalName    String
+  filePath        String
+  fileSize        Int
+  mimeType        String
+  analysisType    String
+  results         Json
+  isVerified      Boolean    @default(false)
+  verificationHash String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // Relacionamentos
+  productId     String
+  product       Product     @relation(fields: [productId], references: [id])
+  laboratoryId  String
+  laboratory    Laboratory  @relation(fields: [laboratoryId], references: [id])
+  validations   Validation[]
+
+  @@map("reports")
+}
+
+model Validation {
+  id          String           @id @default(uuid())
+  status      ValidationStatus @default(PENDING)
+  claimsValidated Json
+  summary     String?
+  notes       String?
+  validatedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relacionamentos
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  reportId  String
+  report    Report  @relation(fields: [reportId], references: [id])
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+
+  @@map("validations")
+}
+
+model QRCodeAccess {
+  id        String   @id @default(uuid())
+  qrCode    String
+  ipAddress String?
+  userAgent String?
+  location  String?
+  accessedAt DateTime @default(now())
+
+  @@map("qr_code_accesses")
+}
+
+enum UserRole {
+  ADMIN
+  BRAND
+  LAB
+  CONSUMER
+}
+
+enum ProductStatus {
+  PENDING
+  VALIDATED
+  REJECTED
+  EXPIRED
+}
+
+enum ValidationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PARTIAL
+}

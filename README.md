@@ -45,22 +45,32 @@ FUSEtech is a revolutionary fitness platform that combines physical activity tra
 ### Frontend Framework
 - **Next.js 14** - React framework with App Router
 - **React 18** - UI library with modern hooks and features
-- **TypeScript** - Type-safe JavaScript development
+- **TypeScript** - Type-safe JavaScript development (OBRIGATÓRIO)
 
 ### Styling & UI
-- **Tailwind CSS** - Utility-first CSS framework
+- **Tailwind CSS 3.4** - Utility-first CSS framework (ÚNICO PERMITIDO)
 - **Lucide React** - Beautiful, customizable icons
 - **Custom Components** - Reusable UI components
 
+### State Management
+- **Zustand** - Lightweight state management
+- **React Hook Form** - Form handling and validation
+
+### Database & Backend
+- **Neon Database** - PostgreSQL serverless (SUBSTITUIU SUPABASE)
+- **Axios** - HTTP client for API calls
+- **Firebase** - Push notifications and real-time features
+
 ### Development Tools
 - **ESLint** - Code linting and quality
-- **Prettier** - Code formatting
-- **Git** - Version control
+- **Prettier** - Code formatting (OBRIGATÓRIO)
+- **Vitest** - Testing framework
+- **TypeScript Strict Mode** - Enhanced type checking
 
-### Future Integrations (Planned)
-- **Supabase** - Backend as a Service
-- **Strava API** - Fitness data integration
+### Integrations
+- **Strava API** - Fitness data integration (IMPLEMENTADO)
 - **Base L2** - Blockchain for tokenization
+- **Firebase Cloud Messaging** - Push notifications (IMPLEMENTADO)
 - **PWA** - Progressive Web App capabilities
 
 ## 🚀 Quick Start
@@ -90,15 +100,48 @@ npm run dev
 
 4. **Open in browser**
 ```
-http://localhost:3000
+http://localhost:3002
 ```
 
 ### Available URLs
-- **Home**: `http://localhost:3000` - Landing page
-- **Dashboard**: `http://localhost:3000/dashboard` - User statistics and overview
-- **Profile**: `http://localhost:3000/profile` - User profile and achievements
-- **Activities**: `http://localhost:3000/activities` - Activity tracking and history
-- **Marketplace**: `http://localhost:3000/marketplace` - Token redemption store
+- **Home**: `http://localhost:3002` - Landing page
+- **Dashboard**: `http://localhost:3002/dashboard` - User statistics and overview
+- **Profile**: `http://localhost:3002/profile` - User profile and achievements
+- **Activities**: `http://localhost:3002/activities` - Activity tracking and history
+- **Marketplace**: `http://localhost:3002/marketplace` - Token redemption store
+
+## 📋 Development Rules & Standards
+
+### 🚨 MANDATORY REQUIREMENTS
+- **TypeScript**: All code must be typed, no `any` allowed
+- **Tailwind CSS 3.4**: Only styling method permitted
+- **Prettier**: Code formatting enforced via pre-commit hooks
+- **Conventional Commits**: Required for all commits
+- **Code Review**: All PRs require approval
+
+### 🔧 Enhanced Scripts
+```bash
+npm run dev          # Start development server (port 3002)
+npm run build        # Build for production
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint issues
+npm run type-check   # TypeScript type checking
+npm run test         # Run tests with Vitest
+npm run clean        # Clean build artifacts
+```
+
+### 📁 Standardized Structure
+```
+src/
+├── app/           # Next.js App Router pages
+├── components/    # Reusable UI components
+├── lib/          # Libraries and utilities
+├── hooks/        # Custom React hooks
+├── types/        # TypeScript type definitions
+└── constants/    # Application constants
+```
+
+**📖 For detailed development guidelines, see [DEVELOPMENT_RULES.md](./DEVELOPMENT_RULES.md)**
 
 ## 📱 Features
 
@@ -235,20 +278,21 @@ totalTokens = baseTokens + performanceBonus + streakBonus
 - **Foundation Building**: Solid base for future integrations
 - **Team Alignment**: Clear vision before technical implementation
 
-### Phase 2: Backend Integration 🔄 (Next)
-**Timeline**: Q2 2024
+### Phase 2: Backend Integration ✅ (Completed)
+**Timeline**: Q1 2024
 
-**Planned Features:**
-- 🔄 User authentication system
-- 🔄 Real database integration (Supabase)
-- 🔄 API development for data management
-- 🔄 User registration and profile management
+**Completed Features:**
+- ✅ User authentication system (Wallet Abstraction)
+- ✅ Real database integration (Neon Database)
+- ✅ API development for data management
+- ✅ Push notifications system (Firebase)
+- ✅ Strava API integration structure
 
-### Phase 3: Fitness Integration 📅 (Q3 2024)
+### Phase 3: Fitness Integration � (Current)
 **Focus**: Real activity tracking and data sources
 
-**Planned Features:**
-- 📅 Strava API integration
+**In Progress:**
+- � Strava API integration (Structure ready, needs API keys)
 - 📅 Apple Health / Google Fit connectivity
 - 📅 Manual activity logging
 - 📅 Real-time activity verification

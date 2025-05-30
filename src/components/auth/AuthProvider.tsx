@@ -71,52 +71,6 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (auth.status === 'unauthenticated') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="max-w-md mx-auto text-center p-6">
-          <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-white text-3xl">🔒</span>
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Login Necessário
-          </h2>
-          <p className="text-gray-600 mb-2">
-            Para acessar o dashboard da FUSEtech, você precisa fazer login com uma das opções disponíveis.
-          </p>
-          <p className="text-sm text-gray-500 mb-8">
-            Escolha entre Strava, Google, Apple ou Email para começar a ganhar pontos por suas atividades físicas.
-          </p>
-
-          <div className="space-y-4">
-            <a
-              href="/login"
-              className="block w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all shadow-lg"
-            >
-              Fazer Login Social
-            </a>
-
-            <div className="flex items-center gap-4 text-xs text-gray-400">
-              <div className="flex-1 border-t border-gray-200"></div>
-              <span>Seguro e rápido</span>
-              <div className="flex-1 border-t border-gray-200"></div>
-            </div>
-
-            <div className="bg-blue-50 rounded-lg p-4 text-left">
-              <h4 className="text-sm font-semibold text-blue-900 mb-2">✨ Por que fazer login?</h4>
-              <ul className="text-xs text-blue-800 space-y-1">
-                <li>• Ganhe pontos por atividades físicas</li>
-                <li>• Wallet automática criada para você</li>
-                <li>• Troque pontos por produtos reais</li>
-                <li>• Sem necessidade de conhecimento crypto</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (auth.status === 'error') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">

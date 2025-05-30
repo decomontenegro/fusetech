@@ -117,7 +117,7 @@ export default function LoginPage() {
           <SocialLogin
             onLogin={handleLogin}
             onSendMagicLink={handleSendMagicLink}
-            isLoading={auth.status === 'loading'}
+            isLoading={false}
           />
 
           {/* Error Display */}
@@ -148,10 +148,10 @@ export default function LoginPage() {
 
               <button
                 onClick={loginAsDevelopmentUser}
-                disabled={auth.status === 'loading'}
+                disabled={false}
                 className="w-full px-4 py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               >
-                {auth.status === 'loading' ? 'Entrando...' : '🧪 Login de Desenvolvimento'}
+                🧪 Login de Desenvolvimento
               </button>
             </div>
           )}

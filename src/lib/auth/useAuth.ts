@@ -11,6 +11,7 @@ const AuthContext = createContext<{
   logout: () => Promise<void>;
   sendMagicLink: (email: string) => Promise<void>;
   verifyMagicLink: (token: string) => Promise<void>;
+  loginAsDevelopmentUser: () => Promise<void>;
 } | null>(null);
 
 // Hook de autenticação

@@ -1,14 +1,55 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Zap, Activity, Trophy, Target, Calendar, TrendingUp } from 'lucide-react'
+import { Zap, Activity, Trophy, Target, Calendar, TrendingUp, Bell, Coins } from 'lucide-react'
+import { notificationService } from '@/lib/notifications/firebase'
 
 export default function DashboardPage() {
   const [mounted, setMounted] = useState(false)
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+  const [fcmToken, setFcmToken] = useState<string | null>(null)
 
   useEffect(() => {
     setMounted(true)
+    initializeNotifications()
   }, [])
+
+  const initializeNotifications = async () => {
+    if (notificationService.isSupported()) {
+      await notificationService.initialize()
+
+      // Check current permission status
+      const permission = notificationService.getPermissionStatus()
+      setNotificationsEnabled(permission === 'granted')
+
+      // Listen for foreground messages
+      notificationService.onForegroundMessage((payload) => {
+        console.log('Foreground notification:', payload)
+        // Show local notification or update UI
+        if (payload.notification) {
+          notificationService.showLocalNotification({
+            title: payload.notification.title || 'FUSEtech',
+            body: payload.notification.body || 'New notification',
+            icon: payload.notification.icon,
+            data: payload.data
+          })
+        }
+      })
+    }
+  }
+
+  const enableNotifications = async () => {
+    const token = await notificationService.requestPermissionAndGetToken()
+    if (token) {
+      setFcmToken(token)
+      setNotificationsEnabled(true)
+
+      // Subscribe to general notifications topic
+      await notificationService.subscribeToTopic(token, 'general')
+
+      console.log('Notifications enabled with token:', token)
+    }
+  }
 
   if (!mounted) {
     return (
@@ -49,6 +90,23 @@ export default function DashboardPage() {
               <h1 className="text-2xl font-bold text-gray-900">FUSEtech Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
+              {/* Notification Button */}
+              {!notificationsEnabled ? (
+                <button
+                  onClick={enableNotifications}
+                  className="flex items-center space-x-2 bg-yellow-100 text-yellow-800 px-3 py-2 rounded-lg hover:bg-yellow-200 transition-colors"
+                  title="Ativar notificações"
+                >
+                  <Bell className="w-4 h-4" />
+                  <span className="text-sm font-medium">Ativar</span>
+                </button>
+              ) : (
+                <div className="flex items-center space-x-2 bg-green-100 text-green-800 px-3 py-2 rounded-lg">
+                  <Bell className="w-4 h-4" />
+                  <span className="text-sm font-medium">Ativo</span>
+                </div>
+              )}
+
               <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg font-semibold">
                 {mockStats.totalFUSE} FUSE
               </div>
