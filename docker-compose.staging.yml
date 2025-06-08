@@ -1,0 +1,182 @@
+version: '3.8'
+
+services:
+  # Next.js Application (Staging)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+        - NEXT_PUBLIC_ENVIRONMENT=staging
+    image: fusetech-staging:latest
+    container_name: fusetech-staging-app
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_ENVIRONMENT=staging
+      - NEXT_PUBLIC_APP_URL=https://staging.fusetech.app
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    env_file:
+      - .env.staging.local
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+    networks:
+      - fusetech-staging
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL Database (Staging)
+  postgres:
+    image: postgres:15-alpine
+    container_name: fusetech-staging-db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=fusetech_staging
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-staging_password}
+      - POSTGRES_DB=fusetech_staging
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+    volumes:
+      - staging-postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-staging-db.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    networks:
+      - fusetech-staging
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fusetech_staging"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache (Staging)
+  redis:
+    image: redis:7-alpine
+    container_name: fusetech-staging-redis
+    ports:
+      - "6380:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - staging-redis-data:/data
+    restart: unless-stopped
+    networks:
+      - fusetech-staging
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Nginx Reverse Proxy (Staging)
+  nginx:
+    image: nginx:alpine
+    container_name: fusetech-staging-nginx
+    ports:
+      - "8081:80"
+    volumes:
+      - ./infrastructure/nginx/staging.conf:/etc/nginx/nginx.conf:ro
+      - ./infrastructure/nginx/ssl/staging:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - fusetech-staging
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Monitoring - Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: fusetech-staging-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./infrastructure/monitoring/prometheus-staging.yml:/etc/prometheus/prometheus.yml:ro
+      - staging-prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    restart: unless-stopped
+    networks:
+      - fusetech-staging
+
+  # Monitoring - Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: fusetech-staging-grafana
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-staging_admin}
+      - GF_SERVER_ROOT_URL=https://staging-metrics.fusetech.app
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - staging-grafana-data:/var/lib/grafana
+      - ./infrastructure/monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./infrastructure/monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - fusetech-staging
+
+  # Log Aggregation - Loki
+  loki:
+    image: grafana/loki:latest
+    container_name: fusetech-staging-loki
+    ports:
+      - "3101:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./infrastructure/monitoring/loki-staging.yml:/etc/loki/local-config.yaml:ro
+      - staging-loki-data:/loki
+    restart: unless-stopped
+    networks:
+      - fusetech-staging
+
+  # Log Shipping - Promtail
+  promtail:
+    image: grafana/promtail:latest
+    container_name: fusetech-staging-promtail
+    volumes:
+      - ./infrastructure/monitoring/promtail-staging.yml:/etc/promtail/config.yml:ro
+      - /var/log:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+    networks:
+      - fusetech-staging
+
+networks:
+  fusetech-staging:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+volumes:
+  staging-postgres-data:
+    driver: local
+  staging-redis-data:
+    driver: local
+  staging-prometheus-data:
+    driver: local
+  staging-grafana-data:
+    driver: local
+  staging-loki-data:
+    driver: local

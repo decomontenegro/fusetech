@@ -197,4 +197,21 @@ export class WalletAbstractionService {
     if (!this.isValidAddress(address)) return address;
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   }
+
+  /**
+   * Converte endereço blockchain em Wallet ID simplificado
+   */
+  static getWalletId(address: string): string {
+    if (!this.isValidAddress(address)) return 'FUSE-XXXX-XXXX';
+    // Pega os últimos 8 caracteres do endereço e formata como ID
+    const shortId = address.slice(-8).toUpperCase();
+    return `FUSE-${shortId.slice(0, 4)}-${shortId.slice(4)}`;
+  }
+
+  /**
+   * Verifica se é um Wallet ID válido
+   */
+  static isValidWalletId(walletId: string): boolean {
+    return /^FUSE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(walletId);
+  }
 }

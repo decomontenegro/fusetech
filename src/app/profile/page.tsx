@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { User, Settings, Trophy, Activity, Calendar, MapPin, Edit3, Camera } from 'lucide-react'
+import { User, Settings, Trophy, Activity, Calendar, MapPin, Edit3, Camera, Wallet, Info } from 'lucide-react'
 
 export default function ProfilePage() {
   const [mounted, setMounted] = useState(false)
@@ -29,6 +29,7 @@ export default function ProfilePage() {
     joinDate: 'Janeiro 2024',
     location: 'São Paulo, SP',
     bio: 'Apaixonado por corrida e ciclismo. Sempre em busca de novos desafios!',
+    walletId: 'FUSE-D897-6F1A',
     stats: {
       totalActivities: 24,
       totalDistance: 156.8,
@@ -95,10 +96,24 @@ export default function ProfilePage() {
                   <Calendar className="w-4 h-4 mr-2" />
                   Membro desde {mockUser.joinDate}
                 </p>
+                <p className="flex items-center justify-center md:justify-start">
+                  <Wallet className="w-4 h-4 mr-2" />
+                  Wallet ID: <code className="font-mono bg-gray-100 px-2 py-0.5 rounded ml-1">{mockUser.walletId}</code>
+                </p>
               </div>
 
               <p className="text-gray-700 leading-relaxed">{mockUser.bio}</p>
             </div>
+          </div>
+        </div>
+
+        {/* Phase 1 Notice */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 mb-6 border border-blue-200">
+          <div className="flex items-center gap-3">
+            <Info className="w-5 h-5 text-blue-600 flex-shrink-0" />
+            <p className="text-sm text-gray-700">
+              <strong>Fase 1:</strong> Seus pontos FUSE serão convertidos 1:1 em tokens reais quando a Fase 2 for lançada em julho de 2024.
+            </p>
           </div>
         </div>
 
@@ -133,7 +148,7 @@ export default function ProfilePage() {
               <span className="text-purple-600 font-bold text-lg">F</span>
             </div>
             <p className="text-2xl font-bold text-gray-900 mb-1">{mockUser.stats.totalFUSE}</p>
-            <p className="text-sm text-gray-600">FUSE Tokens</p>
+            <p className="text-sm text-gray-600">FUSE Points</p>
           </div>
         </div>
 

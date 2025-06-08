@@ -3,6 +3,8 @@
  * Handles OAuth flow, activity sync, and webhook processing
  */
 
+import crypto from 'crypto';
+
 export interface StravaActivity {
   id: number;
   name: string;
@@ -228,13 +230,39 @@ class StravaService {
   }
 
   /**
-   * Verify webhook signature
+   * Verify webhook signature using HMAC
    */
-  verifyWebhookSignature(payload: string, signature: string): boolean {
+  verifyWebhookSignature(payload: string | Buffer, signature: string): boolean {
     const verifyToken = process.env.STRAVA_WEBHOOK_VERIFY_TOKEN || '';
-    // In a real implementation, you'd use HMAC verification
-    // This is a simplified version for demo purposes
-    return signature === verifyToken;
+    
+    // Create HMAC signature
+    const hmac = crypto.createHmac('sha256', verifyToken);
+    hmac.update(payload);
+    const calculatedSignature = hmac.digest('hex');
+    
+    // Use timing-safe comparison to prevent timing attacks
+    try {
+      return crypto.timingSafeEqual(
+        Buffer.from(signature, 'hex'),
+        Buffer.from(calculatedSignature, 'hex')
+      );
+    } catch (error) {
+      // If signatures are different lengths or invalid hex, return false
+      return false;
+    }
+  }
+
+  /**
+   * Validate webhook subscription (for initial setup)
+   */
+  validateWebhookSubscription(mode: string, token: string, challenge: string): { valid: boolean; challenge?: string } {
+    const verifyToken = process.env.STRAVA_WEBHOOK_VERIFY_TOKEN || '';
+    
+    if (mode === 'subscribe' && token === verifyToken) {
+      return { valid: true, challenge };
+    }
+    
+    return { valid: false };
   }
 
   /**

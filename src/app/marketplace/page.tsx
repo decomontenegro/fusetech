@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { ShoppingBag, Zap, Star, Filter, Search, Tag, Gift } from 'lucide-react'
+import { ShoppingBag, Zap, Star, Filter, Search, Tag, Gift, Lock, Info, Clock } from 'lucide-react'
 
 export default function MarketplacePage() {
   const [mounted, setMounted] = useState(false)
@@ -137,12 +137,17 @@ export default function MarketplacePage() {
             </div>
             <div className="flex items-center space-x-4">
               <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg font-semibold">
-                {userBalance} FUSE
+                {userBalance} FUSE Points
               </div>
-              <button className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
-                <ShoppingBag className="w-4 h-4" />
-                <span className="text-sm font-medium">Carrinho</span>
-              </button>
+              <div className="relative group">
+                <button className="flex items-center space-x-2 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed" aria-label="Carrinho de compras (disponível na fase 2)" aria-disabled="true">
+                  <ShoppingBag className="w-4 h-4" aria-hidden="true" />
+                  <span className="text-sm font-medium">Carrinho</span>
+                </button>
+                <div className="absolute top-full right-0 mt-2 bg-gray-800 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity" role="tooltip">
+                  Disponível na Fase 2
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -150,23 +155,50 @@ export default function MarketplacePage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Phase 1 Notice Banner */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-8 border border-blue-200">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Info className="w-6 h-6 text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-gray-900 mb-2">Marketplace em Preparação - Fase 1</h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Estamos preparando parcerias incríveis para quando a Fase 2 for lançada! Por enquanto, continue acumulando seus <strong>FUSE Points</strong>.
+              </p>
+              <div className="bg-white/70 rounded-lg p-3 flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-700">
+                    <strong>🏪 Abertura do Marketplace:</strong> Julho de 2024
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    Produtos de marcas parceiras e experiências exclusivas!
+                  </p>
+                </div>
+                <Clock className="w-8 h-8 text-blue-500" />
+              </div>
+            </div>
+          </div>
+        </div>
         {/* Search and Filters */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
             {/* Search */}
             <div className="relative flex-1 lg:max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
               <input
                 type="text"
                 placeholder="Buscar produtos..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                aria-label="Buscar produtos no marketplace"
+                role="searchbox"
               />
             </div>
 
             {/* Categories */}
-            <div className="flex items-center space-x-2 overflow-x-auto">
+            <div className="flex items-center space-x-2 overflow-x-auto" role="tablist" aria-label="Categorias de produtos">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
@@ -176,8 +208,12 @@ export default function MarketplacePage() {
                       ? 'bg-blue-500 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
+                  aria-label={`Filtrar por categoria ${cat.name}`}
+                  aria-pressed={category === cat.id}
+                  role="tab"
+                  aria-selected={category === cat.id}
                 >
-                  <span>{cat.icon}</span>
+                  <span aria-hidden="true">{cat.icon}</span>
                   <span>{cat.name}</span>
                 </button>
               ))}
@@ -186,9 +222,26 @@ export default function MarketplacePage() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+          {/* Products Header with Phase 2 Badge */}
+          <div className="col-span-full flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Produtos Disponíveis</h2>
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+              <Lock className="w-3 h-3 mr-1" />
+              Compras habilitadas na Fase 2
+            </span>
+          </div>
           {filteredProducts.map((product) => (
-            <div key={product.id} className="bg-white rounded-2xl p-6 shadow-sm border hover:shadow-md transition-shadow">
+            <div key={product.id} className="bg-white rounded-2xl p-6 shadow-sm border hover:shadow-md transition-shadow relative overflow-hidden">
+              {/* Semi-transparent overlay for Phase 1 */}
+              <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex items-center justify-center">
+                <div className="bg-white/90 rounded-lg p-3 text-center shadow-lg">
+                  <Lock className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+                  <p className="text-xs font-medium text-gray-600">Disponível na Fase 2</p>
+                </div>
+              </div>
+              
+              <div className="relative z-0">
               {/* Product Image */}
               <div className="relative mb-4">
                 <div className="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center text-6xl">
@@ -224,7 +277,7 @@ export default function MarketplacePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <span className="text-2xl font-bold text-blue-600">{product.price}</span>
-                    <Zap className="w-5 h-5 text-blue-600" />
+                    <span className="text-sm text-gray-600">Points</span>
                     {product.originalPrice > product.price && (
                       <span className="text-sm text-gray-500 line-through">{product.originalPrice}</span>
                     )}
@@ -241,6 +294,14 @@ export default function MarketplacePage() {
                       ? 'bg-red-100 text-red-600 cursor-not-allowed'
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
                   }`}
+                  aria-label={`${
+                    !product.inStock
+                      ? `${product.name} está esgotado`
+                      : userBalance < product.price
+                      ? `Saldo insuficiente para trocar por ${product.name}. Necessário: ${product.price} FUSE`
+                      : `Trocar ${product.price} FUSE por ${product.name}`
+                  }`}
+                  aria-disabled={!product.inStock || userBalance < product.price}
                 >
                   {!product.inStock
                     ? 'Esgotado'
@@ -249,6 +310,7 @@ export default function MarketplacePage() {
                     : 'Trocar por FUSE'
                   }
                 </button>
+              </div>
               </div>
             </div>
           ))}
@@ -267,11 +329,11 @@ export default function MarketplacePage() {
         {/* Info Banner */}
         <div className="mt-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl p-8 text-white text-center">
           <Gift className="w-12 h-12 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Ganhe mais FUSE!</h2>
+          <h2 className="text-2xl font-bold mb-2">Ganhe mais FUSE Points!</h2>
           <p className="text-blue-100 mb-4">
-            Complete atividades físicas e desafios para ganhar mais tokens e trocar por produtos incríveis.
+            Complete atividades físicas e desafios para ganhar mais pontos. Na Fase 2, você poderá trocar por produtos incríveis!
           </p>
-          <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+          <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors" aria-label="Ver atividades para ganhar mais FUSE">
             Ver Atividades
           </button>
         </div>

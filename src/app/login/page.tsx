@@ -59,6 +59,7 @@ export default function LoginPage() {
             <button
               onClick={() => router.push('/')}
               className="text-gray-600 hover:text-gray-900 transition-colors"
+              aria-label="Voltar para a página inicial"
             >
               Voltar ao início
             </button>
@@ -67,7 +68,7 @@ export default function LoginPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
+      <main id="main-content" className="flex-1 flex items-center justify-center px-4 py-12" role="main">
         <div className="w-full max-w-md">
           {/* Hero Section */}
           <div className="text-center mb-8">
@@ -150,6 +151,7 @@ export default function LoginPage() {
                 onClick={loginAsDevelopmentUser}
                 disabled={false}
                 className="w-full px-4 py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                aria-label="Fazer login como usuário de desenvolvimento (apenas para testes)"
               >
                 🧪 Login de Desenvolvimento
               </button>
@@ -166,13 +168,13 @@ export default function LoginPage() {
               © 2024 FUSEtech. Transformando fitness em valor real.
             </p>
             <div className="flex justify-center gap-6 mt-4">
-              <a href="/terms" className="text-sm text-gray-500 hover:text-gray-700">
+              <a href="/terms" className="text-sm text-gray-500 hover:text-gray-700" aria-label="Ler termos de uso">
                 Termos de Uso
               </a>
-              <a href="/privacy" className="text-sm text-gray-500 hover:text-gray-700">
+              <a href="/privacy" className="text-sm text-gray-500 hover:text-gray-700" aria-label="Ler política de privacidade">
                 Privacidade
               </a>
-              <a href="/support" className="text-sm text-gray-500 hover:text-gray-700">
+              <a href="/support" className="text-sm text-gray-500 hover:text-gray-700" aria-label="Acessar página de suporte">
                 Suporte
               </a>
             </div>

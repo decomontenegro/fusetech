@@ -47,6 +47,8 @@ const mockWalletData = {
   stakingRewards: 12.50,
   // Configurações da Fase 1
   isPhase1: true,
+  isPhase2Available: false, // Fase 2 ainda não disponível
+  phase2LaunchDate: '2024-07-01',
   tokenLaunchDate: '2024-07-01',
   transactions: [
     {
@@ -153,6 +155,13 @@ export default function WalletPage() {
 
   const truncateAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
+  // Converte endereço blockchain em Wallet ID simplificado
+  const getWalletId = (address: string) => {
+    // Pega os últimos 8 caracteres do endereço e formata como ID
+    const shortId = address.slice(-8).toUpperCase();
+    return `FUSE-${shortId.slice(0, 4)}-${shortId.slice(4)}`;
   };
 
   const copyToClipboard = (text: string) => {
@@ -281,9 +290,13 @@ export default function WalletPage() {
           <div className="space-y-2">
             <p className="text-3xl font-bold">{formatTokenAmount(mockWalletData.balance)}</p>
             <div className="flex items-center gap-2 text-sm opacity-80">
-              <span>{truncateAddress(mockWalletData.address)}</span>
-              <button onClick={() => copyToClipboard(mockWalletData.address)}>
-                <Copy className="w-4 h-4 hover:opacity-100" />
+              <span className="font-mono">{getWalletId(mockWalletData.address)}</span>
+              <button 
+                onClick={() => copyToClipboard(getWalletId(mockWalletData.address))}
+                className="hover:opacity-100 transition-opacity"
+                aria-label="Copiar ID da carteira"
+              >
+                <Copy className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -328,12 +341,31 @@ export default function WalletPage() {
 
       {/* Action Tabs Content */}
       {activeTab === 'send' && (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border relative overflow-hidden">
+          {/* Blocker Overlay for Phase 2 */}
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-10 flex items-center justify-center">
+            <div className="text-center p-8 max-w-md">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Clock className="w-8 h-8 text-yellow-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Disponível na Fase 2</h3>
+              <p className="text-gray-600 mb-4">
+                As transferências de tokens estarão disponíveis quando o token FUSE for lançado oficialmente em {new Date(mockWalletData.phase2LaunchDate).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}.
+              </p>
+              <div className="bg-blue-50 rounded-lg p-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Por enquanto:</strong> Continue acumulando pontos através de atividades físicas. Todos os seus pontos serão convertidos 1:1 em tokens FUSE reais!
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Content (disabled) */}
+          <div className="flex items-center gap-3 mb-6 opacity-30">
             <Send className="w-6 h-6 text-blue-500" />
             <h2 className="text-xl font-bold text-gray-900">Enviar FUSE Tokens</h2>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 opacity-30">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Endereço do destinatário</label>
               <input
@@ -356,18 +388,21 @@ export default function WalletPage() {
               <button
                 onClick={() => setSendAmount('10')}
                 className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                aria-label="Definir quantidade para 10 FUSE"
               >
                 10 FUSE
               </button>
               <button
                 onClick={() => setSendAmount('50')}
                 className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                aria-label="Definir quantidade para 50 FUSE"
               >
                 50 FUSE
               </button>
               <button
                 onClick={() => setSendAmount('100')}
                 className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                aria-label="Definir quantidade para 100 FUSE"
               >
                 100 FUSE
               </button>
@@ -376,6 +411,8 @@ export default function WalletPage() {
               onClick={handleSendTokens}
               disabled={!sendAmount || parseFloat(sendAmount) <= 0}
               className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              aria-label="Enviar tokens FUSE"
+              aria-disabled={!sendAmount || parseFloat(sendAmount) <= 0}
             >
               Enviar Tokens
             </button>
@@ -384,39 +421,66 @@ export default function WalletPage() {
       )}
 
       {activeTab === 'stake' && (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border relative overflow-hidden">
+          {/* Blocker Overlay for Phase 2 */}
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-10 flex items-center justify-center">
+            <div className="text-center p-8 max-w-md">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <PiggyBank className="w-8 h-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Staking na Fase 2</h3>
+              <p className="text-gray-600 mb-4">
+                O staking permitirá que você ganhe recompensas adicionais ao bloquear seus tokens FUSE. Este recurso estará disponível após o lançamento oficial.
+              </p>
+              <div className="bg-purple-50 rounded-lg p-4">
+                <p className="text-sm text-purple-800">
+                  <strong>Benefícios futuros:</strong> APY de até 15% ao ano, recompensas semanais e acesso a recursos VIP exclusivos.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Content (disabled) */}
+          <div className="flex items-center gap-3 mb-6 opacity-30">
             <PiggyBank className="w-6 h-6 text-purple-500" />
             <h2 className="text-xl font-bold text-gray-900">Staking de FUSE Tokens</h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 opacity-30">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Quantidade para Staking</label>
+                <label htmlFor="stake-amount" className="block text-sm font-medium text-gray-700 mb-2">Quantidade para Staking</label>
                 <input
+                  id="stake-amount"
                   type="number"
                   placeholder="0.00"
                   value={stakeAmount}
                   onChange={(e) => setStakeAmount(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  aria-label="Quantidade de FUSE tokens para staking"
+                  aria-required="true"
+                  min="0"
+                  step="0.01"
                 />
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setStakeAmount('100')}
                   className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  aria-label="Definir quantidade de staking para 100 FUSE"
                 >
                   100 FUSE
                 </button>
                 <button
                   onClick={() => setStakeAmount('500')}
                   className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  aria-label="Definir quantidade de staking para 500 FUSE"
                 >
                   500 FUSE
                 </button>
                 <button
                   onClick={() => setStakeAmount('1000')}
                   className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  aria-label="Definir quantidade de staking para 1000 FUSE"
                 >
                   1000 FUSE
                 </button>
@@ -425,6 +489,8 @@ export default function WalletPage() {
                 onClick={handleStakeTokens}
                 disabled={!stakeAmount || parseFloat(stakeAmount) <= 0}
                 className="w-full bg-purple-500 text-white py-3 rounded-lg font-semibold hover:bg-purple-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                aria-label="Fazer staking de tokens por 30 dias"
+                aria-disabled={!stakeAmount || parseFloat(stakeAmount) <= 0}
               >
                 Fazer Staking (30 dias)
               </button>
@@ -457,18 +523,29 @@ export default function WalletPage() {
       {/* Quick Actions */}
       {activeTab === 'overview' && (
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl p-6 shadow-sm border">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border relative overflow-hidden">
+            {/* Phase 2 Badge */}
+            <div className="absolute top-3 right-3 bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              <span>Fase 2</span>
+            </div>
+            
             <div className="flex items-center gap-3 mb-4">
               <ExternalLink className="w-6 h-6 text-blue-500" />
               <h3 className="text-lg font-semibold text-gray-900">Blockchain Explorer</h3>
             </div>
             <p className="text-gray-600 mb-4">Visualize suas transações na blockchain Base</p>
             <button
-              onClick={() => window.open(`https://basescan.org/address/${mockWalletData.address}`, '_blank')}
-              className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+              disabled={true}
+              className="w-full bg-gray-300 text-gray-500 py-3 rounded-lg font-semibold cursor-not-allowed transition-colors"
+              aria-label="Ver transações na blockchain (disponível na fase 2)"
+              aria-disabled="true"
             >
-              Ver na BaseScan
+              Disponível na Fase 2
             </button>
+            <p className="text-xs text-gray-500 mt-2 text-center">
+              Explorador blockchain será ativado com o lançamento dos tokens
+            </p>
           </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-sm border">
@@ -491,14 +568,15 @@ export default function WalletPage() {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Endereço:</span>
                 <div className="flex items-center gap-2">
-                  <code className="text-xs bg-gray-100 px-2 py-1 rounded">
-                    {truncateAddress(mockWalletData.address)}
+                  <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono">
+                    {getWalletId(mockWalletData.address)}
                   </code>
                   <button
-                    onClick={() => copyToClipboard(mockWalletData.address)}
-                    className="text-blue-500 hover:text-blue-600"
+                    onClick={() => copyToClipboard(getWalletId(mockWalletData.address))}
+                    className="text-blue-500 hover:text-blue-600 transition-colors"
+                    aria-label="Copiar ID da carteira"
                   >
-                    <Copy className="w-3 h-3" />
+                    <Copy className="w-3 h-3" aria-hidden="true" />
                   </button>
                 </div>
               </div>
@@ -509,14 +587,19 @@ export default function WalletPage() {
               </div>
 
               {mockWalletData.isPhase1 && (
-                <div className="bg-yellow-50 rounded-lg p-3 mt-3">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-yellow-600">⏳</span>
-                    <span className="text-xs font-medium text-yellow-900">Fase 1 - Sistema de Pontos</span>
+                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-4 mt-3 border border-yellow-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-semibold text-yellow-900">Fase 1 - Sistema de Pontos</span>
                   </div>
-                  <p className="text-xs text-yellow-700">
-                    Funcionalidades blockchain completas serão ativadas em julho 2024
+                  <p className="text-xs text-yellow-800 mb-2">
+                    Você está acumulando pontos que serão convertidos em tokens FUSE reais!
                   </p>
+                  <div className="bg-white/50 rounded p-2">
+                    <p className="text-xs text-yellow-900 font-medium">
+                      🚀 Lançamento da Fase 2: {new Date(mockWalletData.phase2LaunchDate).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
@@ -535,6 +618,10 @@ export default function WalletPage() {
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
+                aria-label="Mostrar todas as transações"
+                aria-pressed={filter === 'all'}
+                role="tab"
+                aria-selected={filter === 'all'}
               >
                 Todas
               </button>
@@ -543,6 +630,10 @@ export default function WalletPage() {
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === 'earn' ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
+                aria-label="Mostrar apenas transações de ganhos"
+                aria-pressed={filter === 'earn'}
+                role="tab"
+                aria-selected={filter === 'earn'}
               >
                 Ganhos
               </button>
@@ -551,6 +642,10 @@ export default function WalletPage() {
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === 'spend' ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
+                aria-label="Mostrar apenas transações de gastos"
+                aria-pressed={filter === 'spend'}
+                role="tab"
+                aria-selected={filter === 'spend'}
               >
                 Gastos
               </button>
@@ -559,6 +654,10 @@ export default function WalletPage() {
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === 'stake' ? 'bg-purple-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
+                aria-label="Mostrar apenas transações de staking"
+                aria-pressed={filter === 'stake'}
+                role="tab"
+                aria-selected={filter === 'stake'}
               >
                 Staking
               </button>
@@ -603,14 +702,19 @@ export default function WalletPage() {
                   <div className="text-right">
                     {getStatusIcon(transaction.status)}
                     {transaction.txHash && (
-                      <a
-                        href={`https://basescan.org/tx/${transaction.txHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-blue-500 hover:underline mt-1 block"
-                      >
-                        Ver na blockchain
-                      </a>
+                      <div className="relative group">
+                        <button
+                          disabled={true}
+                          className="text-xs text-gray-400 mt-1 block cursor-not-allowed"
+                        >
+                          Ver na blockchain
+                        </button>
+                        <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block">
+                          <div className="bg-gray-800 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap">
+                            Disponível na Fase 2
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

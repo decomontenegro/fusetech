@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { featureFlagMiddleware } from '@/lib/feature-flags/middleware';
 
 // Rotas que NÃO precisam de autenticação (públicas)
 const publicRoutes = [
@@ -9,7 +10,8 @@ const publicRoutes = [
   '/support',
   '/api/auth/strava',
   '/api/auth/google',
-  '/api/auth/apple'
+  '/api/auth/apple',
+  '/feature-unavailable'
 ];
 
 // Rotas que SEMPRE precisam de autenticação
@@ -20,7 +22,7 @@ const protectedRoutes = [
   '/marketplace'
 ];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Verificar se é uma rota protegida
@@ -37,7 +39,21 @@ export function middleware(request: NextRequest) {
   if (isProtectedRoute) {
     // Como middleware não tem acesso ao localStorage, vamos usar uma abordagem diferente
     // Vamos permitir que o ProtectedRoute component faça a verificação
+    // Mas primeiro, vamos verificar feature flags
+    const featureFlagResponse = await featureFlagMiddleware(request);
+    if (featureFlagResponse.status === 307) {
+      // Feature flag redirect
+      return featureFlagResponse;
+    }
+    
     return NextResponse.next();
+  }
+
+  // Check feature flags for all routes
+  const featureFlagResponse = await featureFlagMiddleware(request);
+  if (featureFlagResponse.status === 307) {
+    // Feature flag redirect
+    return featureFlagResponse;
   }
 
   return NextResponse.next();

@@ -84,6 +84,7 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
               setShowEmailForm(false);
             }}
             className="text-green-600 hover:text-green-700 text-sm font-medium"
+            aria-label="Tentar com outro endereço de email"
           >
             Tentar outro email
           </button>
@@ -109,6 +110,9 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
         onClick={handleStravaLogin}
         disabled={isLoading}
         className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 px-6 rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+        aria-label="Fazer login com Strava"
+        aria-busy={isLoading}
+        aria-disabled={isLoading}
       >
         <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
           <span className="text-orange-500 font-bold text-sm">S</span>
@@ -135,6 +139,9 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
         onClick={handleGoogleLogin}
         disabled={isLoading}
         className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-200 text-gray-700 py-3 px-6 rounded-xl font-semibold hover:border-gray-300 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        aria-label="Fazer login com Google"
+        aria-busy={isLoading}
+        aria-disabled={isLoading}
       >
         <Chrome className="w-5 h-5 text-blue-500" />
         {isLoading ? 'Conectando...' : 'Continuar com Google'}
@@ -145,6 +152,9 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
         onClick={handleAppleLogin}
         disabled={isLoading}
         className="w-full flex items-center justify-center gap-3 bg-black text-white py-3 px-6 rounded-xl font-semibold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        aria-label="Fazer login com Apple"
+        aria-busy={isLoading}
+        aria-disabled={isLoading}
       >
         <Smartphone className="w-5 h-5" />
         {isLoading ? 'Conectando...' : 'Continuar com Apple'}
@@ -156,12 +166,15 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
           onClick={() => setShowEmailForm(true)}
           disabled={isLoading}
           className="w-full flex items-center justify-center gap-3 bg-gray-100 text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Fazer login com email"
+          aria-busy={isLoading}
+          aria-disabled={isLoading}
         >
           <Mail className="w-5 h-5" />
           Continuar com Email
         </button>
       ) : (
-        <form onSubmit={handleEmailSubmit} className="space-y-3">
+        <form onSubmit={handleEmailSubmit} className="space-y-3" aria-label="Formulário de login por email">
           <div>
             <input
               type="email"
@@ -170,6 +183,10 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
+              aria-label="Endereço de email"
+              aria-required="true"
+              aria-invalid={false}
+              autoComplete="email"
             />
           </div>
           <div className="flex gap-2">
@@ -177,6 +194,9 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
               type="submit"
               disabled={isLoading || !email}
               className="flex-1 bg-blue-500 text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Enviar link de acesso por email"
+              aria-busy={isLoading}
+              aria-disabled={isLoading || !email}
             >
               {isLoading ? 'Enviando...' : 'Enviar Link'}
             </button>
@@ -184,6 +204,7 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
               type="button"
               onClick={() => setShowEmailForm(false)}
               className="px-4 py-3 text-gray-500 hover:text-gray-700 transition-colors"
+              aria-label="Cancelar login por email"
             >
               Cancelar
             </button>
@@ -229,11 +250,11 @@ export default function SocialLogin({ onLogin, onSendMagicLink, isLoading }: Soc
       {/* Terms */}
       <p className="text-xs text-gray-500 text-center mt-6">
         Ao continuar, você concorda com nossos{' '}
-        <a href="/terms" className="text-blue-500 hover:underline">
+        <a href="/terms" className="text-blue-500 hover:underline" aria-label="Ler Termos de Uso">
           Termos de Uso
         </a>{' '}
         e{' '}
-        <a href="/privacy" className="text-blue-500 hover:underline">
+        <a href="/privacy" className="text-blue-500 hover:underline" aria-label="Ler Política de Privacidade">
           Política de Privacidade
         </a>
       </p>

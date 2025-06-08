@@ -5,26 +5,39 @@
   "description": "FUSEtech - Tokenize suas atividades físicas",
   "author": "FUSEtech Team",
   "scripts": {
-    "dev": "next dev -p 3002",
-    "build": "next build",
-    "start": "next start -p 3002",
+    "dev": "next dev",
+    "build": "node scripts/build-service-worker.js && next build",
+    "build:sw": "node scripts/build-service-worker.js",
+    "start": "next start -p 9001",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "clean": "rm -rf .next dist coverage"
+    "clean": "rm -rf .next dist coverage",
+    "webhooks:list": "node scripts/manage-strava-webhooks.js list",
+    "webhooks:create": "node scripts/manage-strava-webhooks.js create",
+    "webhooks:delete": "node scripts/manage-strava-webhooks.js delete",
+    "webhooks:test": "node scripts/manage-strava-webhooks.js test",
+    "deploy:staging": "./scripts/deploy-staging.sh",
+    "staging:setup": "./scripts/setup-staging-branch.sh",
+    "staging:env": "cp .env.staging .env.staging.local",
+    "staging:validate": "node scripts/validate-staging.js",
+    "vercel:staging": "vercel --env-file .env.staging --scope fusetech"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.0",
     "axios": "^1.9.0",
+    "class-variance-authority": "^0.7.1",
     "firebase": "^11.8.1",
+    "firebase-admin": "^13.4.0",
+    "framer-motion": "^12.16.0",
     "lucide-react": "^0.511.0",
-    "next": "^14.2.0",
+    "next": "14.2.29",
     "next-themes": "^0.4.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-hook-form": "^7.52.0",
     "sonner": "^1.5.0",
     "zustand": "^5.0.5"
@@ -51,5 +64,21 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
-  }
+  },
+  "main": "hardhat.config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/decomontenegro/fusetech.git"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/decomontenegro/fusetech/issues"
+  },
+  "homepage": "https://github.com/decomontenegro/fusetech#readme"
 }

@@ -1,8 +1,11 @@
+@import '../styles/themes.css';
+@import '../styles/mobile.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Simple, clean styles only */
+/* Base styles with enhanced dark mode support */
 * {
   box-sizing: border-box;
 }
@@ -10,33 +13,66 @@
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Simple scrollbar */
+/* Remove transition flicker on load */
+html.no-transition,
+html.no-transition * {
+  transition: none !important;
+}
+
+/* Modern scrollbar with enhanced theme support */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--bg-secondary);
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: var(--border-primary);
+  border-radius: 5px;
+  border: 2px solid var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--border-secondary);
+  border-color: var(--bg-tertiary);
 }
 
-/* Focus styles for accessibility */
-button:focus,
-input:focus,
-textarea:focus,
-select:focus {
-  outline: 2px solid #3b82f6;
+/* Dark mode scrollbar - Enhanced visibility */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--border-secondary);
+  border: 2px solid var(--bg-tertiary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+  border-color: var(--bg-quaternary);
+}
+
+/* Modern focus styles with theme support */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Simple transitions */
@@ -54,11 +90,375 @@ button {
   cursor: pointer;
 }
 
-/* Simple utility classes */
+/* Modern utility classes */
 .text-gradient {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* Additional glass variations for specific use cases */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-xl);
+}
+
+.glass-panel {
+  background: var(--glass-bg-subtle);
+  backdrop-filter: var(--backdrop-blur-subtle);
+  -webkit-backdrop-filter: var(--backdrop-blur-subtle);
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+/* Dark mode glass enhancements */
+[data-theme="dark"] .glass-card {
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border);
+}
+
+[data-theme="dark"] .glass-panel {
+  background: var(--glass-bg);
+  border-color: var(--glass-border-subtle);
+}
+
+/* Modern card styles - Enhanced with better dark mode support */
+.card-modern {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-modern:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--border-secondary);
+}
+
+/* Dark mode card enhancements */
+[data-theme="dark"] .card-modern {
+  background: var(--bg-card);
+  border-color: var(--border-primary);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .card-modern:hover {
+  background: var(--bg-hover);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-secondary);
+}
+
+/* Card with gradient border */
+.card-gradient-border {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  position: relative;
+  padding: 1px;
+}
+
+.card-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  padding: 1px;
+  background: var(--gradient-primary);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Mesh gradient background - Enhanced with theme awareness */
+.mesh-gradient {
+  background-image: var(--gradient-mesh);
+  background-size: 200% 200%;
+  animation: mesh-animation 15s ease infinite;
+  position: relative;
+}
+
+.mesh-gradient::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, var(--bg-primary) 70%);
+  pointer-events: none;
+}
+
+@keyframes mesh-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Additional gradient utility classes */
+.bg-gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.bg-gradient-secondary {
+  background: var(--gradient-secondary);
+}
+
+.bg-gradient-accent {
+  background: var(--gradient-accent);
+}
+
+.bg-gradient-success {
+  background: var(--gradient-success);
+}
+
+.bg-gradient-warning {
+  background: var(--gradient-warning);
+}
+
+.bg-gradient-error {
+  background: var(--gradient-error);
+}
+
+/* Improved link styles */
+a {
+  color: var(--text-link);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--text-link-hover);
+  text-decoration: underline;
+}
+
+/* Enhanced selection colors */
+::selection {
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
+}
+
+[data-theme="dark"] ::selection {
+  background-color: var(--color-primary);
+  color: var(--bg-primary);
+}
+
+/* Form input enhancements */
+input,
+textarea,
+select {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: var(--border-secondary);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.2);
+}
+
+/* Placeholder text colors */
+::placeholder {
+  color: var(--text-quaternary);
+  opacity: 1;
+}
+
+/* Loading skeleton animation */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--bg-tertiary) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Pulse animation for notifications */
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive typography */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Custom utility classes */
+.text-balance {
+  text-wrap: balance;
+}
+
+.backdrop-blur-none {
+  backdrop-filter: none;
+}
+
+.transition-none {
+  transition: none;
+}
+
+/* Z-index system */
+.z-dropdown {
+  z-index: 1000;
+}
+
+.z-modal {
+  z-index: 2000;
+}
+
+.z-notification {
+  z-index: 3000;
+}
+
+.z-tooltip {
+  z-index: 4000;
+}
+
+/* Glass reflection animation */
+@keyframes glass-reflection {
+  0% {
+    transform: translateX(-100%) skewX(-45deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-45deg);
+  }
+}
+
+.glass-reflection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 60%
+  );
+  animation: glass-reflection 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Glass pulse effect */
+@keyframes glass-pulse {
+  0%, 100% {
+    box-shadow: var(--glass-shadow);
+  }
+  50% {
+    box-shadow: var(--glass-shadow-lg);
+  }
+}
+
+.glass-pulse {
+  animation: glass-pulse 2s ease-in-out infinite;
+}
+
+/* Glass float effect */
+@keyframes glass-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.glass-float {
+  animation: glass-float 3s ease-in-out infinite;
+}
+
+/* Noise texture overlay */
+.glass-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}

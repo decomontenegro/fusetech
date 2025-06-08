@@ -4,17 +4,17 @@
  */
 
 // Import Firebase scripts
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js');
 
-// Firebase configuration
+// Firebase configuration - these values will be injected at build time
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  apiKey: "NEXT_PUBLIC_FIREBASE_API_KEY",
+  authDomain: "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
+  projectId: "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
+  storageBucket: "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
+  messagingSenderId: "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+  appId: "NEXT_PUBLIC_FIREBASE_APP_ID"
 };
 
 // Initialize Firebase
@@ -127,7 +127,7 @@ self.addEventListener('notificationclick', (event) => {
           
           // Otherwise, open new window
           if (clients.openWindow) {
-            const url = data?.url || '/dashboard';
+            const url = data?.url || data?.click_action || '/dashboard';
             return clients.openWindow(url);
           }
         })
@@ -138,17 +138,25 @@ self.addEventListener('notificationclick', (event) => {
 // Handle share achievement
 async function handleShareAchievement(data) {
   try {
-    if (navigator.share) {
-      // Use native sharing if available
-      await navigator.share({
-        title: 'FUSEtech Achievement',
-        text: `I just earned ${data.tokens} FUSE tokens for my ${data.activityType}! 🎉`,
-        url: `${self.location.origin}/dashboard`
-      });
-    } else {
-      // Fallback to opening share page
-      await clients.openWindow(`/share?achievement=${encodeURIComponent(JSON.stringify(data))}`);
+    const allClients = await clients.matchAll({ type: 'window' });
+    
+    // Find an open window to handle the share
+    for (const client of allClients) {
+      if (client.url.includes(self.location.origin)) {
+        client.focus();
+        
+        // Send message to the client to handle share
+        client.postMessage({
+          type: 'share-achievement',
+          data: data
+        });
+        
+        return;
+      }
     }
+    
+    // If no client is open, open a new window with share data
+    await clients.openWindow(`/share?achievement=${encodeURIComponent(JSON.stringify(data))}`);
   } catch (error) {
     console.error('Error sharing achievement:', error);
     // Fallback to opening dashboard
@@ -185,10 +193,10 @@ self.addEventListener('push', (event) => {
       const payload = event.data.json();
       
       const notificationOptions = {
-        body: payload.body,
-        icon: payload.icon || '/icons/icon-192x192.png',
-        badge: '/icons/badge-72x72.png',
-        image: payload.image,
+        body: payload.body || payload.notification?.body,
+        icon: payload.icon || payload.notification?.icon || '/icons/icon-192x192.png',
+        badge: payload.badge || payload.notification?.badge || '/icons/badge-72x72.png',
+        image: payload.image || payload.notification?.image,
         data: payload.data,
         actions: getNotificationActions(payload.data?.type),
         requireInteraction: true,
@@ -198,7 +206,7 @@ self.addEventListener('push', (event) => {
 
       event.waitUntil(
         self.registration.showNotification(
-          payload.title || 'FUSEtech',
+          payload.title || payload.notification?.title || 'FUSEtech',
           notificationOptions
         )
       );
@@ -220,22 +228,58 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
 
-// Cache notification sounds and icons
+// Cache notification resources
+const CACHE_NAME = 'fusetech-notifications-v1';
+const urlsToCache = [
+  '/icons/icon-192x192.png',
+  '/icons/badge-72x72.png',
+  '/sounds/notification.mp3'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(urlsToCache))
+  );
+});
+
+// Serve cached resources
 self.addEventListener('fetch', (event) => {
-  if (event.request.url.includes('/sounds/') || event.request.url.includes('/icons/')) {
+  if (event.request.url.includes('/icons/') || event.request.url.includes('/sounds/')) {
     event.respondWith(
-      caches.open('fusetech-notifications').then((cache) => {
-        return cache.match(event.request).then((response) => {
+      caches.match(event.request)
+        .then((response) => {
           if (response) {
             return response;
           }
-          
           return fetch(event.request).then((response) => {
-            cache.put(event.request, response.clone());
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
             return response;
           });
-        });
-      })
+        })
     );
   }
+});
+
+// Clean up old caches
+self.addEventListener('activate', (event) => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
 });

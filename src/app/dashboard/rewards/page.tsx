@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Gift, ShoppingBag, Star, Zap, Clock, Check } from 'lucide-react'
+import { Gift, ShoppingBag, Star, Zap, Clock, Check, Info, Lock } from 'lucide-react'
 
 export default function DashboardRewardsPage() {
   const [rewards] = useState([
@@ -99,7 +99,7 @@ export default function DashboardRewardsPage() {
           <p className="text-gray-600 mt-1">Troque seus FUSE tokens por produtos e experiências incríveis</p>
         </div>
         <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-xl font-bold text-lg">
-          {userFUSE} FUSE
+          {userFUSE} FUSE Points
         </div>
       </div>
 
@@ -154,14 +154,45 @@ export default function DashboardRewardsPage() {
         </div>
       </div>
 
+      {/* Phase 1 Notice */}
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <Info className="w-6 h-6 text-blue-600" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-gray-900 mb-2">Sistema de Pontos - Fase 1</h3>
+            <p className="text-gray-600 text-sm mb-3">
+              Atualmente você está acumulando <strong>FUSE Points</strong> que serão convertidos 1:1 em tokens FUSE reais quando a Fase 2 for lançada.
+            </p>
+            <div className="bg-white/70 rounded-lg p-3">
+              <p className="text-sm text-gray-700">
+                <strong>🚀 Lançamento da Fase 2:</strong> Julho de 2024
+              </p>
+              <p className="text-xs text-gray-600 mt-1">
+                Quando a Fase 2 for ativada, você poderá usar seus tokens FUSE para resgatar produtos reais!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Available Rewards */}
-      <div className="bg-white rounded-2xl shadow-sm border">
-        <div className="p-6 border-b">
+      <div className="bg-white rounded-2xl shadow-sm border relative">
+        <div className="p-6 border-b flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900">Recompensas Disponíveis</h2>
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+            <Lock className="w-3 h-3 mr-1" />
+            Desbloqueado na Fase 2
+          </span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
           {rewards.map((reward) => (
-            <div key={reward.id} className="border rounded-xl p-6 hover:shadow-lg transition-all">
+            <div key={reward.id} className="border rounded-xl p-6 hover:shadow-lg transition-all relative overflow-hidden">
+              {/* Semi-transparent overlay */}
+              <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] z-10"></div>
+              
+              <div className="relative z-0">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-4">
                   <div className="text-4xl">{reward.image}</div>
@@ -185,16 +216,18 @@ export default function DashboardRewardsPage() {
                   <Zap className="w-5 h-5 text-yellow-500" />
                   <span className="font-bold text-lg text-gray-900">{reward.cost} FUSE</span>
                 </div>
-                <button 
-                  className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                    userFUSE >= reward.cost
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-lg'
-                      : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  }`}
-                  disabled={userFUSE < reward.cost}
-                >
-                  {userFUSE >= reward.cost ? 'Resgatar' : 'FUSE Insuficiente'}
-                </button>
+                <div className="relative">
+                  <button 
+                    className="px-4 py-2 rounded-lg font-semibold bg-gray-300 text-gray-500 cursor-not-allowed"
+                    disabled={true}
+                  >
+                    Fase 2
+                  </button>
+                  <div className="absolute -top-8 right-0 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Disponível após lançamento
+                  </div>
+                </div>
+              </div>
               </div>
             </div>
           ))}
@@ -203,8 +236,9 @@ export default function DashboardRewardsPage() {
 
       {/* My Rewards */}
       <div className="bg-white rounded-2xl shadow-sm border">
-        <div className="p-6 border-b">
+        <div className="p-6 border-b flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900">Minhas Recompensas</h2>
+          <span className="text-sm text-gray-500">(Simulação - Fase 1)</span>
         </div>
         <div className="divide-y">
           {myRewards.map((reward) => (
@@ -218,7 +252,7 @@ export default function DashboardRewardsPage() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <p className="font-semibold text-gray-900">{reward.cost} FUSE</p>
+                  <p className="font-semibold text-gray-900">{reward.cost} FUSE Points</p>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(reward.status)}`}>
                     {getStatusText(reward.status)}
                   </span>

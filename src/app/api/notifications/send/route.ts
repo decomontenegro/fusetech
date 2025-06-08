@@ -1,98 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// Firebase Admin SDK (server-side)
-interface FirebaseAdminConfig {
-  projectId: string;
-  privateKey: string;
-  clientEmail: string;
-}
-
-interface NotificationPayload {
-  token: string;
-  notification: {
-    title: string;
-    body: string;
-    icon?: string;
-    image?: string;
-  };
-  data?: Record<string, string>;
-  webpush?: {
-    headers?: Record<string, string>;
-    data?: Record<string, string>;
-    notification?: {
-      title?: string;
-      body?: string;
-      icon?: string;
-      badge?: string;
-      image?: string;
-      actions?: Array<{
-        action: string;
-        title: string;
-        icon?: string;
-      }>;
-      requireInteraction?: boolean;
-      tag?: string;
-      vibrate?: number[];
-    };
-  };
-}
-
-class FirebaseAdminService {
-  private initialized = false;
-  private admin: any = null;
-
-  async initialize() {
-    if (this.initialized) return;
-
-    try {
-      // In a real implementation, you would use Firebase Admin SDK
-      // For now, we'll simulate the service
-      console.log('Firebase Admin initialized (simulated)');
-      this.initialized = true;
-    } catch (error) {
-      console.error('Error initializing Firebase Admin:', error);
-      throw error;
-    }
-  }
-
-  async sendNotification(payload: NotificationPayload): Promise<string> {
-    await this.initialize();
-
-    try {
-      // In a real implementation, this would use Firebase Admin SDK
-      // admin.messaging().send(message)
-      
-      console.log('Sending notification:', payload);
-      
-      // Simulate successful send
-      return 'notification-id-' + Date.now();
-    } catch (error) {
-      console.error('Error sending notification:', error);
-      throw error;
-    }
-  }
-
-  async sendToTopic(topic: string, payload: Omit<NotificationPayload, 'token'>): Promise<string> {
-    await this.initialize();
-
-    try {
-      console.log(`Sending notification to topic ${topic}:`, payload);
-      
-      // Simulate successful send
-      return 'topic-notification-id-' + Date.now();
-    } catch (error) {
-      console.error('Error sending topic notification:', error);
-      throw error;
-    }
-  }
-}
-
-const firebaseAdmin = new FirebaseAdminService();
+import { 
+  sendNotificationToDevice, 
+  sendNotificationToTopic,
+  sendNotificationToMultipleDevices,
+  createActivityRewardNotification,
+  createChallengeCompleteNotification,
+  createMarketplaceNotification,
+  createSocialNotification,
+  NotificationPayload
+} from '@/lib/firebase/admin';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { token, notification, data, topic } = body;
+    const { token, tokens, topic, notification, data, type } = body;
 
     // Validate required fields
     if (!notification?.title || !notification?.body) {
@@ -102,51 +23,93 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!token && !topic) {
+    if (!token && !tokens && !topic) {
       return NextResponse.json(
-        { error: 'Either token or topic is required' },
+        { error: 'Either token, tokens array, or topic is required' },
         { status: 400 }
       );
     }
 
-    // Prepare notification payload
-    const payload: NotificationPayload = {
-      token: token || '',
-      notification: {
+    // Create notification payload based on type
+    let payload: NotificationPayload;
+    
+    if (type) {
+      // Use predefined notification templates
+      switch (type) {
+        case 'activity_reward':
+          payload = createActivityRewardNotification(
+            data?.tokens || 0,
+            data?.activityType || 'activity'
+          );
+          break;
+        
+        case 'challenge_complete':
+          payload = createChallengeCompleteNotification(
+            data?.challengeName || 'Challenge',
+            data?.reward || 0
+          );
+          break;
+        
+        case 'marketplace_item':
+          payload = createMarketplaceNotification(
+            data?.itemName || 'Item',
+            data?.discount
+          );
+          break;
+        
+        case 'social_interaction':
+          payload = createSocialNotification(
+            data?.socialType || 'like',
+            data?.userName || 'Someone'
+          );
+          break;
+        
+        default:
+          // Custom notification
+          payload = {
+            title: notification.title,
+            body: notification.body,
+            icon: notification.icon || '/icons/icon-192x192.png',
+            badge: notification.badge || '/icons/badge-72x72.png',
+            image: notification.image,
+            click_action: notification.click_action || '/dashboard',
+            data: data ? Object.fromEntries(
+              Object.entries(data).map(([key, value]) => [key, String(value)])
+            ) : undefined,
+          };
+      }
+    } else {
+      // Custom notification
+      payload = {
         title: notification.title,
         body: notification.body,
         icon: notification.icon || '/icons/icon-192x192.png',
+        badge: notification.badge || '/icons/badge-72x72.png',
         image: notification.image,
-      },
-      data: data ? Object.fromEntries(
-        Object.entries(data).map(([key, value]) => [key, String(value)])
-      ) : undefined,
-      webpush: {
-        notification: {
-          title: notification.title,
-          body: notification.body,
-          icon: notification.icon || '/icons/icon-192x192.png',
-          badge: '/icons/badge-72x72.png',
-          image: notification.image,
-          requireInteraction: true,
-          tag: 'fusetech-notification',
-          vibrate: [200, 100, 200],
-          actions: getNotificationActions(notification.type),
-        },
-        headers: {
-          'Urgency': 'high',
-        },
-      },
-    };
+        click_action: notification.click_action || '/dashboard',
+        data: data ? Object.fromEntries(
+          Object.entries(data).map(([key, value]) => [key, String(value)])
+        ) : undefined,
+      };
+    }
 
     let messageId: string;
 
     if (topic) {
       // Send to topic
-      messageId = await firebaseAdmin.sendToTopic(topic, payload);
+      messageId = await sendNotificationToTopic(topic, payload);
+    } else if (tokens && Array.isArray(tokens)) {
+      // Send to multiple devices
+      const response = await sendNotificationToMultipleDevices(tokens, payload);
+      return NextResponse.json({
+        success: true,
+        successCount: response.successCount,
+        failureCount: response.failureCount,
+        responses: response.responses,
+      });
     } else {
       // Send to specific token
-      messageId = await firebaseAdmin.sendNotification(payload);
+      messageId = await sendNotificationToDevice(token, payload);
     }
 
     return NextResponse.json({
@@ -154,38 +117,14 @@ export async function POST(request: NextRequest) {
       messageId,
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in notification API:', error);
     return NextResponse.json(
-      { error: 'Failed to send notification' },
+      { 
+        error: 'Failed to send notification',
+        details: error.message 
+      },
       { status: 500 }
     );
   }
-}
-
-function getNotificationActions(type?: string) {
-  const actions = {
-    activity_reward: [
-      { action: 'view_dashboard', title: '📊 Dashboard' },
-      { action: 'share_achievement', title: '📤 Share' }
-    ],
-    challenge_complete: [
-      { action: 'view_challenges', title: '🏆 Challenges' },
-      { action: 'share_achievement', title: '📤 Share' }
-    ],
-    marketplace_item: [
-      { action: 'view_marketplace', title: '🛍️ Marketplace' },
-      { action: 'dismiss', title: '❌ Dismiss' }
-    ],
-    social_interaction: [
-      { action: 'view_profile', title: '👤 Profile' },
-      { action: 'dismiss', title: '❌ Dismiss' }
-    ],
-    default: [
-      { action: 'open_app', title: '📱 Open App' },
-      { action: 'dismiss', title: '❌ Dismiss' }
-    ]
-  };
-
-  return actions[type as keyof typeof actions] || actions.default;
 }
