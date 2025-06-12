@@ -1,0 +1,2 @@
+npm install @apollo/client next-themes sonner framer-motion zustand
+npm install @types/node @types/react @types/react-dom

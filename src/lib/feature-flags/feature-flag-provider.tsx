@@ -27,7 +27,7 @@ export function FeatureFlagProvider({
   serverFlags,
   context: initialContext 
 }: FeatureFlagProviderProps) {
-  const { user } = useAuth();
+  const { auth } = useAuth();
   const [flags, setFlags] = useState<Map<string, boolean>>(new Map());
   const [context, setContext] = useState<FeatureFlagContext>(initialContext || {});
 
@@ -35,10 +35,10 @@ export function FeatureFlagProvider({
   useEffect(() => {
     setContext(prev => ({
       ...prev,
-      userId: user?.id,
-      userGroups: user?.groups || [],
+      userId: auth.status === 'authenticated' ? auth.user.id : undefined,
+      userGroups: auth.status === 'authenticated' ? [] : [], // No groups in current auth system
     }));
-  }, [user]);
+  }, [auth]);
 
   // Load server flags on mount
   useEffect(() => {

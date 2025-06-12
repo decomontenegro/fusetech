@@ -71,7 +71,8 @@ export default function DashboardPage() {
     if (token) {
       setFcmToken(token)
       setNotificationsEnabled(true)
-      await notificationService.subscribeToTopic(token, 'general')
+      // Subscribe to general notifications topic (implementation pending)
+      console.log('FCM token obtained:', token)
     }
   }
 
@@ -114,7 +115,7 @@ export default function DashboardPage() {
       <PhaseBasedContent />
       
       {/* Phase 1 Notice - Mobile Optimized */}
-      <GlassCard variant="gradient" padding="sm sm:md" className="mb-4 sm:mb-6">
+      <GlassCard variant="gradient" padding="md" className="mb-4 sm:mb-6">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="p-2 sm:p-3 rounded-xl bg-primary/10 shrink-0">
             <Info className="w-5 h-5 sm:w-6 sm:h-6 text-text-primary" />

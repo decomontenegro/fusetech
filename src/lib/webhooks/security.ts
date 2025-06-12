@@ -141,8 +141,8 @@ export class WebhookRateLimiter {
 
   cleanup(): void {
     const now = Date.now();
-    for (const [identifier, requests] of this.requests.entries()) {
-      const validRequests = requests.filter(time => now - time < this.windowMs);
+    for (const [identifier, requests] of Array.from(this.requests.entries())) {
+      const validRequests = requests.filter((time: number) => now - time < this.windowMs);
       if (validRequests.length === 0) {
         this.requests.delete(identifier);
       } else {

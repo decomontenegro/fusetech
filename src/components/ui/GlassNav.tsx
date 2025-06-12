@@ -50,7 +50,7 @@ export const GlassNav = forwardRef<HTMLElement, GlassNavProps>(
         initial={animated ? { y: position === 'top' ? -100 : position === 'bottom' ? 100 : 0 } : undefined}
         animate={animated ? { y: 0 } : undefined}
         transition={animated ? { type: "spring", stiffness: 300, damping: 30 } : undefined}
-        {...props}
+        {...(props as any)}
       >
         <div className="relative z-10">
           {children}

@@ -41,7 +41,7 @@ const glassInputVariants = cva(
 );
 
 interface GlassInputProps
-  extends InputHTMLAttributes<HTMLInputElement>,
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof glassInputVariants> {
   label?: string;
   error?: string;
