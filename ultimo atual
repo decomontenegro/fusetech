@@ -1,2 +1,5 @@
-npm install @apollo/client next-themes sonner framer-motion zustand
-npm install @types/node @types/react @types/react-dom
+
+# Configurar variáveis de ambiente
+# Deploy no Vercel ou servidor de escolha
+npm run build
+npm start
