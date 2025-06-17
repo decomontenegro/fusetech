@@ -57,6 +57,7 @@
     "postcss": "^8.4.38",
     "prettier": "^3.3.0",
     "prisma": "^6.8.2",
+    "sqlite3": "^5.1.7",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.4.0",
     "vitest": "^1.6.0"

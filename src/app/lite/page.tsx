@@ -64,17 +64,59 @@ export default function FUSETechLitePage() {
   const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
-    // Simulate loading user data
-    setTimeout(() => {
-      setUser(mockUser);
-      setActivities(mockActivities);
-      setIsLoading(false);
-    }, 1000);
+    // Check if we're in development mode with mock data
+    const useMockData = process.env.NEXT_PUBLIC_ENABLE_MOCK_DATA === 'true';
+
+    if (useMockData) {
+      // Simulate loading user data
+      setTimeout(() => {
+        setUser(mockUser);
+        setActivities(mockActivities);
+        setIsLoading(false);
+      }, 1000);
+    } else {
+      // In production, load real user data
+      loadUserData();
+    }
   }, []);
 
+  const loadUserData = async () => {
+    try {
+      // TODO: Implement real API calls
+      const response = await fetch('/api/user/profile');
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData);
+
+        const activitiesResponse = await fetch('/api/user/activities');
+        if (activitiesResponse.ok) {
+          const activitiesData = await activitiesResponse.json();
+          setActivities(activitiesData);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load user data:', error);
+      // Fallback to mock data
+      setUser(mockUser);
+      setActivities(mockActivities);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleConnectStrava = () => {
-    // In real implementation: redirect to Strava OAuth
-    window.location.href = '/api/auth/strava';
+    // Check if using mock Strava
+    const useMockStrava = process.env.NEXT_PUBLIC_USE_MOCK_STRAVA === 'true';
+
+    if (useMockStrava) {
+      // Simulate successful Strava connection
+      alert('Mock Strava connection successful! (Development mode)');
+      setUser(mockUser);
+      setActivities(mockActivities);
+    } else {
+      // Real Strava OAuth redirect
+      window.location.href = '/api/auth/strava-lite/callback';
+    }
   };
 
   const handleSyncActivities = async () => {
