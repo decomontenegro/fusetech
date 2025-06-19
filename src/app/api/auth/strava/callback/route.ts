@@ -1,79 +1,92 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stravaService } from '@/lib/integrations/strava';
+import { cookies } from 'next/headers';
 
-/**
- * Endpoint para receber o callback do Strava após autorização
- */
+const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID;
+const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
+
 export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const code = searchParams.get('code');
-    const state = searchParams.get('state');
-    const error = searchParams.get('error');
+  const { searchParams } = new URL(request.url);
+  const code = searchParams.get('code');
+  const error = searchParams.get('error');
 
-    // Handle authorization errors
-    if (error) {
-      console.error('Strava authorization error:', error);
-      return NextResponse.redirect(
-        new URL('/dashboard?error=strava_auth_failed', request.url)
-      );
-    }
-
-    // Validate required parameters
-    if (!code) {
-      console.error('Missing authorization code from Strava');
-      return NextResponse.redirect(
-        new URL('/dashboard?error=missing_code', request.url)
-      );
-    }
-
-    // Exchange code for tokens using the service
-    const tokenData = await stravaService.exchangeCodeForTokens(code);
-
-    // Here you would typically:
-    // 1. Save tokens to database associated with user
-    // 2. Save athlete profile information
-    // 3. Trigger initial activity sync
-
-    console.log('Strava integration successful for athlete:', tokenData.athlete.id);
-
-    // For now, we'll just redirect with success
-    // In a real implementation, you'd save this to the database
-    const successUrl = new URL('/dashboard', request.url);
-    successUrl.searchParams.set('strava_connected', 'true');
-    successUrl.searchParams.set('athlete_id', tokenData.athlete.id.toString());
-
-    return NextResponse.redirect(successUrl);
-
-  } catch (error) {
-    console.error('Strava callback error:', error);
-
-    return NextResponse.redirect(
-      new URL('/dashboard?error=strava_callback_failed', request.url)
-    );
+  if (error) {
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/?error=access_denied`);
   }
-}
 
-// Handle webhook events (POST request from Strava)
-export async function POST(request: NextRequest) {
+  if (!code) {
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/?error=no_code`);
+  }
+
   try {
-    const body = await request.text();
-    const signature = request.headers.get('x-strava-signature') || '';
+    // Trocar código por access token
+    const tokenResponse = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: STRAVA_CLIENT_ID,
+        client_secret: STRAVA_CLIENT_SECRET,
+        code: code,
+        grant_type: 'authorization_code',
+      }),
+    });
 
-    // Verify webhook signature
-    if (!stravaService.verifyWebhookSignature(body, signature)) {
-      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      console.error('Strava token exchange failed:', {
+        status: tokenResponse.status,
+        statusText: tokenResponse.statusText,
+        error: errorText,
+        clientId: STRAVA_CLIENT_ID,
+        code: code
+      });
+      throw new Error(`Failed to exchange code for token: ${tokenResponse.status} - ${errorText}`);
     }
 
-    const event = JSON.parse(body);
+    const tokenData = await tokenResponse.json();
+    
+    // Buscar dados do atleta
+    const athleteResponse = await fetch('https://www.strava.com/api/v3/athlete', {
+      headers: {
+        'Authorization': `Bearer ${tokenData.access_token}`,
+      },
+    });
 
-    // Process the webhook event
-    await stravaService.processWebhookEvent(event);
+    if (!athleteResponse.ok) {
+      throw new Error('Failed to fetch athlete data');
+    }
 
-    return NextResponse.json({ success: true });
+    const athleteData = await athleteResponse.json();
+
+    // Salvar dados do usuário (por enquanto em cookies, depois em DB)
+    const userData = {
+      id: athleteData.id,
+      name: `${athleteData.firstname} ${athleteData.lastname}`,
+      avatar: athleteData.profile,
+      access_token: tokenData.access_token,
+      refresh_token: tokenData.refresh_token,
+      expires_at: tokenData.expires_at,
+      welcomeBonus: 1000, // Bônus de boas-vindas
+      stravaConnected: true,
+      joinedAt: new Date().toISOString(),
+      tokensSpent: 0
+    };
+
+    // Criar cookie de sessão
+    const cookieStore = cookies();
+    cookieStore.set('fusetech_user', JSON.stringify(userData), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30, // 30 dias
+    });
+
+    // Redirecionar para dashboard
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/dashboard?connected=true`);
 
   } catch (error) {
-    console.error('Strava webhook error:', error);
-    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
+    console.error('Strava OAuth error:', error);
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/?error=oauth_failed`);
   }
 }

@@ -1,26 +1,34 @@
-/**
- * FUSEtech Lite - Simplified Strava OAuth Route
- * 
- * Handles Strava authentication flow for MVP
- * GET /api/auth/strava - Redirect to Strava OAuth
- */
-
 import { NextRequest, NextResponse } from 'next/server';
-import { StravaAuth } from '@/lib/auth/strava-auth';
+
+// Configurações do Strava
+const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID;
+const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
+const REDIRECT_URI = `${process.env.NEXTAUTH_URL}/api/auth/strava/callback`;
 
 export async function GET(request: NextRequest) {
-  try {
-    // Generate Strava OAuth URL and redirect
-    const authUrl = StravaAuth.getAuthUrl();
+  const { searchParams } = new URL(request.url);
+  const action = searchParams.get('action');
+
+  if (action === 'login') {
+    // Redirecionar para autorização do Strava
+    const scope = 'read,activity:read_all';
+    const state = generateState();
     
+    const authUrl = `https://www.strava.com/oauth/authorize?` +
+      `client_id=${STRAVA_CLIENT_ID}&` +
+      `redirect_uri=${encodeURIComponent(REDIRECT_URI)}&` +
+      `response_type=code&` +
+      `scope=${scope}&` +
+      `state=${state}&` +
+      `approval_prompt=force`;
+
     return NextResponse.redirect(authUrl);
-    
-  } catch (error) {
-    console.error('Strava auth error:', error);
-    
-    return NextResponse.json(
-      { error: 'Failed to initiate Strava authentication' },
-      { status: 500 }
-    );
   }
+
+  return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+}
+
+function generateState(): string {
+  return Math.random().toString(36).substring(2, 15) + 
+         Math.random().toString(36).substring(2, 15);
 }

@@ -1,0 +1,23 @@
+{
+  "name": "FUSEtech - Fitness meets Blockchain",
+  "short_name": "FUSEtech",
+  "description": "Transforme movimento em valor real. Conecte seu Strava, corra, pedale ou caminhe e ganhe FUSE tokens que podem ser trocados por produtos reais.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["fitness", "health", "lifestyle", "sports"],
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

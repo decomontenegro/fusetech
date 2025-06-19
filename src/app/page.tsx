@@ -5,10 +5,27 @@ import { Play, Zap, Activity, Trophy } from 'lucide-react';
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setMounted(true);
+    checkUserStatus();
   }, []);
+
+  const checkUserStatus = async () => {
+    try {
+      const response = await fetch('/api/user');
+      const userData = await response.json();
+      if (userData.authenticated) {
+        setUser(userData.user);
+      }
+    } catch (error) {
+      console.error('Erro ao verificar usuário:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Prevent hydration mismatch
   if (!mounted) {
@@ -24,9 +41,58 @@ export default function HomePage() {
     );
   }
 
-  const handleGetStarted = () => {
-    // Redirect to login - users must authenticate first
-    window.location.href = '/login';
+  const handleGetStarted = async () => {
+    if (user) {
+      // Se já está logado, vai para dashboard
+      window.location.href = '/dashboard';
+    } else {
+      // Verificar se está em modo mock
+      const skipAuth = process.env.NEXT_PUBLIC_SKIP_AUTH_FOR_TESTING === 'true';
+
+      if (skipAuth) {
+        // Modo mock - criar usuário fake e ir direto para dashboard
+        try {
+          const response = await fetch('/api/auth/mock-login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mockUser: true })
+          });
+
+          if (response.ok) {
+            window.location.href = '/dashboard';
+          } else {
+            // Fallback para Strava se mock falhar
+            window.location.href = '/api/auth/strava?action=login';
+          }
+        } catch (error) {
+          console.error('Erro no mock login:', error);
+          window.location.href = '/api/auth/strava?action=login';
+        }
+      } else {
+        // Modo normal - vai para login Strava
+        window.location.href = '/api/auth/strava?action=login';
+      }
+    }
+  };
+
+  const handleSwitchAccount = () => {
+    // Força nova autorização do Strava (permite escolher conta diferente)
+    window.location.href = '/api/auth/strava?action=login';
+  };
+
+  const handleViewDemo = () => {
+    // Go to demo page
+    window.location.href = '/demo';
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/user', { method: 'DELETE' });
+      setUser(null);
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
   };
 
   return (
@@ -92,16 +158,64 @@ export default function HomePage() {
 
           {/* Vibrant CTA */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
-            <button
-              onClick={handleGetStarted}
-              className="px-10 py-5 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white rounded-2xl text-xl font-black hover:shadow-2xl transition-all transform hover:scale-110 hover:-translate-y-2 shadow-lg"
-            >
-              🚀 Começar Agora - GRÁTIS!
-            </button>
-            <button className="px-10 py-5 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 rounded-2xl text-xl font-bold hover:from-gray-200 hover:to-gray-300 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105">
-              <Play className="w-6 h-6 text-blue-500" />
-              🎬 Ver Demo
-            </button>
+            {!loading && (
+              <>
+                {user ? (
+                  // Usuário logado
+                  <div className="flex flex-col items-center gap-6">
+                    <div className="text-center">
+                      <p className="text-lg text-gray-700 mb-2">
+                        Bem-vindo de volta, <span className="font-bold text-blue-600">{user.name}</span>! 👋
+                      </p>
+                      <p className="text-sm text-gray-500">Conectado via Strava</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <button
+                        onClick={handleGetStarted}
+                        className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl text-lg font-bold hover:shadow-2xl transition-all transform hover:scale-105 shadow-lg"
+                      >
+                        📊 Ir para Dashboard
+                      </button>
+                      <button
+                        onClick={handleSwitchAccount}
+                        className="px-6 py-4 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-2xl text-lg font-bold hover:shadow-2xl transition-all transform hover:scale-105 shadow-lg"
+                        title="Conectar com uma conta Strava diferente"
+                      >
+                        🔄 Trocar Conta
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        className="px-6 py-4 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-2xl text-lg font-bold hover:from-gray-200 hover:to-gray-300 transition-all shadow-lg hover:shadow-xl"
+                      >
+                        Sair
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // Usuário não logado
+                  <>
+                    <button
+                      onClick={handleGetStarted}
+                      className="px-10 py-5 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white rounded-2xl text-xl font-black hover:shadow-2xl transition-all transform hover:scale-110 hover:-translate-y-2 shadow-lg"
+                    >
+                      🚀 Começar Agora - GRÁTIS!
+                    </button>
+                    <button
+                      onClick={handleViewDemo}
+                      className="px-10 py-5 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 rounded-2xl text-xl font-bold hover:from-gray-200 hover:to-gray-300 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      <Play className="w-6 h-6 text-blue-500" />
+                      🎬 Ver Demo
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+            {loading && (
+              <div className="px-10 py-5 bg-gray-200 text-gray-500 rounded-2xl text-xl font-bold animate-pulse">
+                Carregando...
+              </div>
+            )}
           </div>
 
           {/* Colorful Stats */}
