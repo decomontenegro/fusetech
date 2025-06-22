@@ -46,25 +46,31 @@ export default function HomePage() {
       // Se já está logado, vai para dashboard
       window.location.href = '/dashboard';
     } else {
-      // SEMPRE usar modo mock para demonstração no Vercel
-      // Modo mock - criar usuário fake e ir direto para dashboard
+      // Tentar modo mock primeiro, depois Strava
       try {
+        console.log('Tentando mock login...');
         const response = await fetch('/api/auth/mock-login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mockUser: true, forceDemo: true })
         });
 
+        console.log('Mock login response:', response.status);
+
         if (response.ok) {
-          // Recarregar a página para atualizar o estado do usuário
-          window.location.reload();
+          const data = await response.json();
+          console.log('Mock login success:', data);
+          // Aguardar um pouco e recarregar
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         } else {
-          console.error('Mock login falhou, tentando Strava...');
+          console.log('Mock login falhou, tentando Strava...');
           window.location.href = '/api/auth/strava?action=login';
         }
       } catch (error) {
         console.error('Erro no mock login:', error);
-        // Fallback para Strava se mock falhar
+        console.log('Redirecionando para Strava...');
         window.location.href = '/api/auth/strava?action=login';
       }
     }
