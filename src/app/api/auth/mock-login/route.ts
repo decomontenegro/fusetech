@@ -3,16 +3,16 @@ import { cookies } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
-    const { mockUser } = await request.json();
-    
+    const { mockUser, forceDemo } = await request.json();
+
     if (!mockUser) {
       return NextResponse.json({ error: 'Mock user flag required' }, { status: 400 });
     }
 
-    // Verificar se está em modo de teste
+    // Verificar se está em modo de teste OU se é demo forçado
     const skipAuth = process.env.NEXT_PUBLIC_SKIP_AUTH_FOR_TESTING === 'true';
-    
-    if (!skipAuth) {
+
+    if (!skipAuth && !forceDemo) {
       return NextResponse.json({ error: 'Mock login not enabled' }, { status: 403 });
     }
 
