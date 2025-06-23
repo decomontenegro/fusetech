@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { Play, Zap, Activity, Trophy } from 'lucide-react';
+import { Play, Zap, Activity, Trophy, User } from 'lucide-react';
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false);
@@ -207,6 +207,13 @@ export default function HomePage() {
                     >
                       <Play className="w-6 h-6 text-blue-500" />
                       🎬 Ver Demo
+                    </button>
+                    <button
+                      onClick={() => window.location.href = '/demo-users'}
+                      className="px-10 py-5 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-2xl text-xl font-bold hover:shadow-2xl transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      <User className="w-6 h-6" />
+                      🎭 Perfis Demo
                     </button>
                   </>
                 )}
